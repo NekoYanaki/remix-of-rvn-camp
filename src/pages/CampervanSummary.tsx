@@ -5,15 +5,27 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useForm } from "react-hook-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { 
   Calendar, 
   Shield, 
@@ -26,49 +38,124 @@ import {
   Sparkles,
   CreditCard,
   ArrowLeft,
-  Clock
+  Clock,
+  ChevronDown,
+  X,
+  Trash2,
+  Info,
+  Car,
+  Fuel,
+  Settings,
+  Gauge
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-// Mock data for addons and insurance
+// Mock data for addons - based on provided image
 const mockAddons = [
-  { id: "gps", name: "GPS นำทาง", price: 200, description: "ระบบนำทาง GPS ภาษาไทย" },
-  { id: "camping-set", name: "ชุดแคมป์ปิ้ง", price: 500, description: "เต็นท์ ถุงนอน และอุปกรณ์แคมป์ปิ้งครบชุด" },
-  { id: "baby-seat", name: "เบาะนั่งเด็ก", price: 300, description: "เบาะนั่งเด็กมาตรฐานความปลอดภัย" },
-  { id: "extra-driver", name: "คนขับเพิ่มเติม", price: 400, description: "เพิ่มคนขับเพิ่มเติม 1 คน" },
+  { id: "gps", name: "GPS นำทาง", price: 200 },
+  { id: "baby-seat", name: "เบาะนั่งเด็ก", price: 300 },
+  { id: "wifi", name: "WiFi Router", price: 150 },
+  { id: "camping-set", name: "อุปกรณ์แคมปิ้ง", price: 500 },
+  { id: "bbq", name: "ชุดปิ้งย่าง", price: 350 },
+  { id: "sunshade", name: "กันสาด", price: 400 },
+  { id: "generator", name: "เครื่องปั่นไฟ", price: 600 },
+  { id: "outdoor-table", name: "โต๊ะกลางแจ้ง", price: 200 },
+  { id: "folding-chairs", name: "เก้าอี้พับ (ชุด)", price: 150 },
+  { id: "bike-rack", name: "แร็คจักรยาน", price: 250 },
 ];
 
 const mockInsuranceOptions = [
-  { id: "basic", name: "ประกันพื้นฐาน", price: 0, description: "ความคุ้มครองพื้นฐาน", coverage: "คุ้มครองบุคคลที่สาม" },
-  { id: "standard", name: "ประกันมาตรฐาน", price: 300, description: "ความคุ้มครองเพิ่มเติม", coverage: "คุ้มครองรถยนต์และบุคคลที่สาม" },
-  { id: "premium", name: "ประกันพรีเมียม", price: 500, description: "ความคุ้มครองเต็มรูปแบบ", coverage: "คุ้มครองครบทุกกรณี ไม่มีค่าเสียหายส่วนแรก" },
+  { 
+    id: "basic", 
+    name: "ประกันพื้นฐาน", 
+    price: 0, 
+    description: "ความคุ้มครองพื้นฐาน",
+    details: [
+      "คุ้มครองบุคคลที่สาม สูงสุด 1,000,000 บาท",
+      "คุ้มครองการเสียชีวิตของผู้ขับขี่ 100,000 บาท",
+      "ไม่คุ้มครองความเสียหายของตัวรถ",
+      "ค่าเสียหายส่วนแรก 20,000 บาท"
+    ]
+  },
+  { 
+    id: "standard", 
+    name: "ประกันมาตรฐาน", 
+    price: 300, 
+    description: "ความคุ้มครองเพิ่มเติม",
+    details: [
+      "คุ้มครองบุคคลที่สาม สูงสุด 2,000,000 บาท",
+      "คุ้มครองตัวรถ สูงสุด 500,000 บาท",
+      "คุ้มครองอุบัติเหตุส่วนบุคคล 200,000 บาท",
+      "ค่าเสียหายส่วนแรก 10,000 บาท",
+      "บริการช่วยเหลือฉุกเฉิน 24 ชม."
+    ]
+  },
+  { 
+    id: "premium", 
+    name: "ประกันพรีเมียม", 
+    price: 500, 
+    description: "ความคุ้มครองเต็มรูปแบบ",
+    details: [
+      "คุ้มครองบุคคลที่สาม สูงสุด 5,000,000 บาท",
+      "คุ้มครองตัวรถเต็มมูลค่า",
+      "คุ้มครองอุบัติเหตุส่วนบุคคล 500,000 บาท",
+      "ไม่มีค่าเสียหายส่วนแรก",
+      "บริการช่วยเหลือฉุกเฉิน 24 ชม.",
+      "รถยนต์ทดแทนกรณีซ่อมนาน",
+      "คุ้มครองภัยธรรมชาติ"
+    ]
+  },
 ];
+
+// Mock motorhome data (similar to MotorhomeDetail page)
+const mockMotorhomeData = {
+  id: "1",
+  name: "Caravan",
+  brand: "Mitsubishi",
+  model: "Triton",
+  image: "/lovable-uploads/motorhome-main.jpg",
+  specs: {
+    passengers: 4,
+    beds: 2,
+    transmission: "อัตโนมัติ",
+    fuelType: "ดีเซล",
+    year: 2023,
+    engine: "2.8L"
+  },
+  amenities: ["Shower", "Toilet", "Kitchen", "AC", "TV", "Solar panel"],
+  pricing: {
+    basePrice: 12000,
+    deposit: 10000
+  }
+};
 
 const CampervanSummary = () => {
   const navigate = useNavigate();
-  const { register, handleSubmit, watch } = useForm();
-  const hasFlightDetails = watch("hasFlightDetails", "no");
   
   // State for addons and insurance
-  const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
+  const [selectedAddons, setSelectedAddons] = useState<{id: string; name: string; price: number}[]>([]);
   const [selectedInsurance, setSelectedInsurance] = useState("basic");
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [promoCode, setPromoCode] = useState("");
   const [paymentOption, setPaymentOption] = useState("full");
+  const [addonPopoverOpen, setAddonPopoverOpen] = useState(false);
+  const [insuranceModalOpen, setInsuranceModalOpen] = useState(false);
+  const [selectedInsuranceForModal, setSelectedInsuranceForModal] = useState<typeof mockInsuranceOptions[0] | null>(null);
 
-  const handleAddonToggle = (addonId: string) => {
-    setSelectedAddons(prev => 
-      prev.includes(addonId) 
-        ? prev.filter(id => id !== addonId)
-        : [...prev, addonId]
-    );
+  const handleAddAddon = (addon: typeof mockAddons[0]) => {
+    if (!selectedAddons.find(a => a.id === addon.id)) {
+      setSelectedAddons(prev => [...prev, addon]);
+    }
+    setAddonPopoverOpen(false);
+  };
+
+  const handleRemoveAddon = (addonId: string) => {
+    setSelectedAddons(prev => prev.filter(a => a.id !== addonId));
   };
 
   const calculateAddonsTotal = () => {
-    return mockAddons
-      .filter(addon => selectedAddons.includes(addon.id))
-      .reduce((sum, addon) => sum + addon.price, 0);
+    return selectedAddons.reduce((sum, addon) => sum + addon.price, 0);
   };
 
   const getInsurancePrice = () => {
@@ -76,8 +163,13 @@ const CampervanSummary = () => {
     return insurance?.price || 0;
   };
 
-  const basePrice = 12000; // Base price total
+  const openInsuranceModal = (insurance: typeof mockInsuranceOptions[0]) => {
+    setSelectedInsuranceForModal(insurance);
+    setInsuranceModalOpen(true);
+  };
+
   const days = 1;
+  const basePrice = mockMotorhomeData.pricing.basePrice;
   const addonsTotal = calculateAddonsTotal() * days;
   const insuranceTotal = getInsurancePrice() * days;
   const totalPrice = basePrice + addonsTotal + insuranceTotal;
@@ -85,12 +177,9 @@ const CampervanSummary = () => {
 
   const referenceNumber = `${Date.now()}`;
 
-  const onSubmit = (data: any) => {
-    console.log("Form submitted:", data);
-    console.log("Selected addons:", selectedAddons);
-    console.log("Selected insurance:", selectedInsurance);
-    // Handle form submission
-  };
+  const availableAddons = mockAddons.filter(
+    addon => !selectedAddons.find(a => a.id === addon.id)
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -98,6 +187,14 @@ const CampervanSummary = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Page Header */}
         <div className="mb-6">
+          <Button 
+            variant="ghost" 
+            className="mb-2 -ml-2"
+            onClick={() => navigate(-1)}
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            ย้อนกลับ
+          </Button>
           <h1 className="text-2xl font-bold text-gray-900">Booking Summary</h1>
           <p className="text-sm text-gray-500">Reference: {referenceNumber}</p>
         </div>
@@ -105,18 +202,18 @@ const CampervanSummary = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Content - Left Side */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Selected Motorhome Card */}
+            {/* Selected Motorhome Card - Enhanced */}
             <Card className="overflow-hidden">
               <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Selected Motorhome</CardTitle>
+                <CardTitle className="text-lg font-bold">Selected Motorhome</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex flex-col md:flex-row gap-6">
                   {/* Vehicle Image */}
-                  <div className="w-full md:w-48 h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                  <div className="w-full md:w-56 h-40 bg-gray-100 rounded-xl overflow-hidden flex-shrink-0 border">
                     <img 
-                      src="/lovable-uploads/motorhome-main.jpg" 
-                      alt="Caravan"
+                      src={mockMotorhomeData.image}
+                      alt={mockMotorhomeData.name}
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -125,15 +222,36 @@ const CampervanSummary = () => {
                   <div className="flex-1">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">Caravan</h3>
-                        <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+                        <h3 className="text-xl font-bold text-gray-900">{mockMotorhomeData.name}</h3>
+                        <p className="text-sm text-gray-500">{mockMotorhomeData.brand} {mockMotorhomeData.model}</p>
+                        <div className="flex items-center gap-4 text-sm text-gray-600 mt-2">
                           <span className="flex items-center gap-1">
                             <Users className="h-4 w-4" />
-                            4
+                            {mockMotorhomeData.specs.passengers}
                           </span>
                           <span className="flex items-center gap-1">
                             <Bed className="h-4 w-4" />
-                            2
+                            {mockMotorhomeData.specs.beds}
+                          </span>
+                        </div>
+                        
+                        {/* Additional specs */}
+                        <div className="flex flex-wrap gap-3 mt-3 text-xs text-gray-500">
+                          <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
+                            <Settings className="h-3 w-3" />
+                            {mockMotorhomeData.specs.transmission}
+                          </span>
+                          <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
+                            <Fuel className="h-3 w-3" />
+                            {mockMotorhomeData.specs.fuelType}
+                          </span>
+                          <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
+                            <Gauge className="h-3 w-3" />
+                            {mockMotorhomeData.specs.engine}
+                          </span>
+                          <span className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
+                            <Car className="h-3 w-3" />
+                            {mockMotorhomeData.specs.year}
                           </span>
                         </div>
                       </div>
@@ -142,246 +260,205 @@ const CampervanSummary = () => {
                           <Tag className="h-3 w-3" />
                           Price
                         </div>
-                        <p className="text-xl font-bold text-red-500">{basePrice.toLocaleString()} THB</p>
+                        <p className="text-2xl font-bold text-red-500">{basePrice.toLocaleString()} THB</p>
+                      </div>
+                    </div>
+
+                    {/* Amenities preview */}
+                    <div className="mt-3 pt-3 border-t">
+                      <div className="flex flex-wrap gap-2">
+                        {mockMotorhomeData.amenities.slice(0, 6).map((amenity, idx) => (
+                          <span key={idx} className="text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded flex items-center gap-1">
+                            <Check className="h-3 w-3" />
+                            {amenity}
+                          </span>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Pickup / Dropoff Info */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t">
-                  <div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
-                      <Calendar className="h-3 w-3" />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 pt-6 border-t">
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                      <Calendar className="h-4 w-4" />
                       Pick-up
                     </div>
-                    <p className="font-semibold text-gray-900">14 Jan 2026, 10:00</p>
-                    <div className="flex items-start gap-1 mt-1">
-                      <MapPin className="h-3 w-3 text-gray-400 mt-0.5 flex-shrink-0" />
-                      <p className="text-xs text-gray-500">TKD Fiber Co.,Ltd (CARRYBOY แคร์รี่บอย)</p>
+                    <p className="font-bold text-gray-900 text-lg">14 Jan 2026, 10:00</p>
+                    <div className="flex items-start gap-1 mt-2">
+                      <MapPin className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-gray-600">TKD Fiber Co.,Ltd (CARRYBOY แคร์รี่บอย)</p>
                     </div>
                   </div>
-                  <div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
-                      <Calendar className="h-3 w-3" />
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                      <Calendar className="h-4 w-4" />
                       Drop-off
                     </div>
-                    <p className="font-semibold text-gray-900">15 Jan 2026</p>
-                    <div className="flex items-start gap-1 mt-1">
-                      <MapPin className="h-3 w-3 text-gray-400 mt-0.5 flex-shrink-0" />
-                      <p className="text-xs text-gray-500">TKD Fiber Co.,Ltd (CARRYBOY แคร์รี่บอย)</p>
+                    <p className="font-bold text-gray-900 text-lg">15 Jan 2026</p>
+                    <div className="flex items-start gap-1 mt-2">
+                      <MapPin className="h-4 w-4 text-gray-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-gray-600">TKD Fiber Co.,Ltd (CARRYBOY แคร์รี่บอย)</p>
                     </div>
                   </div>
-                  <div>
-                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
-                      <Clock className="h-3 w-3" />
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
+                      <Clock className="h-4 w-4" />
                       Day
                     </div>
-                    <p className="font-semibold text-gray-900">{days}</p>
+                    <p className="font-bold text-gray-900 text-lg">{days}</p>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              {/* Add-ons Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Package className="h-5 w-5 text-primary" />
-                    Add-ons เพิ่มเติม
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    เลือกอุปกรณ์เสริมที่ต้องการ
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {mockAddons.map(addon => (
+            {/* Add-ons Section - Dropdown style */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Package className="h-5 w-5 text-primary" />
+                  Add-on & Accessories
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  เลือกอุปกรณ์เสริมที่ต้องการ
+                </p>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                {/* Dropdown for selecting addons */}
+                <Popover open={addonPopoverOpen} onOpenChange={setAddonPopoverOpen}>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="w-full justify-between bg-blue-500 hover:bg-blue-600 text-white hover:text-white border-blue-500"
+                    >
+                      <span>ค้นหา Add-on & Accessories...</span>
+                      <ChevronDown className="h-4 w-4" />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-full p-0 bg-white" align="start">
+                    <Command>
+                      <CommandInput placeholder="ค้นหา Add-on..." />
+                      <CommandList>
+                        <CommandEmpty>ไม่พบ Add-on</CommandEmpty>
+                        <CommandGroup>
+                          {availableAddons.map(addon => (
+                            <CommandItem
+                              key={addon.id}
+                              value={addon.name}
+                              onSelect={() => handleAddAddon(addon)}
+                              className="cursor-pointer"
+                            >
+                              <span>{addon.name} (฿{addon.price.toLocaleString()})</span>
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+
+                {/* Selected addons list */}
+                {selectedAddons.length > 0 && (
+                  <div className="space-y-2">
+                    {selectedAddons.map(addon => (
                       <div 
-                        key={addon.id} 
+                        key={addon.id}
+                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border"
+                      >
+                        <span className="font-medium">{addon.name}</span>
+                        <div className="flex items-center gap-3">
+                          <span className="text-gray-600">฿ {addon.price.toLocaleString()}</span>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+                            onClick={() => handleRemoveAddon(addon.id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* Total addons */}
+                    <div className="flex justify-between items-center pt-2 border-t mt-2">
+                      <span className="text-gray-600">รวม Add-on</span>
+                      <span className="font-bold text-red-500">฿{addonsTotal.toLocaleString()}</span>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Insurance Section - with modal details */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <Shield className="h-5 w-5 text-green-600" />
+                  ประกันภัย
+                </CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  เลือกแผนประกันที่เหมาะกับคุณ
+                </p>
+              </CardHeader>
+              <CardContent>
+                <RadioGroup value={selectedInsurance} onValueChange={setSelectedInsurance}>
+                  <div className="space-y-3">
+                    {mockInsuranceOptions.map(option => (
+                      <div 
+                        key={option.id} 
                         className={`flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${
-                          selectedAddons.includes(addon.id) 
-                            ? 'border-primary bg-primary/5' 
+                          selectedInsurance === option.id 
+                            ? 'border-green-500 bg-green-50' 
                             : 'hover:border-gray-400'
                         }`}
-                        onClick={() => handleAddonToggle(addon.id)}
+                        onClick={() => setSelectedInsurance(option.id)}
                       >
-                        <Checkbox
-                          id={addon.id}
-                          checked={selectedAddons.includes(addon.id)}
-                          className="mt-1"
-                        />
+                        <RadioGroupItem value={option.id} id={option.id} className="mt-1" />
                         <div className="flex-1">
-                          <Label htmlFor={addon.id} className="font-medium cursor-pointer">
-                            {addon.name}
+                          <Label htmlFor={option.id} className="font-medium cursor-pointer flex items-center gap-2">
+                            {option.name}
+                            {option.price === 0 && (
+                              <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
+                                รวมแล้ว
+                              </span>
+                            )}
                           </Label>
-                          <p className="text-xs text-gray-500">{addon.description}</p>
+                          <p className="text-sm text-gray-500 mt-1">{option.description}</p>
+                          <Button
+                            variant="link"
+                            className="p-0 h-auto text-blue-600 hover:text-blue-700 text-sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openInsuranceModal(option);
+                            }}
+                          >
+                            <Info className="h-3 w-3 mr-1" />
+                            ดูรายละเอียด
+                          </Button>
                         </div>
-                        <span className="text-sm font-medium text-primary">+฿{addon.price.toLocaleString()}/วัน</span>
+                        <span className="text-sm font-medium">
+                          {option.price === 0 ? "ฟรี" : `+฿${option.price.toLocaleString()}/วัน`}
+                        </span>
                       </div>
                     ))}
                   </div>
-                </CardContent>
-              </Card>
+                </RadioGroup>
+              </CardContent>
+            </Card>
 
-              {/* Insurance Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Shield className="h-5 w-5 text-green-600" />
-                    ประกันภัย
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    เลือกแผนประกันที่เหมาะกับคุณ
-                  </p>
-                </CardHeader>
-                <CardContent>
-                  <RadioGroup value={selectedInsurance} onValueChange={setSelectedInsurance}>
-                    <div className="space-y-3">
-                      {mockInsuranceOptions.map(option => (
-                        <div 
-                          key={option.id} 
-                          className={`flex items-start gap-3 p-4 border rounded-lg cursor-pointer transition-colors ${
-                            selectedInsurance === option.id 
-                              ? 'border-green-500 bg-green-50' 
-                              : 'hover:border-gray-400'
-                          }`}
-                          onClick={() => setSelectedInsurance(option.id)}
-                        >
-                          <RadioGroupItem value={option.id} id={option.id} className="mt-1" />
-                          <div className="flex-1">
-                            <Label htmlFor={option.id} className="font-medium cursor-pointer flex items-center gap-2">
-                              {option.name}
-                              {option.price === 0 && (
-                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">
-                                  รวมแล้ว
-                                </span>
-                              )}
-                            </Label>
-                            <p className="text-xs text-gray-500 mt-1">{option.description}</p>
-                            <p className="text-xs text-gray-400 flex items-center gap-1 mt-1">
-                              <Check className="h-3 w-3" />
-                              {option.coverage}
-                            </p>
-                          </div>
-                          <span className="text-sm font-medium">
-                            {option.price === 0 ? "ฟรี" : `+฿${option.price.toLocaleString()}/วัน`}
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </CardContent>
-              </Card>
-
-              {/* Rental Details Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">ข้อมูลผู้เช่า</CardTitle>
-                  <p className="text-sm text-muted-foreground">
-                    กรอกข้อมูลของท่านเพื่อทำการจอง
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                      <Label>คำนำหน้า</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="เลือก" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="mr">นาย</SelectItem>
-                          <SelectItem value="ms">นางสาว</SelectItem>
-                          <SelectItem value="mrs">นาง</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>ชื่อ</Label>
-                      <Input {...register("firstName")} required />
-                    </div>
-                    <div>
-                      <Label>นามสกุล</Label>
-                      <Input {...register("lastName")} required />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>อีเมล</Label>
-                      <Input type="email" {...register("email")} required />
-                    </div>
-                    <div>
-                      <Label>เบอร์โทรศัพท์</Label>
-                      <Input type="tel" {...register("phone")} required />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="md:col-span-2">
-                      <Label>ที่อยู่</Label>
-                      <Input {...register("address")} required />
-                    </div>
-                    <div>
-                      <Label>จังหวัด</Label>
-                      <Input {...register("city")} required />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Driver & Passenger Details */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg">ข้อมูลคนขับและผู้โดยสาร</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>ชื่อ-นามสกุลคนขับ</Label>
-                      <Input {...register("driverName")} required />
-                    </div>
-                    <div>
-                      <Label>วันเกิด</Label>
-                      <div className="relative">
-                        <Input type="date" {...register("driverDob")} required />
-                        <Calendar className="absolute right-3 top-2.5 h-5 w-5 text-muted-foreground pointer-events-none" />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>ประเทศที่ออกใบขับขี่</Label>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue placeholder="เลือกประเทศ" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="th">ประเทศไทย</SelectItem>
-                          <SelectItem value="international">ใบขับขี่สากล</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <Label>จำนวนผู้โดยสาร</Label>
-                      <Input type="number" min="1" max="6" {...register("passengers")} required />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Terms & Conditions */}
-              <div className="flex items-center space-x-2">
-                <Checkbox 
-                  id="terms" 
-                  checked={termsAccepted}
-                  onCheckedChange={(checked) => setTermsAccepted(checked === true)}
-                />
-                <Label htmlFor="terms" className="cursor-pointer text-sm">
-                  ฉันได้อ่านและยอมรับข้อกำหนดและเงื่อนไข
-                </Label>
-              </div>
-            </form>
+            {/* Terms & Conditions */}
+            <div className="flex items-center space-x-2 bg-white p-4 rounded-lg border">
+              <Checkbox 
+                id="terms" 
+                checked={termsAccepted}
+                onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+              />
+              <Label htmlFor="terms" className="cursor-pointer text-sm">
+                ฉันได้อ่านและยอมรับ<span className="text-blue-600 underline">ข้อกำหนดและเงื่อนไข</span>
+              </Label>
+            </div>
           </div>
 
           {/* Right Sidebar */}
@@ -399,13 +476,13 @@ const CampervanSummary = () => {
                     onChange={(e) => setPromoCode(e.target.value)}
                     className="flex-1"
                   />
-                  <Button variant="outline">Add Promotion</Button>
+                  <Button variant="outline">Add</Button>
                 </div>
               </CardContent>
             </Card>
 
             {/* Payment Summary Card */}
-            <Card>
+            <Card className="sticky top-4">
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Payment Summary</CardTitle>
               </CardHeader>
@@ -413,21 +490,21 @@ const CampervanSummary = () => {
                 <div className="flex justify-between items-center text-sm">
                   <span className="flex items-center gap-2 text-gray-600">
                     <Tag className="h-4 w-4" />
-                    Base price
+                    ค่าเช่ารถ ({days} วัน)
                   </span>
                   <span className="font-medium">{basePrice.toLocaleString()} THB</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="flex items-center gap-2 text-gray-600">
                     <Sparkles className="h-4 w-4" />
-                    Extras
+                    Add-ons
                   </span>
                   <span className="font-medium">{addonsTotal.toLocaleString()} THB</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="flex items-center gap-2 text-gray-600">
                     <Shield className="h-4 w-4" />
-                    Insurance
+                    ประกันภัย
                   </span>
                   <span className="font-medium">{insuranceTotal.toLocaleString()} THB</span>
                 </div>
@@ -439,18 +516,9 @@ const CampervanSummary = () => {
                   <span className="text-xl font-bold text-red-500">{totalPrice.toLocaleString()} THB</span>
                 </div>
 
-                <Button 
-                  variant="outline" 
-                  className="w-full mt-2"
-                  onClick={() => navigate(-1)}
-                >
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to edit
-                </Button>
-
                 {/* Payment Options */}
                 <div className="pt-4 border-t">
-                  <p className="text-sm font-medium mb-3">Select Payment Option</p>
+                  <p className="text-sm font-medium mb-3">เลือกวิธีชำระเงิน</p>
                   <RadioGroup value={paymentOption} onValueChange={setPaymentOption} className="space-y-2">
                     <div 
                       className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
@@ -460,8 +528,8 @@ const CampervanSummary = () => {
                     >
                       <RadioGroupItem value="full" id="full" />
                       <Label htmlFor="full" className="cursor-pointer flex-1">
-                        <span className="font-medium">Pay Full Amount</span>
-                        <span className="ml-2 font-bold">{totalPrice.toLocaleString()} THB</span>
+                        <span className="font-medium block">ชำระเต็มจำนวน</span>
+                        <span className="text-lg font-bold text-primary">{totalPrice.toLocaleString()} THB</span>
                       </Label>
                     </div>
                     <div 
@@ -472,8 +540,8 @@ const CampervanSummary = () => {
                     >
                       <RadioGroupItem value="deposit" id="deposit" />
                       <Label htmlFor="deposit" className="cursor-pointer flex-1">
-                        <span className="font-medium">Pay Deposit (20%)</span>
-                        <span className="ml-2 font-bold">{depositAmount.toLocaleString()} THB</span>
+                        <span className="font-medium block">ชำระมัดจำ (20%)</span>
+                        <span className="text-lg font-bold text-primary">{depositAmount.toLocaleString()} THB</span>
                       </Label>
                     </div>
                   </RadioGroup>
@@ -493,6 +561,51 @@ const CampervanSummary = () => {
         </div>
       </main>
       <Footer />
+
+      {/* Insurance Detail Modal */}
+      <Dialog open={insuranceModalOpen} onOpenChange={setInsuranceModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5 text-green-600" />
+              {selectedInsuranceForModal?.name}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-gray-600">{selectedInsuranceForModal?.description}</p>
+            <div className="space-y-2">
+              <h4 className="font-medium">รายละเอียดความคุ้มครอง:</h4>
+              <ul className="space-y-2">
+                {selectedInsuranceForModal?.details.map((detail, idx) => (
+                  <li key={idx} className="flex items-start gap-2 text-sm">
+                    <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                    <span>{detail}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="pt-4 border-t">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">ราคา</span>
+                <span className="text-xl font-bold text-green-600">
+                  {selectedInsuranceForModal?.price === 0 ? "ฟรี" : `฿${selectedInsuranceForModal?.price.toLocaleString()}/วัน`}
+                </span>
+              </div>
+            </div>
+            <Button 
+              className="w-full"
+              onClick={() => {
+                if (selectedInsuranceForModal) {
+                  setSelectedInsurance(selectedInsuranceForModal.id);
+                }
+                setInsuranceModalOpen(false);
+              }}
+            >
+              เลือกแผนนี้
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
