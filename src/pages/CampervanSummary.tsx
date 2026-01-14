@@ -14,7 +14,20 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useForm } from "react-hook-form";
-import { Calendar, Shield, Package, Check } from "lucide-react";
+import { 
+  Calendar, 
+  Shield, 
+  Package, 
+  Check, 
+  Users, 
+  Bed, 
+  MapPin, 
+  Tag,
+  Sparkles,
+  CreditCard,
+  ArrowLeft,
+  Clock
+} from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -41,6 +54,8 @@ const CampervanSummary = () => {
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [selectedInsurance, setSelectedInsurance] = useState("basic");
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [promoCode, setPromoCode] = useState("");
+  const [paymentOption, setPaymentOption] = useState("full");
 
   const handleAddonToggle = (addonId: string) => {
     setSelectedAddons(prev => 
@@ -61,12 +76,14 @@ const CampervanSummary = () => {
     return insurance?.price || 0;
   };
 
-  const basePrice = 3000; // Base price per day
-  const days = 3;
-  const baseTotal = basePrice * days;
+  const basePrice = 12000; // Base price total
+  const days = 1;
   const addonsTotal = calculateAddonsTotal() * days;
   const insuranceTotal = getInsurancePrice() * days;
-  const totalPrice = baseTotal + addonsTotal + insuranceTotal;
+  const totalPrice = basePrice + addonsTotal + insuranceTotal;
+  const depositAmount = Math.round(totalPrice * 0.2);
+
+  const referenceNumber = `${Date.now()}`;
 
   const onSubmit = (data: any) => {
     console.log("Form submitted:", data);
@@ -76,19 +93,101 @@ const CampervanSummary = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
       <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            <h1 className="text-3xl font-bold">ยืนยันการจองรถบ้าน</h1>
+        {/* Page Header */}
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900">Booking Summary</h1>
+          <p className="text-sm text-gray-500">Reference: {referenceNumber}</p>
+        </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Content - Left Side */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Selected Motorhome Card */}
+            <Card className="overflow-hidden">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Selected Motorhome</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col md:flex-row gap-4">
+                  {/* Vehicle Image */}
+                  <div className="w-full md:w-48 h-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                    <img 
+                      src="/lovable-uploads/motorhome-main.jpg" 
+                      alt="Caravan"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  
+                  {/* Vehicle Info */}
+                  <div className="flex-1">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900">Caravan</h3>
+                        <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+                          <span className="flex items-center gap-1">
+                            <Users className="h-4 w-4" />
+                            4
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Bed className="h-4 w-4" />
+                            2
+                          </span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="flex items-center gap-1 text-xs text-gray-500">
+                          <Tag className="h-3 w-3" />
+                          Price
+                        </div>
+                        <p className="text-xl font-bold text-red-500">{basePrice.toLocaleString()} THB</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Pickup / Dropoff Info */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 pt-4 border-t">
+                  <div>
+                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                      <Calendar className="h-3 w-3" />
+                      Pick-up
+                    </div>
+                    <p className="font-semibold text-gray-900">14 Jan 2026, 10:00</p>
+                    <div className="flex items-start gap-1 mt-1">
+                      <MapPin className="h-3 w-3 text-gray-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-xs text-gray-500">TKD Fiber Co.,Ltd (CARRYBOY แคร์รี่บอย)</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                      <Calendar className="h-3 w-3" />
+                      Drop-off
+                    </div>
+                    <p className="font-semibold text-gray-900">15 Jan 2026</p>
+                    <div className="flex items-start gap-1 mt-1">
+                      <MapPin className="h-3 w-3 text-gray-400 mt-0.5 flex-shrink-0" />
+                      <p className="text-xs text-gray-500">TKD Fiber Co.,Ltd (CARRYBOY แคร์รี่บอย)</p>
+                    </div>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                      <Clock className="h-3 w-3" />
+                      Day
+                    </div>
+                    <p className="font-semibold text-gray-900">{days}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Add-ons Section */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-lg">
                     <Package className="h-5 w-5 text-primary" />
                     Add-ons เพิ่มเติม
                   </CardTitle>
@@ -129,7 +228,7 @@ const CampervanSummary = () => {
               {/* Insurance Section */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
+                  <CardTitle className="flex items-center gap-2 text-lg">
                     <Shield className="h-5 w-5 text-green-600" />
                     ประกันภัย
                   </CardTitle>
@@ -179,7 +278,7 @@ const CampervanSummary = () => {
               {/* Rental Details Section */}
               <Card>
                 <CardHeader>
-                  <CardTitle>ข้อมูลผู้เช่า</CardTitle>
+                  <CardTitle className="text-lg">ข้อมูลผู้เช่า</CardTitle>
                   <p className="text-sm text-muted-foreground">
                     กรอกข้อมูลของท่านเพื่อทำการจอง
                   </p>
@@ -234,7 +333,7 @@ const CampervanSummary = () => {
               {/* Driver & Passenger Details */}
               <Card>
                 <CardHeader>
-                  <CardTitle>ข้อมูลคนขับและผู้โดยสาร</CardTitle>
+                  <CardTitle className="text-lg">ข้อมูลคนขับและผู้โดยสาร</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -271,35 +370,6 @@ const CampervanSummary = () => {
                 </CardContent>
               </Card>
 
-              {/* Payment Details */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>ข้อมูลการชำระเงิน</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>หมายเลขบัตร</Label>
-                      <Input {...register("cardNumber")} required />
-                    </div>
-                    <div>
-                      <Label>รหัส CVV</Label>
-                      <Input type="password" maxLength={4} {...register("cvv")} required />
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <Label>ชื่อบนบัตร</Label>
-                      <Input {...register("cardName")} required />
-                    </div>
-                    <div>
-                      <Label>วันหมดอายุ</Label>
-                      <Input placeholder="MM/YY" {...register("expiryDate")} required />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
               {/* Terms & Conditions */}
               <div className="flex items-center space-x-2">
                 <Checkbox 
@@ -307,72 +377,116 @@ const CampervanSummary = () => {
                   checked={termsAccepted}
                   onCheckedChange={(checked) => setTermsAccepted(checked === true)}
                 />
-                <Label htmlFor="terms" className="cursor-pointer">
+                <Label htmlFor="terms" className="cursor-pointer text-sm">
                   ฉันได้อ่านและยอมรับข้อกำหนดและเงื่อนไข
                 </Label>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4">
-                <Button type="submit" className="flex-1 bg-green-600 hover:bg-green-700">
-                  ยืนยันการจอง
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => navigate(-1)}
-                >
-                  ยกเลิก
-                </Button>
               </div>
             </form>
           </div>
 
-          {/* Booking Summary Sidebar */}
-          <div className="lg:col-span-1">
-            <Card className="sticky top-4">
-              <CardHeader>
-                <CardTitle>สรุปการจอง</CardTitle>
+          {/* Right Sidebar */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* Promotion Card */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Promotion</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h3 className="font-medium">รถบ้านที่เลือก</h3>
-                  <p className="text-muted-foreground">Motorhome Premium</p>
+              <CardContent>
+                <div className="flex gap-2">
+                  <Input 
+                    placeholder="Enter promo code" 
+                    value={promoCode}
+                    onChange={(e) => setPromoCode(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button variant="outline">Add Promotion</Button>
                 </div>
-                <div>
-                  <h3 className="font-medium">วันรับรถ</h3>
-                  <p className="text-muted-foreground">กรุงเทพฯ</p>
-                  <p className="text-muted-foreground">จันทร์, 15 เม.ย. 2567</p>
+              </CardContent>
+            </Card>
+
+            {/* Payment Summary Card */}
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Payment Summary</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="flex items-center gap-2 text-gray-600">
+                    <Tag className="h-4 w-4" />
+                    Base price
+                  </span>
+                  <span className="font-medium">{basePrice.toLocaleString()} THB</span>
                 </div>
-                <div>
-                  <h3 className="font-medium">วันคืนรถ</h3>
-                  <p className="text-muted-foreground">เชียงใหม่</p>
-                  <p className="text-muted-foreground">พุธ, 17 เม.ย. 2567</p>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="flex items-center gap-2 text-gray-600">
+                    <Sparkles className="h-4 w-4" />
+                    Extras
+                  </span>
+                  <span className="font-medium">{addonsTotal.toLocaleString()} THB</span>
                 </div>
-                
-                <div className="border-t pt-4 space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>ค่าเช่ารถ ({days} วัน)</span>
-                    <span>฿{baseTotal.toLocaleString()}</span>
-                  </div>
-                  {selectedAddons.length > 0 && (
-                    <div className="flex justify-between text-sm">
-                      <span>Add-ons ({days} วัน)</span>
-                      <span>฿{addonsTotal.toLocaleString()}</span>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="flex items-center gap-2 text-gray-600">
+                    <Shield className="h-4 w-4" />
+                    Insurance
+                  </span>
+                  <span className="font-medium">{insuranceTotal.toLocaleString()} THB</span>
+                </div>
+                <div className="flex justify-between items-center pt-3 border-t">
+                  <span className="flex items-center gap-2 text-red-500 font-semibold">
+                    <CreditCard className="h-4 w-4" />
+                    Total
+                  </span>
+                  <span className="text-xl font-bold text-red-500">{totalPrice.toLocaleString()} THB</span>
+                </div>
+
+                <Button 
+                  variant="outline" 
+                  className="w-full mt-2"
+                  onClick={() => navigate(-1)}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to edit
+                </Button>
+
+                {/* Payment Options */}
+                <div className="pt-4 border-t">
+                  <p className="text-sm font-medium mb-3">Select Payment Option</p>
+                  <RadioGroup value={paymentOption} onValueChange={setPaymentOption} className="space-y-2">
+                    <div 
+                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                        paymentOption === 'full' ? 'border-primary bg-primary/5' : 'hover:border-gray-400'
+                      }`}
+                      onClick={() => setPaymentOption('full')}
+                    >
+                      <RadioGroupItem value="full" id="full" />
+                      <Label htmlFor="full" className="cursor-pointer flex-1">
+                        <span className="font-medium">Pay Full Amount</span>
+                        <span className="ml-2 font-bold">{totalPrice.toLocaleString()} THB</span>
+                      </Label>
                     </div>
-                  )}
-                  {insuranceTotal > 0 && (
-                    <div className="flex justify-between text-sm">
-                      <span>ประกันภัย ({days} วัน)</span>
-                      <span>฿{insuranceTotal.toLocaleString()}</span>
+                    <div 
+                      className={`flex items-center gap-3 p-3 border rounded-lg cursor-pointer transition-colors ${
+                        paymentOption === 'deposit' ? 'border-primary bg-primary/5' : 'hover:border-gray-400'
+                      }`}
+                      onClick={() => setPaymentOption('deposit')}
+                    >
+                      <RadioGroupItem value="deposit" id="deposit" />
+                      <Label htmlFor="deposit" className="cursor-pointer flex-1">
+                        <span className="font-medium">Pay Deposit (20%)</span>
+                        <span className="ml-2 font-bold">{depositAmount.toLocaleString()} THB</span>
+                      </Label>
                     </div>
-                  )}
-                  <div className="flex justify-between font-medium text-lg pt-2 border-t">
-                    <span>รวมทั้งหมด</span>
-                    <span className="text-primary">฿{totalPrice.toLocaleString()}</span>
-                  </div>
+                  </RadioGroup>
                 </div>
+
+                {/* Pay Now Button */}
+                <Button 
+                  className="w-full bg-red-500 hover:bg-red-600 text-white mt-4"
+                  disabled={!termsAccepted}
+                  onClick={() => navigate('/payment-summary')}
+                >
+                  Pay Now ({paymentOption === 'full' ? totalPrice.toLocaleString() : depositAmount.toLocaleString()} THB)
+                </Button>
               </CardContent>
             </Card>
           </div>
