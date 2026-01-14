@@ -18,7 +18,6 @@ import {
   Navigation, 
   Sun, 
   Camera, 
-  Bed,
   ChevronDown,
   ChevronUp,
   RotateCcw
@@ -35,14 +34,13 @@ export interface FilterState {
   brands: string[];
   features: string[];
   capacity: string[];
-  // New vehicle spec filters
+  // Vehicle spec filters
   vehicleTypes: string[];
   transmissions: string[];
   fuelTypes: string[];
   yearRange: [number, number];
   lengthRange: [number, number];
   heightRange: [number, number];
-  bedTypes: string[];
 }
 
 const FilterSidebar = ({ onFilterChange, filters }: FilterSidebarProps) => {
@@ -68,12 +66,6 @@ const FilterSidebar = ({ onFilterChange, filters }: FilterSidebarProps) => {
     { id: "diesel", label: "Diesel" },
     { id: "hybrid", label: "Hybrid" },
     { id: "ev", label: "EV" }
-  ];
-
-  const bedTypes = [
-    { id: "single", label: "Single" },
-    { id: "double", label: "Double" },
-    { id: "queen", label: "Queen" }
   ];
 
   // Enhanced features with icons
@@ -121,7 +113,6 @@ const FilterSidebar = ({ onFilterChange, filters }: FilterSidebarProps) => {
       yearRange: [2018, 2024],
       lengthRange: [4, 10],
       heightRange: [2, 4],
-      bedTypes: []
     };
     setLocalFilters(clearedFilters);
     onFilterChange(clearedFilters);
@@ -345,27 +336,6 @@ const FilterSidebar = ({ onFilterChange, filters }: FilterSidebarProps) => {
         </div>
       </Card>
 
-      {/* Bed Types */}
-      <Card className="p-4">
-        <div className="flex items-center gap-2 mb-3">
-          <Bed className="h-4 w-4 text-primary" />
-          <Label className="text-sm font-semibold">ประเภทเตียง</Label>
-        </div>
-        <div className="space-y-2.5">
-          {bedTypes.map((bed) => (
-            <div key={bed.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`bed-${bed.id}`}
-                checked={localFilters.bedTypes.includes(bed.id)}
-                onCheckedChange={(checked) => handleArrayFilterChange("bedTypes", bed.id, checked as boolean)}
-              />
-              <Label htmlFor={`bed-${bed.id}`} className="cursor-pointer text-sm font-normal">
-                {bed.label}
-              </Label>
-            </div>
-          ))}
-        </div>
-      </Card>
 
       {/* Features */}
       <Card className="p-4">

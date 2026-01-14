@@ -201,7 +201,6 @@ const [filters, setFilters] = useState<FilterState>({
     yearRange: [2018, 2024],
     lengthRange: [4, 10],
     heightRange: [2, 4],
-    bedTypes: []
   });
 
   const [sortOption, setSortOption] = useState<SortOption>("recommended");
@@ -293,13 +292,6 @@ const filteredAndSortedMotorhomes = useMemo(() => {
       // Height filter
       if (motorhome.height) {
         if (motorhome.height < filters.heightRange[0] || motorhome.height > filters.heightRange[1]) {
-          return false;
-        }
-      }
-
-      // Bed type filter
-      if (filters.bedTypes.length > 0 && motorhome.bedType) {
-        if (!filters.bedTypes.includes(motorhome.bedType)) {
           return false;
         }
       }
@@ -400,9 +392,9 @@ const filteredAndSortedMotorhomes = useMemo(() => {
         </Button>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar Filters - Sticky */}
+          {/* Sidebar Filters - Scrolls with content */}
           <aside className="w-full lg:w-72 flex-shrink-0">
-            <div className="lg:sticky lg:top-4">
+            <div>
               <FilterSidebar filters={filters} onFilterChange={setFilters} />
             </div>
           </aside>
