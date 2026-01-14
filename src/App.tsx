@@ -62,7 +62,7 @@ const App = () => (
           <Route path="/customer-details" element={<CustomerDetails />} />
           <Route path="/payment-summary" element={<PaymentSummary />} />
           <Route path="/book-motorhome" element={<BookMotorhome />} />
-          <Route path="/search-hotels" element={<SearchHotels />} />
+          <Route path="/search-campsite" element={<SearchHotels />} />
           <Route path="/hotels-calculator" element={<HotelsCalculator />} />
           <Route path="/motorhome-results" element={<MotorhomeResults />} />
           <Route path="/motorhome-calculator" element={<MotorhomeCalculator />} />
@@ -70,7 +70,7 @@ const App = () => (
           <Route path="/download" element={<Download />} />
           <Route path="/rent-campervan" element={<RentCampervan />} />
           <Route path="/campervan-detail" element={<CampervanDetail />} />
-          <Route path="/campervan-summary" element={<CampervanSummary />} />
+          <Route path="/motorhome-summary" element={<CampervanSummary />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
