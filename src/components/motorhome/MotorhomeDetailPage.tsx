@@ -2,23 +2,32 @@
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
 import {
   ArrowLeft,
   Star,
-  Heart,
-  Share2,
-  Badge,
   Check,
   X,
   Grid3x3,
   ChevronLeft,
   ChevronRight,
-  Ruler
+  Ruler,
+  Car,
+  Fuel,
+  Calendar,
+  Settings,
+  Gauge,
+  Users,
+  BedDouble,
+  Wifi,
+  Snowflake,
+  Tv,
+  Refrigerator,
+  ShowerHead,
+  Utensils,
+  Flame,
+  Battery,
+  Armchair
 } from "lucide-react";
-import { MotorhomeGallery } from "./MotorhomeGallery";
 import { BookingSection } from "./BookingSection";
 import { ReviewsSection } from "./ReviewsSection";
 
@@ -95,6 +104,26 @@ interface MotorhomeDetailPageProps {
   };
 }
 
+// Icon mapping for amenities
+const amenityIcons: Record<string, React.ReactNode> = {
+  "WiFi": <Wifi className="h-5 w-5 text-green-600" />,
+  "แอร์": <Snowflake className="h-5 w-5 text-blue-500" />,
+  "เครื่องปรับอากาศ": <Snowflake className="h-5 w-5 text-blue-500" />,
+  "ทีวี": <Tv className="h-5 w-5 text-purple-500" />,
+  "ตู้เย็น": <Refrigerator className="h-5 w-5 text-cyan-500" />,
+  "ห้องน้ำ": <ShowerHead className="h-5 w-5 text-blue-400" />,
+  "ห้องอาบน้ำ": <ShowerHead className="h-5 w-5 text-blue-400" />,
+  "เตาแก๊ส": <Flame className="h-5 w-5 text-orange-500" />,
+  "ครัว": <Utensils className="h-5 w-5 text-amber-600" />,
+  "โซลาร์เซลล์": <Battery className="h-5 w-5 text-yellow-500" />,
+  "เตียงนอน": <BedDouble className="h-5 w-5 text-indigo-500" />,
+  "โซฟา": <Armchair className="h-5 w-5 text-rose-500" />,
+};
+
+const getAmenityIcon = (name: string) => {
+  return amenityIcons[name] || <Check className="h-5 w-5 text-green-500" />;
+};
+
 const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
   const navigate = useNavigate();
   
@@ -140,6 +169,9 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
     setSelectedImageIndex((prev) => (prev - 1 + motorhome.images.length) % motorhome.images.length);
   };
 
+  // Filter only available amenities
+  const availableAmenities = motorhome.amenities.filter(amenity => amenity.available);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Navigation Header */}
@@ -155,7 +187,7 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
               <div>
-                <h1 className="text-xl font-bold">{motorhome.brand}</h1>
+                <h1 className="text-xl font-bold">{motorhome.name}</h1>
                 <div className="flex items-center gap-2">
                   <span className="bg-red-500 text-white px-2 py-0.5 rounded text-xs font-medium">
                     {motorhome.badges[0]}
@@ -184,71 +216,68 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Brand and Description */}
-        <div className="flex items-start gap-4 mb-6">
-          <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-            <span className="text-red-600 font-bold text-lg">M</span>
-          </div>
-          <div className="flex-1">
-            <h2 className="text-xl font-bold">{motorhome.brand}</h2>
-            <p className="text-gray-600 text-sm mt-1">{motorhome.description}</p>
-          </div>
-        </div>
-
-        {/* RVN CAMP Brand */}
-        <div className="mb-8">
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold">RVN</span>
-            <span className="text-xl font-bold text-red-500">CAMP</span>
-            <span className="text-gray-400 text-xs">________________________</span>
-          </div>
+        {/* Description */}
+        <div className="mb-6">
+          <p className="text-gray-600">{motorhome.description}</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Specs Section */}
+            {/* Vehicle Specs Section with Icons */}
             <div ref={overviewRef} className="bg-white">
-              <div className="grid grid-cols-2 gap-8">
-                {/* Basic Info */}
-                <div>
-                  <h3 className="font-semibold mb-4">ข้อมูลพื้นฐาน</h3>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">ยี่ห้อ</span>
-                      <span className="font-medium">{motorhome.brand}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">รุ่น</span>
-                      <span className="font-medium">{motorhome.model}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">ปี</span>
-                      <span className="font-medium">{motorhome.specs.year}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">เชื้อเพลิง</span>
-                      <span className="font-medium">{motorhome.specs.fuelType}</span>
-                    </div>
+              <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                <Car className="h-5 w-5 text-primary" />
+                ข้อมูลจำเพาะ
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Calendar className="h-6 w-6 text-blue-500" />
+                  <div>
+                    <p className="text-xs text-gray-500">ปี</p>
+                    <p className="font-medium">{motorhome.specs.year}</p>
                   </div>
                 </div>
-
-                {/* Performance */}
-                <div>
-                  <h3 className="font-semibold mb-4">สมรรถนะ</h3>
-                  <div className="space-y-3 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">เครื่องยนต์</span>
-                      <span className="font-medium">{motorhome.specs.engine}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">เกียร์</span>
-                      <span className="font-medium">{motorhome.specs.drive}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">เมลนิมิ</span>
-                      <span className="font-medium">{motorhome.specs.transmission}</span>
-                    </div>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Fuel className="h-6 w-6 text-orange-500" />
+                  <div>
+                    <p className="text-xs text-gray-500">เชื้อเพลิง</p>
+                    <p className="font-medium">{motorhome.specs.fuelType}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Gauge className="h-6 w-6 text-red-500" />
+                  <div>
+                    <p className="text-xs text-gray-500">เครื่องยนต์</p>
+                    <p className="font-medium">{motorhome.specs.engine}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Settings className="h-6 w-6 text-gray-600" />
+                  <div>
+                    <p className="text-xs text-gray-500">เกียร์</p>
+                    <p className="font-medium">{motorhome.specs.transmission}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Car className="h-6 w-6 text-green-500" />
+                  <div>
+                    <p className="text-xs text-gray-500">ระบบขับเคลื่อน</p>
+                    <p className="font-medium">{motorhome.specs.drive}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <Users className="h-6 w-6 text-purple-500" />
+                  <div>
+                    <p className="text-xs text-gray-500">ผู้โดยสาร</p>
+                    <p className="font-medium">{motorhome.specs.passengers} คน</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <BedDouble className="h-6 w-6 text-indigo-500" />
+                  <div>
+                    <p className="text-xs text-gray-500">เตียงนอน</p>
+                    <p className="font-medium">{motorhome.specs.beds} เตียง</p>
                   </div>
                 </div>
               </div>
@@ -257,25 +286,25 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
             {/* Dimensions Section */}
             <div ref={dimensionsRef} className="bg-white border-t pt-6">
               <div className="flex items-center gap-2 mb-4">
-                <Ruler className="h-5 w-5" />
-                <h3 className="font-semibold">ขนาด</h3>
+                <Ruler className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-lg">ขนาดรถ</h3>
               </div>
-              <div className="grid grid-cols-4 gap-4 text-sm text-center">
-                <div className="border-r">
-                  <p className="text-gray-600 mb-1">ความยาว</p>
-                  <p className="font-medium">{motorhome.dimensions.length}</p>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <p className="text-gray-600 text-sm mb-1">ความยาว</p>
+                  <p className="font-bold text-lg">{motorhome.dimensions.length}</p>
                 </div>
-                <div className="border-r">
-                  <p className="text-gray-600 mb-1">ความกว้าง</p>
-                  <p className="font-medium">{motorhome.dimensions.width}</p>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <p className="text-gray-600 text-sm mb-1">ความกว้าง</p>
+                  <p className="font-bold text-lg">{motorhome.dimensions.width}</p>
                 </div>
-                <div className="border-r">
-                  <p className="text-gray-600 mb-1">ความสูง</p>
-                  <p className="font-medium">{motorhome.dimensions.height}</p>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <p className="text-gray-600 text-sm mb-1">ความสูง</p>
+                  <p className="font-bold text-lg">{motorhome.dimensions.height}</p>
                 </div>
-                <div>
-                  <p className="text-gray-600 mb-1">ความยาวฐานล้อ</p>
-                  <p className="font-medium">{motorhome.dimensions.wheelbase}</p>
+                <div className="text-center p-4 bg-gray-50 rounded-lg">
+                  <p className="text-gray-600 text-sm mb-1">ฐานล้อ</p>
+                  <p className="font-bold text-lg">{motorhome.dimensions.wheelbase}</p>
                 </div>
               </div>
             </div>
@@ -283,8 +312,8 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
             {/* Floorplan / Gallery Section */}
             <div ref={floorplanRef} className="bg-white border-t pt-6">
               <div className="flex items-center gap-2 mb-4">
-                <Grid3x3 className="h-5 w-5" />
-                <h3 className="font-semibold">แผนผัง</h3>
+                <Grid3x3 className="h-5 w-5 text-primary" />
+                <h3 className="font-semibold text-lg">แผนผัง</h3>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {motorhome.images.slice(1).map((image, index) => (
@@ -304,18 +333,17 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
               </div>
             </div>
 
-            {/* Amenities Section */}
+            {/* Amenities Section - Only show available */}
             <div ref={amenitiesRef} className="bg-white border-t pt-6">
-              <h3 className="font-semibold mb-4">สิ่งอำนวยความสะดวก</h3>
-              <div className="grid grid-cols-2 gap-4">
-                {motorhome.amenities.map((amenity, index) => (
-                  <div key={index} className="flex items-center gap-3 py-2 border-b">
-                    <span className="text-gray-700">{amenity.name}</span>
-                    {amenity.available ? (
-                      <Check className="h-4 w-4 text-green-500 ml-auto" />
-                    ) : (
-                      <X className="h-4 w-4 text-red-400 ml-auto" />
-                    )}
+              <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                <Check className="h-5 w-5 text-primary" />
+                สิ่งอำนวยความสะดวก
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                {availableAmenities.map((amenity, index) => (
+                  <div key={index} className="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
+                    {getAmenityIcon(amenity.name)}
+                    <span className="text-gray-700 font-medium">{amenity.name}</span>
                   </div>
                 ))}
               </div>
@@ -332,8 +360,6 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
             <div className="sticky top-24">
               <BookingSection 
                 motorhome={motorhome} 
-                addons={motorhome.addons}
-                insuranceOptions={motorhome.insuranceOptions}
                 pickupLocations={motorhome.pickupLocations}
               />
             </div>
