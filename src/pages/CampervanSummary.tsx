@@ -330,16 +330,16 @@ const CampervanSummary = () => {
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
-                      className="w-full justify-between bg-blue-500 hover:bg-blue-600 text-white hover:text-white border-blue-500"
+                      className="w-full justify-between bg-white hover:bg-red-50 text-red-600 hover:text-red-700 border-red-300 hover:border-red-400"
                     >
                       <span>ค้นหา Add-on & Accessories...</span>
                       <ChevronDown className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-full p-0 bg-white" align="start">
-                    <Command>
-                      <CommandInput placeholder="ค้นหา Add-on..." />
-                      <CommandList>
+                  <PopoverContent className="w-full p-0 bg-white border-red-200" align="start">
+                    <Command className="bg-white">
+                      <CommandInput placeholder="ค้นหา Add-on..." className="border-red-100" />
+                      <CommandList className="bg-white">
                         <CommandEmpty>ไม่พบ Add-on</CommandEmpty>
                         <CommandGroup>
                           {availableAddons.map(addon => (
@@ -347,7 +347,7 @@ const CampervanSummary = () => {
                               key={addon.id}
                               value={addon.name}
                               onSelect={() => handleAddAddon(addon)}
-                              className="cursor-pointer"
+                              className="cursor-pointer hover:bg-red-50 data-[selected=true]:bg-red-50 data-[selected=true]:text-red-700"
                             >
                               <span>{addon.name} (฿{addon.price.toLocaleString()})</span>
                             </CommandItem>
