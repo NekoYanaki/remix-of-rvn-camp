@@ -154,7 +154,7 @@ const SearchHeader = ({
           </Popover>
 
           {/* Search Button */}
-          <Button onClick={onSearch} className="h-12 px-8 bg-orange-500 hover:bg-orange-600 text-white font-semibold shadow-lg">
+          <Button onClick={onSearch} className="h-12 px-8 bg-green-600 hover:bg-green-700 text-white font-semibold shadow-lg">
             <Search className="w-5 h-5 mr-2" />
             ค้นหา
           </Button>
