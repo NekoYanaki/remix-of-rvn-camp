@@ -5,110 +5,83 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CampsiteDetailPage from "@/components/campsite/CampsiteDetailPage";
 
-// Mock data with different content based on ID
+// Mock data based on partner registration - บ้านอิ่มสุขแคมป์ปิ้ง เพชรบุรี
 const getCampsiteData = (id: string) => {
-  const baseData = {
-    id: id || "1",
-    name: "Mountain View Eco Campsite",
+  const partnerData = {
+    id: id || "d639a81f-8c05-40a1-85e1-6bf70c77a931",
+    name: "บ้านอิ่มสุขแคมป์ปิ้ง เพชรบุรี",
     images: [
-      "/lovable-uploads/491cfd8c-5bc4-4d54-afb5-cc0adc56e139.png",
-      "/lovable-uploads/ffbe678e-abe3-4ee8-8950-91cb622e5fde.png",
-      "/lovable-uploads/31648e34-1e0e-418b-a716-4edcc750815c.png",
-      "/lovable-uploads/57b37350-81fd-4c1a-af07-400f654b5c47.png",
-      "/lovable-uploads/71ca327b-2638-4ef8-8596-5784d0446c53.png",
-      "/lovable-uploads/d8ae79a0-6073-4419-8cad-67eba89223b4.png"
+      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/main_image/mainimage.png",
+      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/1.jpg",
+      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg",
+      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg",
+      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/4.jpg",
+      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/5.jpg"
     ],
-    price: 45,
+    price: 500,
     rating: 4.8,
-    reviewCount: 127,
-    description: "Escape to nature at our eco-friendly campsite nestled in the heart of the mountains. Perfect for digital nomads and nature lovers seeking tranquility, adventure, and sustainable travel. Wake up to breathtaking sunrise views and fall asleep under a canopy of stars.",
+    reviewCount: 24,
+    description: "บ้านอิ่มสุขแคมป์ปิ้ง ที่พักสำหรับรถบ้านและแคมป์ปิ้ง ตั้งอยู่ใน อ.ท่ายาง จ.เพชรบุรี บรรยากาศดี เงียบสงบ มีพื้นที่สีเขียว เหมาะสำหรับการพักผ่อน พร้อมสิ่งอำนวยความสะดวกครบครัน ไฟฟ้า น้ำประปา Wi-Fi ห้องน้ำสะอาด",
     location: {
-      address: "123 Mountain Ridge Trail",
-      city: "Boulder Creek",
-      country: "United States",
-      coordinates: { lat: 37.1234, lng: -122.0567 }
+      address: "27 ม.11 ต.กลัดหลวง อ.ท่ายาง",
+      city: "เพชรบุรี",
+      country: "ประเทศไทย",
+      coordinates: { lat: 12.8432, lng: 99.8345 }
     },
     amenities: [
-      "Hot showers",
-      "Flush toilets", 
-      "Electricity hookups",
-      "Fresh water supply",
-      "Free Wi-Fi",
-      "Campfire pits",
-      "Picnic tables",
-      "Barbecue grills",
-      "Pet-friendly areas",
-      "Waste disposal",
-      "Communal kitchen",
-      "Parking available"
+      "ไฟฟ้าให้เชื่อมต่อ",
+      "จุดทิ้งน้ำเสีย", 
+      "ระบบน้ำประปา",
+      "Wi-Fi ฟรี",
+      "ห้องน้ำและห้องอาบน้ำ",
+      "จุดทำอาหาร (ครัวกลาง/เตาปิ้งย่าง)",
+      "พื้นที่จอดรถยนต์เสริม",
+      "บริเวณพักผ่อน/ลานกางเต็นท์",
+      "จุดทิ้งขยะและระบบจัดการขยะ",
+      "ระบบรักษาความปลอดภัย (CCTV)",
+      "แสงสว่างในพื้นที่",
+      "ร้านค้าหรือร้านอาหารใกล้เคียง"
     ],
     activities: [
-      "Hiking trails",
-      "Mountain biking",
-      "Stargazing sessions",
-      "Wildlife watching",
-      "Photography tours",
-      "Yoga classes",
-      "Kayak rental",
-      "Rock climbing"
+      "กิจกรรมท้องถิ่น",
+      "การท่องเที่ยวใกล้เคียง",
+      "พักผ่อนท่ามกลางธรรมชาติ",
+      "ถ่ายภาพวิวทิวทัศน์"
     ],
     rules: [
-      "Quiet hours from 10 PM to 7 AM",
-      "Maximum 6 people per campsite",
-      "Pets must be leashed at all times",
-      "No loud music or parties",
-      "Campfires only in designated areas",
-      "Check-in after 2 PM, check-out before 11 AM",
-      "No smoking in buildings",
-      "Dispose of waste properly"
+      "อนุญาตให้นำสัตว์เลี้ยงเข้าพัก (กรุณาตรวจสอบกฎเกี่ยวกับสัตว์เลี้ยง)",
+      "เช็คอิน: 14:00 น.",
+      "เช็คเอาท์: 12:00 น.",
+      "กรุณารักษาความเงียบสงบ",
+      "ทิ้งขยะในจุดที่กำหนด"
     ],
     stayOptions: [
       {
-        type: "Tent Pitch",
-        description: "Perfect spot for your tent with access to all facilities",
-        maxGuests: 4,
-        price: 35
-      },
-      {
-        type: "RV Spot",
-        description: "Full hookup site for RVs and campervans up to 35 feet",
+        type: "ลานจอดรถบ้าน",
+        description: "พื้นที่สำหรับจอดรถบ้าน Caravan, Motorhome ทุกประเภท พร้อมไฟฟ้าและน้ำประปา",
         maxGuests: 6,
-        price: 55
-      },
-      {
-        type: "Glamping Cabin",
-        description: "Cozy cabin with basic amenities for comfortable camping",
-        maxGuests: 4,
-        price: 85
+        price: 500
       }
     ],
     host: {
-      name: "Sarah Mountains",
-      avatar: "/lovable-uploads/b3b48e94-e287-44ba-807a-e228a1df866a.png",
-      joinedDate: "2019"
-    }
+      name: "บ้านอิ่มสุขแคมป์ปิ้ง",
+      avatar: "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/main_image/mainimage.png",
+      joinedDate: "2024",
+      phone: "0625958885",
+      email: "kaengkrachanhos2@gmail.com"
+    },
+    supportedVehicles: [
+      "Caravan",
+      "Motorhome A Class",
+      "Motorhome B Class", 
+      "Motorhome C Class",
+      "Campervan"
+    ],
+    checkIn: "14:00",
+    checkOut: "12:00"
   };
 
-  // Customize based on ID
-  if (id === "2") {
-    return {
-      ...baseData,
-      name: "Seaside Paradise Campground",
-      price: 65,
-      description: "Wake up to ocean waves at our beachfront campsite. Perfect for surfers, beach lovers, and anyone seeking a coastal adventure with modern amenities."
-    };
-  }
-
-  if (id === "3") {
-    return {
-      ...baseData,
-      name: "Forest Hideaway Camp",
-      price: 40,
-      description: "Immerse yourself in old-growth forest at this secluded campsite. Ideal for nature photographers, bird watchers, and those seeking digital detox."
-    };
-  }
-
-  return baseData;
+  return partnerData;
 };
 
 const CampsiteDetails = () => {
