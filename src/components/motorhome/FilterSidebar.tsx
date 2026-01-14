@@ -3,7 +3,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { Search, MapPin } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 interface FilterSidebarProps {
@@ -55,30 +54,6 @@ const FilterSidebar = ({ onFilterChange, filters }: FilterSidebarProps) => {
 
   return (
     <div className="space-y-6">
-      {/* Map Preview */}
-      <Card className="overflow-hidden">
-        <div className="relative h-40 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-          <div className="text-center">
-            <MapPin className="w-8 h-8 text-primary mx-auto mb-2" />
-            <p className="text-sm font-medium text-primary">ค้นหาบนแผนที่</p>
-          </div>
-        </div>
-      </Card>
-
-      {/* Search by Name */}
-      <Card className="p-4">
-        <Label className="text-sm font-semibold mb-3 block">ค้นหาตามชื่อ</Label>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input
-            placeholder="ค้นหา..."
-            className="pl-9"
-            value={localFilters.searchQuery}
-            onChange={(e) => updateFilters({ searchQuery: e.target.value })}
-          />
-        </div>
-      </Card>
-
       {/* Price Range */}
       <Card className="p-4">
         <Label className="text-sm font-semibold mb-4 block">ราคาต่อคืน</Label>

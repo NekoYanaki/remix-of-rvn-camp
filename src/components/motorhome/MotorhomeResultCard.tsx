@@ -1,8 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { 
-  Heart, 
   Users, 
   Eye, 
   Star, 
@@ -13,7 +11,6 @@ import {
   Bed
 } from "lucide-react";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
 export interface Motorhome {
   id: number;
@@ -48,7 +45,6 @@ const MotorhomeResultCard = ({
   onViewDetails 
 }: MotorhomeResultCardProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isFavorite, setIsFavorite] = useState(false);
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => 
@@ -63,12 +59,6 @@ const MotorhomeResultCard = ({
   };
 
   const totalPrice = motorhome.price * (totalDays || 1);
-  const originalTotalPrice = motorhome.originalPrice 
-    ? motorhome.originalPrice * (totalDays || 1) 
-    : null;
-  const discountPercent = motorhome.originalPrice 
-    ? Math.round((1 - motorhome.price / motorhome.originalPrice) * 100)
-    : null;
 
   const displayedAmenities = motorhome.amenities.slice(0, 4);
   const remainingAmenities = motorhome.amenities.length - 4;
@@ -106,19 +96,6 @@ const MotorhomeResultCard = ({
           <div className="absolute bottom-2 left-2 bg-black/60 text-white text-xs px-2 py-1 rounded">
             {currentImageIndex + 1}/{motorhome.images.length}
           </div>
-
-          {/* Favorite Button */}
-          <button
-            onClick={(e) => { e.stopPropagation(); setIsFavorite(!isFavorite); }}
-            className="absolute top-3 right-3 w-9 h-9 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-md transition-colors"
-          >
-            <Heart 
-              className={cn(
-                "w-5 h-5 transition-colors",
-                isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
-              )} 
-            />
-          </button>
         </div>
 
         {/* Content */}
@@ -126,16 +103,8 @@ const MotorhomeResultCard = ({
           <div className="flex flex-col lg:flex-row gap-4 h-full">
             {/* Left - Details */}
             <div className="flex-1 space-y-3">
-              {/* Title & Brand */}
+              {/* Title */}
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Badge variant="secondary" className="text-xs font-normal">
-                    {motorhome.brand}
-                  </Badge>
-                  <Badge variant="outline" className="text-xs font-normal text-green-600 border-green-300">
-                    ว่าง
-                  </Badge>
-                </div>
                 <h3 className="text-lg font-semibold text-foreground hover:text-primary cursor-pointer transition-colors">
                   {motorhome.name}
                 </h3>
@@ -193,20 +162,6 @@ const MotorhomeResultCard = ({
             {/* Right - Price & Actions */}
             <div className="lg:w-44 flex flex-col items-end justify-between lg:border-l lg:pl-4">
               <div className="text-right w-full">
-                {discountPercent && (
-                  <div className="flex items-center justify-end gap-2 mb-1">
-                    <Badge className="bg-red-500 hover:bg-red-600 text-white text-xs">
-                      ลด {discountPercent}%
-                    </Badge>
-                  </div>
-                )}
-                
-                {originalTotalPrice && (
-                  <p className="text-sm text-muted-foreground line-through">
-                    ฿{originalTotalPrice.toLocaleString()}
-                  </p>
-                )}
-                
                 <p className="text-2xl font-bold text-primary">
                   ฿{totalPrice.toLocaleString()}
                 </p>
