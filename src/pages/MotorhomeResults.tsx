@@ -1,56 +1,323 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import SearchResults from "@/components/motorhome/SearchResults";
-import TopFilters from "@/components/motorhome/TopFilters";
+import FilterSidebar, { FilterState } from "@/components/motorhome/FilterSidebar";
+import SortingTabs, { SortOption } from "@/components/motorhome/SortingTabs";
+import MotorhomeResultCard, { Motorhome } from "@/components/motorhome/MotorhomeResultCard";
+import SearchHeader from "@/components/motorhome/SearchHeader";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { useToast } from "@/components/ui/use-toast";
+
+const motorhomesData: Motorhome[] = [
+  {
+    id: 1,
+    name: "Toyota Hilux Revo Camper Premium",
+    brand: "Toyota",
+    model: "Hilux Revo",
+    seats: 4,
+    price: 4500,
+    originalPrice: 5500,
+    images: [
+      "/lovable-uploads/c1762e4a-0c04-42c9-bb90-72efea7f0c35.png",
+      "/lovable-uploads/1b98df29-031c-453f-8985-bf9ab03b53a6.png",
+    ],
+    amenities: ["ห้องน้ำ", "โซล่าเซลล์", "ครัว", "แอร์", "WiFi", "TV", "ตู้เย็น"],
+    bedSize: "Queen",
+    transmission: "ออโต้",
+    fuelType: "ดีเซล",
+    rating: 4.8,
+    reviewCount: 156,
+    pickupLocation: "สนามบินสุวรรณภูมิ",
+    dropoffLocation: "สนามบินเชียงใหม่",
+  },
+  {
+    id: 2,
+    name: "Toyota Hilux Champ Camper",
+    brand: "Toyota",
+    model: "Hilux Champ",
+    seats: 6,
+    price: 7500,
+    images: [
+      "/lovable-uploads/1b98df29-031c-453f-8985-bf9ab03b53a6.png",
+      "/lovable-uploads/c1762e4a-0c04-42c9-bb90-72efea7f0c35.png",
+    ],
+    amenities: ["ครัว", "ห้องน้ำ", "แอร์", "WiFi", "โซล่าเซลล์", "TV", "ฝักบัว"],
+    bedSize: "King",
+    transmission: "ออโต้",
+    fuelType: "ดีเซล",
+    rating: 4.9,
+    reviewCount: 89,
+    pickupLocation: "สนามบินดอนเมือง",
+    dropoffLocation: "สนามบินภูเก็ต",
+  },
+  {
+    id: 3,
+    name: "Mitsubishi Triton Camper",
+    brand: "Mitsubishi",
+    model: "Triton",
+    seats: 2,
+    price: 3500,
+    originalPrice: 4200,
+    images: [
+      "/lovable-uploads/39ca8590-7c01-4b61-945b-09c0787d5e19.png",
+    ],
+    amenities: ["ครัว", "ห้องน้ำเคลื่อนที่", "แอร์", "โซล่าเซลล์"],
+    bedSize: "Double",
+    transmission: "เกียร์ธรรมดา",
+    fuelType: "ดีเซล",
+    rating: 4.5,
+    reviewCount: 67,
+    pickupLocation: "สนามบินสุวรรณภูมิ",
+    dropoffLocation: "สนามบินกระบี่",
+  },
+  {
+    id: 4,
+    name: "Isuzu D-Max Camper Deluxe",
+    brand: "Isuzu",
+    model: "D-Max",
+    seats: 4,
+    price: 6000,
+    images: [
+      "/lovable-uploads/e4ce7067-7522-45d6-82c0-56a7fb4d8543.png",
+    ],
+    amenities: ["ครัว", "ห้องน้ำ", "แอร์", "WiFi", "TV", "ตู้เย็น", "ฝักบัว"],
+    bedSize: "Queen",
+    transmission: "ออโต้",
+    fuelType: "ดีเซล",
+    rating: 4.7,
+    reviewCount: 124,
+    pickupLocation: "สนามบินดอนเมือง",
+    dropoffLocation: "สนามบินเชียงใหม่",
+  },
+  {
+    id: 5,
+    name: "Ford Ranger Camper Sport",
+    brand: "Ford",
+    model: "Ranger",
+    seats: 4,
+    price: 5500,
+    originalPrice: 6500,
+    images: [
+      "/lovable-uploads/c1762e4a-0c04-42c9-bb90-72efea7f0c35.png",
+    ],
+    amenities: ["ครัว", "แอร์", "WiFi", "โซล่าเซลล์", "ตู้เย็น"],
+    bedSize: "Queen",
+    transmission: "ออโต้",
+    fuelType: "ดีเซล",
+    rating: 4.6,
+    reviewCount: 98,
+    pickupLocation: "สนามบินสุวรรณภูมิ",
+    dropoffLocation: "สนามบินสุวรรณภูมิ",
+  },
+];
 
 const MotorhomeResults = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = location.state || {};
-  
+  const { toast } = useToast();
+
+  const [pickupLocation, setPickupLocation] = useState(searchParams.pickupLocation || "");
   const [departureDate, setDepartureDate] = useState<Date | undefined>(
     searchParams.departureDate ? new Date(searchParams.departureDate) : undefined
   );
   const [returnDate, setReturnDate] = useState<Date | undefined>(
     searchParams.returnDate ? new Date(searchParams.returnDate) : undefined
   );
-  const [filters, setFilters] = useState({
+  const [guests, setGuests] = useState(searchParams.guests || 2);
+
+  const [filters, setFilters] = useState<FilterState>({
+    searchQuery: "",
+    priceRange: [0, 15000],
+    brands: [],
     features: [],
-    priceRange: [0, 10000],
-    types: [],
     capacity: [],
   });
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="mb-6">
-          <Button
-            variant="ghost"
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 mb-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Search
-          </Button>
-          
-          {/* Top Filters */}
-          <TopFilters
-            departureDate={departureDate}
-            returnDate={returnDate}
-            onDepartureDateChange={setDepartureDate}
-            onReturnDateChange={setReturnDate}
-            onFilterChange={setFilters}
-          />
-        </div>
+  const [sortOption, setSortOption] = useState<SortOption>("recommended");
 
-        {/* Results */}
-        <SearchResults filters={filters} />
+  const calculateTotalDays = () => {
+    if (!departureDate || !returnDate) return 1;
+    const diff = Math.ceil((returnDate.getTime() - departureDate.getTime()) / (1000 * 60 * 60 * 24));
+    return diff > 0 ? diff : 1;
+  };
+
+  const totalDays = calculateTotalDays();
+
+  const filteredAndSortedMotorhomes = useMemo(() => {
+    let result = motorhomesData.filter((motorhome) => {
+      // Search query filter
+      if (filters.searchQuery) {
+        const query = filters.searchQuery.toLowerCase();
+        if (!motorhome.name.toLowerCase().includes(query) && 
+            !motorhome.brand.toLowerCase().includes(query)) {
+          return false;
+        }
+      }
+
+      // Price filter
+      if (motorhome.price < filters.priceRange[0] || motorhome.price > filters.priceRange[1]) {
+        return false;
+      }
+
+      // Brand filter
+      if (filters.brands.length > 0 && !filters.brands.includes(motorhome.brand)) {
+        return false;
+      }
+
+      // Features filter
+      if (filters.features.length > 0) {
+        const hasAllFeatures = filters.features.every((feature) =>
+          motorhome.amenities.includes(feature)
+        );
+        if (!hasAllFeatures) return false;
+      }
+
+      // Capacity filter
+      if (filters.capacity.length > 0) {
+        const capacityMatch = filters.capacity.some((cap) => {
+          if (cap === "2 คน") return motorhome.seats === 2;
+          if (cap === "4 คน") return motorhome.seats === 4;
+          if (cap === "6 คน") return motorhome.seats === 6;
+          if (cap === "8+ คน") return motorhome.seats >= 8;
+          return false;
+        });
+        if (!capacityMatch) return false;
+      }
+
+      return true;
+    });
+
+    // Sorting
+    switch (sortOption) {
+      case "price-low":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case "price-high":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case "rating":
+        result.sort((a, b) => b.rating - a.rating);
+        break;
+      case "capacity":
+        result.sort((a, b) => b.seats - a.seats);
+        break;
+      default:
+        // recommended - sort by rating and has discount
+        result.sort((a, b) => {
+          const aScore = a.rating + (a.originalPrice ? 0.5 : 0);
+          const bScore = b.rating + (b.originalPrice ? 0.5 : 0);
+          return bScore - aScore;
+        });
+    }
+
+    return result;
+  }, [filters, sortOption]);
+
+  const handleSelectMotorhome = (motorhome: Motorhome) => {
+    toast({
+      title: "เลือกรถ Motorhome",
+      description: `คุณได้เลือก ${motorhome.name} กำลังพาคุณไปยังหน้ารายละเอียด...`,
+    });
+
+    navigate("/motorhome-calculator", {
+      state: {
+        pickupLocation,
+        departureDate: departureDate?.toISOString(),
+        returnDate: returnDate?.toISOString(),
+        guests,
+        selectedMotorhome: motorhome,
+        totalDays,
+        totalPrice: motorhome.price * totalDays,
+      },
+    });
+  };
+
+  const handleViewDetails = (motorhome: Motorhome) => {
+    navigate(`/motorhome/${motorhome.id}`, {
+      state: {
+        pickupLocation,
+        departureDate: departureDate?.toISOString(),
+        returnDate: returnDate?.toISOString(),
+        guests,
+        selectedMotorhome: motorhome,
+      },
+    });
+  };
+
+  const handleSearch = () => {
+    toast({
+      title: "กำลังค้นหา",
+      description: "กำลังค้นหารถ Motorhome ตามเงื่อนไขของคุณ...",
+    });
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col bg-muted/30">
+      <Header />
+      
+      {/* Search Header */}
+      <SearchHeader
+        pickupLocation={pickupLocation}
+        departureDate={departureDate}
+        returnDate={returnDate}
+        guests={guests}
+        onPickupLocationChange={setPickupLocation}
+        onDepartureDateChange={setDepartureDate}
+        onReturnDateChange={setReturnDate}
+        onGuestsChange={setGuests}
+        onSearch={handleSearch}
+      />
+
+      <main className="flex-1 container mx-auto px-4 py-6">
+        {/* Back Button */}
+        <Button
+          variant="ghost"
+          onClick={() => navigate(-1)}
+          className="flex items-center gap-2 mb-4"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          กลับไปหน้าก่อนหน้า
+        </Button>
+
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Sidebar Filters */}
+          <aside className="w-full lg:w-72 flex-shrink-0">
+            <FilterSidebar filters={filters} onFilterChange={setFilters} />
+          </aside>
+
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Sorting Tabs */}
+            <SortingTabs
+              activeSort={sortOption}
+              onSortChange={setSortOption}
+              resultsCount={filteredAndSortedMotorhomes.length}
+            />
+
+            {/* Results */}
+            <div className="space-y-4">
+              {filteredAndSortedMotorhomes.length > 0 ? (
+                filteredAndSortedMotorhomes.map((motorhome) => (
+                  <MotorhomeResultCard
+                    key={motorhome.id}
+                    motorhome={motorhome}
+                    totalDays={totalDays}
+                    onSelect={handleSelectMotorhome}
+                    onViewDetails={handleViewDetails}
+                  />
+                ))
+              ) : (
+                <div className="text-center py-12 bg-background rounded-lg border">
+                  <p className="text-lg text-muted-foreground">ไม่พบรถ Motorhome ที่ตรงกับเงื่อนไขของคุณ</p>
+                  <p className="text-sm text-muted-foreground mt-2">ลองปรับตัวกรองหรือค้นหาใหม่อีกครั้ง</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </main>
 
       <Footer />
