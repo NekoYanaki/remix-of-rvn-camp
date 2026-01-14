@@ -40,6 +40,7 @@ const CampervanSummary = () => {
   // State for addons and insurance
   const [selectedAddons, setSelectedAddons] = useState<string[]>([]);
   const [selectedInsurance, setSelectedInsurance] = useState("basic");
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const handleAddonToggle = (addonId: string) => {
     setSelectedAddons(prev => 
@@ -301,8 +302,12 @@ const CampervanSummary = () => {
 
               {/* Terms & Conditions */}
               <div className="flex items-center space-x-2">
-                <Checkbox id="terms" {...register("terms")} />
-                <Label htmlFor="terms">
+                <Checkbox 
+                  id="terms" 
+                  checked={termsAccepted}
+                  onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                />
+                <Label htmlFor="terms" className="cursor-pointer">
                   ฉันได้อ่านและยอมรับข้อกำหนดและเงื่อนไข
                 </Label>
               </div>
