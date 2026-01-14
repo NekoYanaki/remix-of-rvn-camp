@@ -29,6 +29,14 @@ export interface Motorhome {
   reviewCount: number;
   pickupLocation: string;
   dropoffLocation: string;
+  // New vehicle spec properties
+  vehicleType?: string;
+  transmissionType?: string;
+  fuelTypeCode?: string;
+  year?: number;
+  length?: number;
+  height?: number;
+  bedType?: string;
 }
 
 interface MotorhomeResultCardProps {
