@@ -111,6 +111,10 @@ const SearchHotels = () => {
     regions: [],
     facilities: [],
     campsiteTypes: [],
+    accommodationTypes: [],
+    motorhomeTypes: [],
+    guestCount: null,
+    minRating: null,
   });
 
   const [sortOption, setSortOption] = useState<CampsiteSortOption>("recommended");
