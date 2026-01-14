@@ -53,13 +53,6 @@ export const BookingSection = ({
     <div className="space-y-4">
       <Card className="border shadow-lg">
         <CardContent className="p-4">
-          {/* Status Badge */}
-          <div className="mb-4">
-            <span className="inline-flex items-center gap-1 text-sm text-green-600 bg-green-50 px-2 py-1 rounded">
-              <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-              พร้อมให้บริการ
-            </span>
-          </div>
 
           {/* Pickup Time */}
           <div className="mb-4">
