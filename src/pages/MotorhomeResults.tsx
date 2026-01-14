@@ -283,9 +283,11 @@ const MotorhomeResults = () => {
         </Button>
 
         <div className="flex flex-col lg:flex-row gap-6">
-          {/* Sidebar Filters */}
+          {/* Sidebar Filters - Sticky */}
           <aside className="w-full lg:w-72 flex-shrink-0">
-            <FilterSidebar filters={filters} onFilterChange={setFilters} />
+            <div className="lg:sticky lg:top-4">
+              <FilterSidebar filters={filters} onFilterChange={setFilters} />
+            </div>
           </aside>
 
           {/* Main Content */}
