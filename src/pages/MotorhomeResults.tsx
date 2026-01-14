@@ -23,7 +23,7 @@ const motorhomesData: Motorhome[] = [
       "/lovable-uploads/c1762e4a-0c04-42c9-bb90-72efea7f0c35.png",
       "/lovable-uploads/1b98df29-031c-453f-8985-bf9ab03b53a6.png",
     ],
-    amenities: ["ห้องน้ำ", "โซล่าเซลล์", "ครัว", "แอร์", "WiFi", "TV", "ตู้เย็น"],
+    amenities: ["ห้องน้ำ", "โซล่าเซลล์", "ครัว", "แอร์ห้องโดยสาร", "WiFi", "TV", "ตู้เย็น", "GPS", "กล้องถอย"],
     bedSize: "Queen",
     transmission: "ออโต้",
     fuelType: "ดีเซล",
@@ -31,6 +31,13 @@ const motorhomesData: Motorhome[] = [
     reviewCount: 156,
     pickupLocation: "สนามบินสุวรรณภูมิ",
     dropoffLocation: "สนามบินเชียงใหม่",
+    vehicleType: "camper",
+    transmissionType: "auto",
+    fuelTypeCode: "diesel",
+    year: 2023,
+    length: 5.8,
+    height: 2.8,
+    bedType: "queen",
   },
   {
     id: 2,
@@ -43,7 +50,7 @@ const motorhomesData: Motorhome[] = [
       "/lovable-uploads/1b98df29-031c-453f-8985-bf9ab03b53a6.png",
       "/lovable-uploads/c1762e4a-0c04-42c9-bb90-72efea7f0c35.png",
     ],
-    amenities: ["ครัว", "ห้องน้ำ", "แอร์", "WiFi", "โซล่าเซลล์", "TV", "ฝักบัว"],
+    amenities: ["ครัว", "ห้องน้ำ", "แอร์พื้นที่พัก", "WiFi", "โซล่าเซลล์", "TV", "ฝักบัว", "GPS"],
     bedSize: "King",
     transmission: "ออโต้",
     fuelType: "ดีเซล",
@@ -51,6 +58,13 @@ const motorhomesData: Motorhome[] = [
     reviewCount: 89,
     pickupLocation: "สนามบินดอนเมือง",
     dropoffLocation: "สนามบินภูเก็ต",
+    vehicleType: "motorhome",
+    transmissionType: "auto",
+    fuelTypeCode: "diesel",
+    year: 2024,
+    length: 7.2,
+    height: 3.2,
+    bedType: "queen",
   },
   {
     id: 3,
@@ -63,7 +77,7 @@ const motorhomesData: Motorhome[] = [
     images: [
       "/lovable-uploads/39ca8590-7c01-4b61-945b-09c0787d5e19.png",
     ],
-    amenities: ["ครัว", "ห้องน้ำเคลื่อนที่", "แอร์", "โซล่าเซลล์"],
+    amenities: ["ครัว", "ห้องน้ำ", "แอร์ห้องโดยสาร", "โซล่าเซลล์"],
     bedSize: "Double",
     transmission: "เกียร์ธรรมดา",
     fuelType: "ดีเซล",
@@ -71,6 +85,13 @@ const motorhomesData: Motorhome[] = [
     reviewCount: 67,
     pickupLocation: "สนามบินสุวรรณภูมิ",
     dropoffLocation: "สนามบินกระบี่",
+    vehicleType: "camper",
+    transmissionType: "manual",
+    fuelTypeCode: "diesel",
+    year: 2021,
+    length: 5.2,
+    height: 2.5,
+    bedType: "double",
   },
   {
     id: 4,
@@ -82,7 +103,7 @@ const motorhomesData: Motorhome[] = [
     images: [
       "/lovable-uploads/e4ce7067-7522-45d6-82c0-56a7fb4d8543.png",
     ],
-    amenities: ["ครัว", "ห้องน้ำ", "แอร์", "WiFi", "TV", "ตู้เย็น", "ฝักบัว"],
+    amenities: ["ครัว", "ห้องน้ำ", "แอร์ห้องโดยสาร", "แอร์พื้นที่พัก", "WiFi", "TV", "ตู้เย็น", "ฝักบัว", "กล้องถอย"],
     bedSize: "Queen",
     transmission: "ออโต้",
     fuelType: "ดีเซล",
@@ -90,6 +111,13 @@ const motorhomesData: Motorhome[] = [
     reviewCount: 124,
     pickupLocation: "สนามบินดอนเมือง",
     dropoffLocation: "สนามบินเชียงใหม่",
+    vehicleType: "motorhome",
+    transmissionType: "auto",
+    fuelTypeCode: "diesel",
+    year: 2022,
+    length: 6.5,
+    height: 3.0,
+    bedType: "queen",
   },
   {
     id: 5,
@@ -102,14 +130,47 @@ const motorhomesData: Motorhome[] = [
     images: [
       "/lovable-uploads/c1762e4a-0c04-42c9-bb90-72efea7f0c35.png",
     ],
-    amenities: ["ครัว", "แอร์", "WiFi", "โซล่าเซลล์", "ตู้เย็น"],
+    amenities: ["ครัว", "แอร์ห้องโดยสาร", "WiFi", "โซล่าเซลล์", "ตู้เย็น", "GPS"],
     bedSize: "Queen",
     transmission: "ออโต้",
-    fuelType: "ดีเซล",
+    fuelType: "ไฮบริด",
     rating: 4.6,
     reviewCount: 98,
     pickupLocation: "สนามบินสุวรรณภูมิ",
     dropoffLocation: "สนามบินสุวรรณภูมิ",
+    vehicleType: "camper",
+    transmissionType: "auto",
+    fuelTypeCode: "hybrid",
+    year: 2023,
+    length: 5.5,
+    height: 2.7,
+    bedType: "queen",
+  },
+  {
+    id: 6,
+    name: "Nissan Navara Caravan",
+    brand: "Nissan",
+    model: "Navara",
+    seats: 4,
+    price: 4800,
+    images: [
+      "/lovable-uploads/1b98df29-031c-453f-8985-bf9ab03b53a6.png",
+    ],
+    amenities: ["ครัว", "ห้องน้ำ", "แอร์พื้นที่พัก", "WiFi", "GPS", "กล้องถอย"],
+    bedSize: "Double",
+    transmission: "ออโต้",
+    fuelType: "ดีเซล",
+    rating: 4.4,
+    reviewCount: 56,
+    pickupLocation: "สนามบินดอนเมือง",
+    dropoffLocation: "สนามบินดอนเมือง",
+    vehicleType: "caravan",
+    transmissionType: "auto",
+    fuelTypeCode: "diesel",
+    year: 2020,
+    length: 6.0,
+    height: 2.9,
+    bedType: "double",
   },
 ];
 
@@ -128,12 +189,19 @@ const MotorhomeResults = () => {
   );
   const [guests, setGuests] = useState(searchParams.guests || 2);
 
-  const [filters, setFilters] = useState<FilterState>({
+const [filters, setFilters] = useState<FilterState>({
     searchQuery: "",
     priceRange: [0, 15000],
     brands: [],
     features: [],
     capacity: [],
+    vehicleTypes: [],
+    transmissions: [],
+    fuelTypes: [],
+    yearRange: [2018, 2024],
+    lengthRange: [4, 10],
+    heightRange: [2, 4],
+    bedTypes: []
   });
 
   const [sortOption, setSortOption] = useState<SortOption>("recommended");
@@ -146,7 +214,7 @@ const MotorhomeResults = () => {
 
   const totalDays = calculateTotalDays();
 
-  const filteredAndSortedMotorhomes = useMemo(() => {
+const filteredAndSortedMotorhomes = useMemo(() => {
     let result = motorhomesData.filter((motorhome) => {
       // Search query filter
       if (filters.searchQuery) {
@@ -185,6 +253,55 @@ const MotorhomeResults = () => {
           return false;
         });
         if (!capacityMatch) return false;
+      }
+
+      // Vehicle type filter
+      if (filters.vehicleTypes.length > 0 && motorhome.vehicleType) {
+        if (!filters.vehicleTypes.includes(motorhome.vehicleType)) {
+          return false;
+        }
+      }
+
+      // Transmission filter
+      if (filters.transmissions.length > 0 && motorhome.transmissionType) {
+        if (!filters.transmissions.includes(motorhome.transmissionType)) {
+          return false;
+        }
+      }
+
+      // Fuel type filter
+      if (filters.fuelTypes.length > 0 && motorhome.fuelTypeCode) {
+        if (!filters.fuelTypes.includes(motorhome.fuelTypeCode)) {
+          return false;
+        }
+      }
+
+      // Year filter
+      if (motorhome.year) {
+        if (motorhome.year < filters.yearRange[0] || motorhome.year > filters.yearRange[1]) {
+          return false;
+        }
+      }
+
+      // Length filter
+      if (motorhome.length) {
+        if (motorhome.length < filters.lengthRange[0] || motorhome.length > filters.lengthRange[1]) {
+          return false;
+        }
+      }
+
+      // Height filter
+      if (motorhome.height) {
+        if (motorhome.height < filters.heightRange[0] || motorhome.height > filters.heightRange[1]) {
+          return false;
+        }
+      }
+
+      // Bed type filter
+      if (filters.bedTypes.length > 0 && motorhome.bedType) {
+        if (!filters.bedTypes.includes(motorhome.bedType)) {
+          return false;
+        }
       }
 
       return true;
