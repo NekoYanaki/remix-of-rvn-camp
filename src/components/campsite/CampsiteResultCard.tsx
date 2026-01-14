@@ -1,14 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { 
   Users, 
   Eye, 
   Star, 
   ChevronLeft, 
   ChevronRight,
-  MapPin,
-  Tent,
-  TreePine
+  MapPin
 } from "lucide-react";
 import { useState } from "react";
 
@@ -54,8 +53,6 @@ const CampsiteResultCard = ({
     );
   };
 
-  const totalPrice = campsite.price * (totalDays || 1);
-
   const displayedFacilities = campsite.facilities.slice(0, 4);
   const remainingFacilities = campsite.facilities.length - 4;
 
@@ -100,18 +97,18 @@ const CampsiteResultCard = ({
             {/* Left - Details */}
             <div className="flex-1 space-y-3">
               {/* Title */}
-              <div>
-                <h3 className="text-lg font-semibold text-foreground hover:text-primary cursor-pointer transition-colors">
-                  {campsite.name}
-                </h3>
+              <h3 className="text-lg font-semibold text-foreground hover:text-primary cursor-pointer transition-colors">
+                {campsite.name}
+              </h3>
+
+              {/* Location */}
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <MapPin className="w-4 h-4" />
+                <span>{campsite.location} / {campsite.region}</span>
               </div>
 
-              {/* Location & Rating */}
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                  <MapPin className="w-4 h-4" />
-                  <span>{campsite.location}</span>
-                </div>
+              {/* Rating */}
+              <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 bg-primary text-primary-foreground px-2 py-0.5 rounded text-sm font-medium">
                   <Star className="w-3.5 h-3.5 fill-current" />
                   {campsite.rating.toFixed(1)}
@@ -121,26 +118,16 @@ const CampsiteResultCard = ({
                 </span>
               </div>
 
-              {/* Specs */}
-              <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Users className="w-4 h-4" />
-                  <span>รองรับ {campsite.maxGuests} คน</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Tent className="w-4 h-4" />
-                  <span>{campsite.type}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <TreePine className="w-4 h-4" />
-                  <span>{campsite.region}</span>
-                </div>
+              {/* Guest Capacity */}
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <Users className="w-4 h-4" />
+                <span>รองรับผู้เข้าพัก {campsite.maxGuests} คน</span>
               </div>
 
-              {/* Description */}
-              <p className="text-sm text-muted-foreground line-clamp-2">
-                {campsite.description}
-              </p>
+              {/* Camp Type Tag */}
+              <Badge variant="secondary" className="text-xs">
+                {campsite.type}
+              </Badge>
 
               {/* Facilities */}
               <div className="flex flex-wrap gap-1.5">
@@ -164,15 +151,10 @@ const CampsiteResultCard = ({
             <div className="lg:w-44 flex flex-col items-end justify-between lg:border-l lg:pl-4">
               <div className="text-right w-full">
                 <p className="text-2xl font-bold text-primary">
-                  ฿{totalPrice.toLocaleString()}
+                  ฿{campsite.price.toLocaleString()}
                 </p>
-                
                 <p className="text-xs text-muted-foreground">
-                  {totalDays > 1 ? `${totalDays} คืน` : "ต่อคืน"}
-                </p>
-                
-                <p className="text-xs text-muted-foreground mt-1">
-                  ราคา/คืน ฿{campsite.price.toLocaleString()}
+                  / คืน
                 </p>
               </div>
 
@@ -181,7 +163,7 @@ const CampsiteResultCard = ({
                   onClick={() => onSelect(campsite)}
                   className="w-full"
                 >
-                  จองแคมป์ไซต์นี้
+                  จองแคมป์ไซต์
                 </Button>
                 <Button
                   variant="outline"

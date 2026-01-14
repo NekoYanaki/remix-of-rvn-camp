@@ -32,7 +32,7 @@ import MotorhomeDetail from "./pages/MotorhomeDetail";
 import Download from "./pages/Download";
 import RentCampervan from "./pages/RentCampervan";
 import CampervanDetail from "./pages/CampervanDetail";
-import CampervanSummary from "./pages/CampervanSummary";
+import MotorhomeSummary from "./pages/MotorhomeSummary";
 
 const queryClient = new QueryClient();
 
@@ -70,7 +70,7 @@ const App = () => (
           <Route path="/download" element={<Download />} />
           <Route path="/rent-campervan" element={<RentCampervan />} />
           <Route path="/campervan-detail" element={<CampervanDetail />} />
-          <Route path="/motorhome-summary" element={<CampervanSummary />} />
+          <Route path="/motorhome-summary" element={<MotorhomeSummary />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

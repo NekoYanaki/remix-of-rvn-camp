@@ -4,6 +4,8 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { RotateCcw, Star } from "lucide-react";
 
 interface CampsiteFilterSidebarProps {
   onFilterChange: (filters: CampsiteFilterState) => void;
@@ -15,14 +17,33 @@ export interface CampsiteFilterState {
   regions: string[];
   facilities: string[];
   campsiteTypes: string[];
+  accommodationTypes: string[];
+  motorhomeTypes: string[];
+  guestCount: number | null;
+  minRating: number | null;
 }
+
+const initialFilters: CampsiteFilterState = {
+  priceRange: [0, 5000],
+  regions: [],
+  facilities: [],
+  campsiteTypes: [],
+  accommodationTypes: [],
+  motorhomeTypes: [],
+  guestCount: null,
+  minRating: null,
+};
 
 const CampsiteFilterSidebar = ({ onFilterChange, filters }: CampsiteFilterSidebarProps) => {
   const [localFilters, setLocalFilters] = useState<CampsiteFilterState>(filters);
 
-  const regions = ["ภาคเหนือ", "ภาคกลาง", "ภาคใต้", "ภาคอีสาน", "ภาคตะวันออก", "ภาคตะวันตก"];
-  const facilities = ["ห้องน้ำ", "ไฟฟ้า", "น้ำประปา", "WiFi", "ร้านอาหาร", "ที่จอดรถ", "กิจกรรมผจญภัย", "สระว่ายน้ำ"];
+  const regions = ["ภาคเหนือ", "ภาคกลาง", "ภาคอีสาน", "ภาคใต้", "ภาคตะวันออก", "ภาคตะวันตก"];
+  const facilities = ["ห้องน้ำ", "ไฟฟ้า", "น้ำประปา", "ที่จอดรถ", "Wi-Fi", "กิจกรรม"];
   const campsiteTypes = ["ริมน้ำ", "บนภูเขา", "ในป่า", "ชายทะเล", "ทุ่งหญ้า", "สวนผลไม้"];
+  const accommodationTypes = ["เต็นท์ส่วนตัว", "เต็นท์ให้เช่า", "บ้านพัก", "กระโจม", "รถบ้าน"];
+  const motorhomeTypes = ["Class A", "Class B", "Class C", "Campervan", "Travel Trailer"];
+  const guestOptions = [2, 4, 6, 8, 10];
+  const ratingOptions = [4.5, 4.0, 3.5, 3.0];
 
   const updateFilters = (newFilters: Partial<CampsiteFilterState>) => {
     const updated = { ...localFilters, ...newFilters };
@@ -30,32 +51,38 @@ const CampsiteFilterSidebar = ({ onFilterChange, filters }: CampsiteFilterSideba
     onFilterChange(updated);
   };
 
-  const handleRegionChange = (region: string, checked: boolean) => {
-    const newRegions = checked
-      ? [...localFilters.regions, region]
-      : localFilters.regions.filter((r) => r !== region);
-    updateFilters({ regions: newRegions });
+  const handleCheckboxChange = (
+    key: keyof Pick<CampsiteFilterState, 'regions' | 'facilities' | 'campsiteTypes' | 'accommodationTypes' | 'motorhomeTypes'>,
+    value: string,
+    checked: boolean
+  ) => {
+    const currentArray = localFilters[key];
+    const newArray = checked
+      ? [...currentArray, value]
+      : currentArray.filter((item) => item !== value);
+    updateFilters({ [key]: newArray });
   };
 
-  const handleFacilityChange = (facility: string, checked: boolean) => {
-    const newFacilities = checked
-      ? [...localFilters.facilities, facility]
-      : localFilters.facilities.filter((f) => f !== facility);
-    updateFilters({ facilities: newFacilities });
-  };
-
-  const handleTypeChange = (type: string, checked: boolean) => {
-    const newTypes = checked
-      ? [...localFilters.campsiteTypes, type]
-      : localFilters.campsiteTypes.filter((t) => t !== type);
-    updateFilters({ campsiteTypes: newTypes });
+  const handleClearFilters = () => {
+    setLocalFilters(initialFilters);
+    onFilterChange(initialFilters);
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      {/* Clear Filters Button */}
+      <Button
+        variant="outline"
+        onClick={handleClearFilters}
+        className="w-full flex items-center justify-center gap-2"
+      >
+        <RotateCcw className="w-4 h-4" />
+        ล้างตัวกรอง
+      </Button>
+
       {/* Price Range */}
       <Card className="p-4">
-        <Label className="text-sm font-semibold mb-4 block">ราคาต่อคืน</Label>
+        <Label className="text-sm font-semibold mb-4 block">ราคา / คืน</Label>
         <Slider
           value={localFilters.priceRange}
           onValueChange={(value) => updateFilters({ priceRange: value as [number, number] })}
@@ -66,7 +93,7 @@ const CampsiteFilterSidebar = ({ onFilterChange, filters }: CampsiteFilterSideba
         />
         <div className="flex items-center gap-2">
           <div className="flex-1">
-            <Label className="text-xs text-muted-foreground">ราคาเริ่มต้น</Label>
+            <Label className="text-xs text-muted-foreground">ต่ำสุด</Label>
             <div className="flex items-center border rounded-md px-2 py-1.5">
               <span className="text-sm text-muted-foreground mr-1">฿</span>
               <Input
@@ -102,7 +129,7 @@ const CampsiteFilterSidebar = ({ onFilterChange, filters }: CampsiteFilterSideba
               <Checkbox
                 id={`region-${region}`}
                 checked={localFilters.regions.includes(region)}
-                onCheckedChange={(checked) => handleRegionChange(region, checked as boolean)}
+                onCheckedChange={(checked) => handleCheckboxChange("regions", region, checked as boolean)}
               />
               <Label htmlFor={`region-${region}`} className="cursor-pointer text-sm font-normal">
                 {region}
@@ -112,19 +139,57 @@ const CampsiteFilterSidebar = ({ onFilterChange, filters }: CampsiteFilterSideba
         </div>
       </Card>
 
-      {/* Campsite Types */}
+      {/* Accommodation Types */}
       <Card className="p-4">
-        <Label className="text-sm font-semibold mb-3 block">ประเภทแคมป์ไซต์</Label>
+        <Label className="text-sm font-semibold mb-3 block">ประเภทที่พักที่รองรับ</Label>
         <div className="space-y-2.5">
-          {campsiteTypes.map((type) => (
+          {accommodationTypes.map((type) => (
             <div key={type} className="flex items-center space-x-2">
               <Checkbox
-                id={`type-${type}`}
-                checked={localFilters.campsiteTypes.includes(type)}
-                onCheckedChange={(checked) => handleTypeChange(type, checked as boolean)}
+                id={`accommodation-${type}`}
+                checked={localFilters.accommodationTypes.includes(type)}
+                onCheckedChange={(checked) => handleCheckboxChange("accommodationTypes", type, checked as boolean)}
               />
-              <Label htmlFor={`type-${type}`} className="cursor-pointer text-sm font-normal">
+              <Label htmlFor={`accommodation-${type}`} className="cursor-pointer text-sm font-normal">
                 {type}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* Motorhome Types */}
+      <Card className="p-4">
+        <Label className="text-sm font-semibold mb-3 block">ประเภทรถบ้านที่รองรับ</Label>
+        <div className="space-y-2.5">
+          {motorhomeTypes.map((type) => (
+            <div key={type} className="flex items-center space-x-2">
+              <Checkbox
+                id={`motorhome-${type}`}
+                checked={localFilters.motorhomeTypes.includes(type)}
+                onCheckedChange={(checked) => handleCheckboxChange("motorhomeTypes", type, checked as boolean)}
+              />
+              <Label htmlFor={`motorhome-${type}`} className="cursor-pointer text-sm font-normal">
+                {type}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* Guest Count */}
+      <Card className="p-4">
+        <Label className="text-sm font-semibold mb-3 block">จำนวนผู้เข้าพัก</Label>
+        <div className="space-y-2.5">
+          {guestOptions.map((count) => (
+            <div key={count} className="flex items-center space-x-2">
+              <Checkbox
+                id={`guest-${count}`}
+                checked={localFilters.guestCount === count}
+                onCheckedChange={(checked) => updateFilters({ guestCount: checked ? count : null })}
+              />
+              <Label htmlFor={`guest-${count}`} className="cursor-pointer text-sm font-normal">
+                {count} คนขึ้นไป
               </Label>
             </div>
           ))}
@@ -140,10 +205,30 @@ const CampsiteFilterSidebar = ({ onFilterChange, filters }: CampsiteFilterSideba
               <Checkbox
                 id={`facility-${facility}`}
                 checked={localFilters.facilities.includes(facility)}
-                onCheckedChange={(checked) => handleFacilityChange(facility, checked as boolean)}
+                onCheckedChange={(checked) => handleCheckboxChange("facilities", facility, checked as boolean)}
               />
               <Label htmlFor={`facility-${facility}`} className="cursor-pointer text-sm font-normal">
                 {facility}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </Card>
+
+      {/* Review Rating */}
+      <Card className="p-4">
+        <Label className="text-sm font-semibold mb-3 block">คะแนนรีวิว</Label>
+        <div className="space-y-2.5">
+          {ratingOptions.map((rating) => (
+            <div key={rating} className="flex items-center space-x-2">
+              <Checkbox
+                id={`rating-${rating}`}
+                checked={localFilters.minRating === rating}
+                onCheckedChange={(checked) => updateFilters({ minRating: checked ? rating : null })}
+              />
+              <Label htmlFor={`rating-${rating}`} className="cursor-pointer text-sm font-normal flex items-center gap-1">
+                <Star className="w-3.5 h-3.5 fill-yellow-400 text-yellow-400" />
+                {rating}+ ขึ้นไป
               </Label>
             </div>
           ))}
