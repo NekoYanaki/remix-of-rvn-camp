@@ -37,6 +37,12 @@ interface CampsiteDetailPageProps {
       description: string;
       maxGuests: number;
       price: number;
+      priceType?: 'per_night' | 'per_person';
+      slots?: number;
+      unit?: string;
+      images?: string[];
+      supportedVehicles?: string[];
+      amenities?: Array<string | { name: string; image?: string }>;
     }>;
     host: {
       name: string;
@@ -57,8 +63,7 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
   const tabs = [
     { id: "host", label: "เจ้าของที่พัก", sectionId: "section-host" },
     { id: "overview", label: "ภาพรวม", sectionId: "section-overview" },
-    { id: "stayoptions", label: "ที่พัก/ราคา", sectionId: "section-stayoptions" },
-    { id: "vehicles", label: "พาหนะที่รองรับ", sectionId: "section-vehicles" },
+    { id: "zones", label: "ข้อมูลโซน", sectionId: "section-zones" },
     { id: "facilities", label: "สิ่งอำนวยความสะดวก", sectionId: "section-facilities" },
     { id: "location", label: "ตำแหน่ง", sectionId: "section-location" },
     { id: "rules", label: "กฎระเบียบ", sectionId: "section-rules" },

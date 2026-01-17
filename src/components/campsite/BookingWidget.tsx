@@ -390,23 +390,6 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
         </CardContent>
       </Card>
 
-      {/* Vehicle Support Info */}
-      {campsite.supportedVehicles && campsite.supportedVehicles.length > 0 && (
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-gray-600">พาหนะที่รองรับ</CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <div className="flex flex-wrap gap-2">
-              {campsite.supportedVehicles.map((vehicle, index) => (
-                <Badge key={index} variant="secondary" className="text-xs">
-                  {vehicle}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };

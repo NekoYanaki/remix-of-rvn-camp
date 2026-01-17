@@ -1,6 +1,4 @@
-
-import React from "react";
-import { Users, Car, Truck, Tent, Home, Zap, Wifi, Droplet, Shield, Flame, ParkingCircle, Trash2, Lightbulb, Store, Check, X } from "lucide-react";
+import { Users, Car, Truck, Tent, Home, Zap, Wifi, Droplet, Shield, Flame, ParkingCircle, Trash2, Lightbulb, Store, Check } from "lucide-react";
 
 interface CampsiteDetailsProps {
   campsite: {
@@ -10,6 +8,12 @@ interface CampsiteDetailsProps {
       description: string;
       maxGuests: number;
       price: number;
+      priceType?: 'per_night' | 'per_person';
+      slots?: number;
+      unit?: string;
+      images?: string[];
+      supportedVehicles?: string[];
+      amenities?: Array<string | { name: string; image?: string }>;
     }>;
     amenities: string[];
     activities: string[];
@@ -58,15 +62,6 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
     return Car;
   };
 
-  // Vehicles supported by this campsite
-  const supportedVehicles = campsite.supportedVehicles || [
-    "Caravan",
-    "Motorhome A Class",
-    "Motorhome B Class",
-    "Motorhome C Class",
-    "Campervan"
-  ];
-
   return (
     <div className="space-y-8">
       {/* Host Information - First */}
@@ -112,34 +107,100 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
         )}
       </section>
 
-      {/* Stay Options with Prices */}
-      <section id="section-stayoptions" className="bg-white rounded-lg p-6 border scroll-mt-32">
-        <h2 className="text-xl font-semibold mb-4">ประเภทที่พักและราคา</h2>
-        <div className="space-y-4">
+      {/* Zone Information - ข้อมูลโซน */}
+      <section id="section-zones" className="bg-white rounded-lg p-6 border scroll-mt-32">
+        <h2 className="text-xl font-semibold mb-6">ข้อมูลโซน</h2>
+        <div className="space-y-8">
           {campsite.stayOptions.map((option, index) => {
             const IconComponent = getStayIcon(option.type);
             return (
-              <div key={index} className="border rounded-lg p-4 hover:border-green-300 transition-colors">
-                <div className="flex items-start gap-4">
-                  <div className="bg-green-100 p-3 rounded-lg">
-                    <IconComponent className="h-6 w-6 text-green-600" />
+              <div key={index} className="border rounded-xl overflow-hidden hover:border-green-300 transition-colors">
+                {/* Zone Images */}
+                {option.images && option.images.length > 0 && (
+                  <div className="grid grid-cols-4 gap-1 h-40">
+                    {option.images.slice(0, 4).map((img, imgIdx) => (
+                      <div key={imgIdx} className="relative overflow-hidden">
+                        <img 
+                          src={img} 
+                          alt={`${option.type} - รูปที่ ${imgIdx + 1}`}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform"
+                        />
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg text-gray-900">{option.type}</h3>
-                    <p className="text-gray-600 mb-2">{option.description}</p>
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
-                      <div className="flex items-center gap-1">
-                        <Users className="h-4 w-4" />
-                        <span>สูงสุด {option.maxGuests} คน</span>
+                )}
+                
+                {/* Zone Info */}
+                <div className="p-5">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="bg-green-100 p-3 rounded-lg">
+                      <IconComponent className="h-6 w-6 text-green-600" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg text-gray-900">{option.type}</h3>
+                      <p className="text-gray-600 mb-2">{option.description}</p>
+                      <div className="flex items-center gap-6 text-sm text-gray-500">
+                        <div className="flex items-center gap-1">
+                          <Users className="h-4 w-4" />
+                          <span>สูงสุด {option.maxGuests} คน</span>
+                        </div>
+                        {option.slots && (
+                          <div className="flex items-center gap-1">
+                            <span>จำนวนสล็อต: {option.slots}</span>
+                          </div>
+                        )}
+                        {option.unit && (
+                          <div className="flex items-center gap-1">
+                            <span>หน่วย: {option.unit}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold text-green-600">
+                        ฿{option.price.toLocaleString()}
+                      </div>
+                      <div className="text-sm text-gray-500">
+                        {option.priceType === 'per_person' ? 'ต่อคน/คืน' : 'ต่อคืน'}
                       </div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-2xl font-bold text-green-600">
-                      ฿{option.price.toLocaleString()}
+                  
+                  {/* Zone Supported Vehicles */}
+                  {option.supportedVehicles && option.supportedVehicles.length > 0 && (
+                    <div className="mb-4">
+                      <h4 className="text-sm font-medium text-gray-700 mb-2">รถที่รองรับในโซนนี้</h4>
+                      <div className="flex flex-wrap gap-2">
+                        {option.supportedVehicles.map((vehicle, vIdx) => (
+                          <span 
+                            key={vIdx}
+                            className="px-3 py-1 bg-gray-800 text-white rounded-full text-xs font-medium"
+                          >
+                            {vehicle}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                    <div className="text-sm text-gray-500">ต่อคืน</div>
-                  </div>
+                  )}
+
+                  {/* Zone Amenities */}
+                  {option.amenities && option.amenities.length > 0 && (
+                    <div className="pt-4 border-t">
+                      <h4 className="text-sm font-medium text-gray-700 mb-3">สิ่งอำนวยความสะดวกในโซนนี้</h4>
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                        {option.amenities.map((amenity, aIdx) => {
+                          const AmenityIcon = getAmenityIcon(typeof amenity === 'string' ? amenity : amenity.name);
+                          const amenityName = typeof amenity === 'string' ? amenity : amenity.name;
+                          return (
+                            <div key={aIdx} className="flex items-center gap-2 p-2 bg-gray-50 rounded-lg text-sm">
+                              <AmenityIcon className="h-4 w-4 text-green-600 flex-shrink-0" />
+                              <span className="text-gray-700 truncate">{amenityName}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             );
@@ -147,20 +208,6 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
         </div>
       </section>
 
-      {/* Supported Vehicles */}
-      <section id="section-vehicles" className="bg-white rounded-lg p-6 border scroll-mt-32">
-        <h2 className="text-xl font-semibold mb-4">พาหนะที่รองรับ</h2>
-        <div className="flex flex-wrap gap-2">
-          {supportedVehicles.map((vehicle, index) => (
-            <span 
-              key={index} 
-              className="px-4 py-2 bg-gray-800 text-white rounded-full text-sm font-medium"
-            >
-              {vehicle}
-            </span>
-          ))}
-        </div>
-      </section>
 
       {/* Key Amenities */}
       <section id="section-facilities" className="bg-white rounded-lg p-6 border scroll-mt-32">
