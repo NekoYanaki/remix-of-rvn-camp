@@ -15,8 +15,7 @@ const getCampsiteData = (id: string) => {
       "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/1.jpg",
       "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg",
       "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg",
-      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/4.jpg",
-      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/5.jpg"
+      "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/4.jpg"
     ],
     price: 500,
     rating: 4.8,
@@ -57,10 +56,22 @@ const getCampsiteData = (id: string) => {
     ],
     stayOptions: [
       {
-        type: "ลานจอดรถบ้าน",
+        type: "ลานจอดรถบ้าน (ไฟฟ้า+น้ำ)",
         description: "พื้นที่สำหรับจอดรถบ้าน Caravan, Motorhome ทุกประเภท พร้อมไฟฟ้าและน้ำประปา",
         maxGuests: 6,
         price: 500
+      },
+      {
+        type: "ลานจอดรถบ้าน (ไม่มีไฟฟ้า)",
+        description: "พื้นที่สำหรับจอดรถบ้านแบบไม่ใช้ไฟฟ้า เหมาะสำหรับผู้ที่มี Solar Panel",
+        maxGuests: 6,
+        price: 300
+      },
+      {
+        type: "พื้นที่กางเต็นท์",
+        description: "พื้นที่สำหรับกางเต็นท์ บรรยากาศร่มรื่น ใกล้ชิดธรรมชาติ",
+        maxGuests: 4,
+        price: 200
       }
     ],
     host: {

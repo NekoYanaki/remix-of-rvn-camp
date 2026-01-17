@@ -9,12 +9,15 @@ interface ImageGridProps {
 }
 
 export const ImageGrid = ({ images, name, onImageClick }: ImageGridProps) => {
+  // Take only first 5 images
+  const displayImages = images.slice(0, 5);
+  
   return (
-    <div className="grid grid-cols-4 gap-3 h-96 rounded-xl overflow-hidden mb-8">
-      {/* Main large image */}
+    <div className="grid grid-cols-3 gap-2 h-[400px] rounded-xl overflow-hidden mb-8">
+      {/* Main large image - takes 2/3 width */}
       <div className="col-span-2 row-span-2 relative group cursor-pointer">
         <img
-          src={images[0]}
+          src={displayImages[0]}
           alt={name}
           className="w-full h-full object-cover group-hover:brightness-95 transition-all duration-300"
           onClick={() => onImageClick(0)}
@@ -22,31 +25,33 @@ export const ImageGrid = ({ images, name, onImageClick }: ImageGridProps) => {
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300" />
       </div>
 
-      {/* Grid of smaller images */}
-      {images.slice(1, 5).map((image, index) => (
-        <div key={index} className="relative group cursor-pointer">
-          <img
-            src={image}
-            alt={`${name} ${index + 2}`}
-            className="w-full h-full object-cover group-hover:brightness-95 transition-all duration-300"
-            onClick={() => onImageClick(index + 1)}
-          />
-          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300" />
-          {index === 3 && images.length > 5 && (
-            <div 
-              className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center cursor-pointer hover:bg-opacity-50 transition-all"
+      {/* Right column - 4 smaller images in 2x2 grid */}
+      <div className="col-span-1 row-span-2 grid grid-rows-2 grid-cols-2 gap-2">
+        {displayImages.slice(1, 5).map((image, index) => (
+          <div key={index} className="relative group cursor-pointer">
+            <img
+              src={image}
+              alt={`${name} ${index + 2}`}
+              className="w-full h-full object-cover group-hover:brightness-95 transition-all duration-300"
               onClick={() => onImageClick(index + 1)}
-            >
-              <div className="text-white text-center">
-                <Grid3x3 className="h-6 w-6 mx-auto mb-2" />
-                <span className="text-sm font-medium">
-                  Show all {images.length} photos
-                </span>
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300" />
+            {index === 3 && images.length > 5 && (
+              <div 
+                className="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center cursor-pointer hover:bg-opacity-50 transition-all"
+                onClick={() => onImageClick(index + 1)}
+              >
+                <div className="text-white text-center">
+                  <Grid3x3 className="h-5 w-5 mx-auto mb-1" />
+                  <span className="text-xs font-medium">
+                    +{images.length - 5} photos
+                  </span>
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      ))}
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

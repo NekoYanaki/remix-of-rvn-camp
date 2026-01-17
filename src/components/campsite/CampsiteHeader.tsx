@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Star, MapPin, Shield, Award } from "lucide-react";
+import { Star, MapPin } from "lucide-react";
 
 interface CampsiteHeaderProps {
   campsite: {
@@ -18,18 +18,10 @@ interface CampsiteHeaderProps {
 export const CampsiteHeader = ({ campsite }: CampsiteHeaderProps) => {
   return (
     <div className="mb-6">
-      {/* Badges */}
+      {/* Badge - Only Campsite */}
       <div className="flex items-center gap-2 mb-3">
         <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
           Campsite
-        </span>
-        <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
-          <Shield className="h-3 w-3" />
-          Genius
-        </span>
-        <span className="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-medium flex items-center gap-1">
-          <Award className="h-3 w-3" />
-          Eco-Friendly
         </span>
       </div>
 
@@ -46,15 +38,15 @@ export const CampsiteHeader = ({ campsite }: CampsiteHeaderProps) => {
           <span className="text-gray-600">
             ({campsite.reviewCount} reviews)
           </span>
-          <span className="text-blue-600 font-medium hover:underline cursor-pointer">
+          <span className="text-green-600 font-medium hover:underline cursor-pointer">
             Read all reviews
           </span>
         </div>
 
         <div className="flex items-center gap-2 text-gray-600">
           <MapPin className="h-4 w-4" />
-          <span>{campsite.location.city}, {campsite.location.country}</span>
-          <span className="text-blue-600 hover:underline cursor-pointer">
+          <span>{campsite.location.address}, {campsite.location.city}</span>
+          <span className="text-green-600 hover:underline cursor-pointer">
             Show on map
           </span>
         </div>
