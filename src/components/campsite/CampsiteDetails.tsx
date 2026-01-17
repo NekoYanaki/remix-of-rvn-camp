@@ -521,73 +521,79 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                       
                       {/* Amenities Layout */}
                       {(() => {
-                        const withImages = option.amenities.filter(a => {
+                        // Collect all images from all amenities
+                        const allImages: { src: string; name: string }[] = [];
+                        option.amenities.forEach(a => {
                           const data = typeof a === 'string' ? { name: a } : a;
-                          return data.images && data.images.length > 0;
+                          if (data.images && data.images.length > 0) {
+                            data.images.forEach(img => {
+                              allImages.push({ src: img, name: data.name });
+                            });
+                          }
                         });
-                        const withoutImages = option.amenities.filter(a => {
-                          const data = typeof a === 'string' ? { name: a } : a;
-                          return !data.images || data.images.length === 0;
-                        });
+                        
+                        // Get all amenity names for label chips
+                        const allAmenities = option.amenities.map(a => 
+                          typeof a === 'string' ? { name: a } : a
+                        );
                         
                         return (
                           <>
-                            {/* Image Cards - Overview Section */}
-                            {withImages.length > 0 && (
-                              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-                                {withImages.map((amenity, aIdx) => {
-                                  const amenityData = typeof amenity === 'string' 
-                                    ? { name: amenity } 
-                                    : amenity;
-                                  const AmenityIcon = getAmenityIcon(amenityData.name);
-                                  
-                                  return (
+                            {/* Gallery Overview - All Images */}
+                            {allImages.length > 0 && (
+                              <div className="mb-4">
+                                <div className="grid grid-cols-3 md:grid-cols-4 gap-2">
+                                  {allImages.slice(0, 4).map((img, imgIdx) => (
                                     <div 
-                                      key={aIdx} 
-                                      className="relative rounded-xl overflow-hidden border cursor-pointer hover:border-green-400 hover:shadow-md transition-all"
+                                      key={imgIdx}
+                                      className="relative aspect-square rounded-lg overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
                                       onClick={() => setViewingImages({
-                                        images: amenityData.images!,
-                                        currentIndex: 0,
-                                        title: amenityData.name
+                                        images: allImages.map(i => i.src),
+                                        currentIndex: imgIdx,
+                                        title: 'สิ่งอำนวยความสะดวก'
                                       })}
                                     >
-                                      <div className="h-28 relative">
-                                        <img 
-                                          src={amenityData.images![0]} 
-                                          alt={amenityData.name}
-                                          className="w-full h-full object-cover"
-                                        />
-                                        {amenityData.images!.length > 1 && (
-                                          <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-lg flex items-center gap-1">
-                                            <Image className="h-3 w-3" />
-                                            {amenityData.images!.length}
-                                          </div>
-                                        )}
-                                      </div>
-                                      <div className="p-2.5 bg-white flex items-center gap-2 border-t">
-                                        <AmenityIcon className="h-4 w-4 text-green-600 flex-shrink-0" />
-                                        <span className="text-sm text-gray-700 font-medium truncate">{amenityData.name}</span>
-                                      </div>
+                                      <img 
+                                        src={img.src} 
+                                        alt={img.name}
+                                        className="w-full h-full object-cover"
+                                      />
+                                      {/* Show count on last visible image if more images exist */}
+                                      {imgIdx === 3 && allImages.length > 4 && (
+                                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                                          <span className="text-white font-medium text-lg">+{allImages.length - 4}</span>
+                                        </div>
+                                      )}
                                     </div>
-                                  );
-                                })}
+                                  ))}
+                                </div>
+                                {allImages.length > 0 && (
+                                  <button
+                                    onClick={() => setViewingImages({
+                                      images: allImages.map(i => i.src),
+                                      currentIndex: 0,
+                                      title: 'สิ่งอำนวยความสะดวก'
+                                    })}
+                                    className="mt-2 text-sm text-green-600 hover:text-green-700 font-medium flex items-center gap-1"
+                                  >
+                                    <Image className="h-4 w-4" />
+                                    ดูภาพทั้งหมด ({allImages.length} ภาพ)
+                                  </button>
+                                )}
                               </div>
                             )}
                             
-                            {/* Text Labels - Facility Chips */}
-                            {withoutImages.length > 0 && (
+                            {/* Text Labels - All Facility Chips */}
+                            {allAmenities.length > 0 && (
                               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                {withoutImages.map((amenity, aIdx) => {
-                                  const amenityData = typeof amenity === 'string' 
-                                    ? { name: amenity } 
-                                    : amenity;
-                                  
+                                {allAmenities.map((amenityData, aIdx) => {
+                                  const AmenityIcon = getAmenityIcon(amenityData.name);
                                   return (
                                     <div 
                                       key={aIdx} 
                                       className="flex items-center gap-2 px-4 py-2.5 bg-green-50 rounded-lg border border-green-100"
                                     >
-                                      <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
+                                      <AmenityIcon className="h-4 w-4 text-green-600 flex-shrink-0" />
                                       <span className="text-sm text-gray-700 font-medium">{amenityData.name}</span>
                                     </div>
                                   );
