@@ -339,47 +339,45 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
 
   return (
     <div className="space-y-8">
-      {/* Host Information - First */}
+      {/* Host Information + About - Combined */}
       <section id="section-host" className="bg-white rounded-lg p-6 border scroll-mt-32">
-        <h2 className="text-xl font-semibold mb-4">เจ้าของที่พัก</h2>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 mb-5">
           <img
             src={campsite.host.avatar}
             alt={campsite.host.name}
-            className="w-16 h-16 rounded-full object-cover"
+            className="w-14 h-14 rounded-full object-cover"
           />
           <div>
             <h3 className="font-semibold text-lg">{campsite.host.name}</h3>
-            <p className="text-gray-600">เป็นสมาชิกตั้งแต่ปี {campsite.host.joinedDate}</p>
+            <p className="text-sm text-gray-500">เป็นสมาชิกตั้งแต่ปี {campsite.host.joinedDate}</p>
             {campsite.host.phone && (
-              <p className="text-sm text-gray-500 mt-1">📞 {campsite.host.phone}</p>
+              <p className="text-sm text-gray-500">📞 {campsite.host.phone}</p>
             )}
           </div>
         </div>
-      </section>
-
-      {/* Description */}
-      <section id="section-overview" className="bg-white rounded-lg p-6 border scroll-mt-32">
-        <h2 className="text-xl font-semibold mb-4">เกี่ยวกับที่พัก</h2>
-        <p className="text-gray-700 leading-relaxed text-base">{campsite.description}</p>
         
-        {/* Check-in/out times */}
-        {(campsite.checkIn || campsite.checkOut) && (
-          <div className="mt-4 flex gap-6 text-sm">
-            {campsite.checkIn && (
-              <div className="flex items-center gap-2">
-                <span className="font-medium">เช็คอิน:</span>
-                <span className="text-gray-600">{campsite.checkIn} น.</span>
-              </div>
-            )}
-            {campsite.checkOut && (
-              <div className="flex items-center gap-2">
-                <span className="font-medium">เช็คเอาท์:</span>
-                <span className="text-gray-600">{campsite.checkOut} น.</span>
-              </div>
-            )}
-          </div>
-        )}
+        <div id="section-overview" className="scroll-mt-32">
+          <h2 className="text-xl font-semibold mb-3">เกี่ยวกับที่พัก</h2>
+          <p className="text-gray-700 leading-relaxed text-base">{campsite.description}</p>
+          
+          {/* Check-in/out times */}
+          {(campsite.checkIn || campsite.checkOut) && (
+            <div className="mt-4 flex gap-6 text-sm">
+              {campsite.checkIn && (
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">เช็คอิน:</span>
+                  <span className="text-gray-600">{campsite.checkIn} น.</span>
+                </div>
+              )}
+              {campsite.checkOut && (
+                <div className="flex items-center gap-2">
+                  <span className="font-medium">เช็คเอาท์:</span>
+                  <span className="text-gray-600">{campsite.checkOut} น.</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </section>
 
       {/* Zone Information - ข้อมูลโซน */}
