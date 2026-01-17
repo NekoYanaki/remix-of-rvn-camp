@@ -117,6 +117,7 @@ const getCampsiteData = (id: string) => {
           { 
             name: "ห้องน้ำและห้องอาบน้ำ",
             images: [
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/1.jpg",
               "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg"
             ]
           },
@@ -162,7 +163,8 @@ const getCampsiteData = (id: string) => {
           { 
             name: "ห้องน้ำและห้องอาบน้ำ",
             images: [
-              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg"
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/1.jpg",
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg"
             ]
           },
           { name: "จุดทำอาหาร (ครัวกลาง/เตาปิ้งย่าง)" },
