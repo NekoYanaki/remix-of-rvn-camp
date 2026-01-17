@@ -27,20 +27,6 @@ const getCampsiteData = (id: string) => {
       country: "ประเทศไทย",
       coordinates: { lat: 12.8432, lng: 99.8345 }
     },
-    amenities: [
-      "ไฟฟ้าให้เชื่อมต่อ",
-      "จุดทิ้งน้ำเสีย", 
-      "ระบบน้ำประปา",
-      "Wi-Fi ฟรี",
-      "ห้องน้ำและห้องอาบน้ำ",
-      "จุดทำอาหาร (ครัวกลาง/เตาปิ้งย่าง)",
-      "พื้นที่จอดรถยนต์เสริม",
-      "บริเวณพักผ่อน/ลานกางเต็นท์",
-      "จุดทิ้งขยะและระบบจัดการขยะ",
-      "ระบบรักษาความปลอดภัย (CCTV)",
-      "แสงสว่างในพื้นที่",
-      "ร้านค้าหรือร้านอาหารใกล้เคียง"
-    ],
     rules: [
       "อนุญาตให้นำสัตว์เลี้ยงเข้าพัก (กรุณาตรวจสอบกฎเกี่ยวกับสัตว์เลี้ยง)",
       "เช็คอิน: 14:00 น.",
@@ -74,7 +60,7 @@ const getCampsiteData = (id: string) => {
           },
           { name: "จุดทำอาหาร (ครัวกลาง/เตาปิ้งย่าง)" },
           { 
-            name: "พื้นที่จอดรถยนต์เสริม",
+            name: "พื้นที่สำหรับจอดรถยนต์เสริม",
             images: [
               "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg"
             ]
@@ -134,7 +120,12 @@ const getCampsiteData = (id: string) => {
               "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg"
             ]
           },
-          { name: "พื้นที่จอดรถยนต์เสริม" }
+          { 
+            name: "พื้นที่สำหรับจอดรถยนต์เสริม",
+            images: [
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg"
+            ]
+          }
         ],
         zoneDetails: {
           safety: [

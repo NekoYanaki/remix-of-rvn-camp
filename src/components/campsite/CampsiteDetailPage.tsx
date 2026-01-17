@@ -46,7 +46,6 @@ interface CampsiteDetailPageProps {
       country: string;
       coordinates: { lat: number; lng: number };
     };
-    amenities: string[];
     rules: string[];
     stayOptions: Array<{
       type: string;
@@ -81,7 +80,6 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
     { id: "host", label: "เจ้าของที่พัก", sectionId: "section-host" },
     { id: "overview", label: "ภาพรวม", sectionId: "section-overview" },
     { id: "zones", label: "ข้อมูลโซน", sectionId: "section-zones" },
-    { id: "facilities", label: "สิ่งอำนวยความสะดวก", sectionId: "section-facilities" },
     { id: "location", label: "ตำแหน่ง", sectionId: "section-location" },
     { id: "rules", label: "กฎระเบียบ", sectionId: "section-rules" },
     { id: "reviews", label: "รีวิว", sectionId: "section-reviews" },

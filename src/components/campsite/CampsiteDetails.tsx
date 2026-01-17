@@ -1,17 +1,29 @@
 import { useState } from "react";
-import { Users, Car, Truck, Tent, Home, Zap, Wifi, Droplet, Shield, Flame, ParkingCircle, Trash2, Lightbulb, Store, Check, ChevronRight, ChevronLeft, X, Image, TreePine, Volume2, Dog, FileText, Battery } from "lucide-react";
+import { Users, Car, Truck, Tent, Home, Zap, Wifi, Droplet, Shield, Flame, ParkingCircle, Trash2, Lightbulb, Store, Check, ChevronRight, ChevronLeft, X, Image, TreePine, Volume2, Dog, FileText, Battery, CalendarDays } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+import { th } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 interface AmenityItem {
   name: string;
   images?: string[];
 }
 
+interface ZoneAvailability {
+  date: Date;
+  availableSlots: number;
+  totalSlots: number;
+}
+
 interface ZoneDetails {
-  safety?: string[]; // 4.5 ความปลอดภัย
-  additionalServices?: string[]; // 4.6 บริการเสริม
-  atmosphere?: string[]; // 4.7 บรรยากาศ
-  rules?: { // 4.8 กฎระเบียบ
+  safety?: string[];
+  additionalServices?: string[];
+  atmosphere?: string[];
+  rules?: {
     petsAllowed?: boolean;
     petRules?: string;
     noisePolicy?: string;
@@ -34,8 +46,8 @@ interface CampsiteDetailsProps {
       supportedVehicles?: string[];
       amenities?: Array<string | AmenityItem>;
       zoneDetails?: ZoneDetails;
+      availability?: ZoneAvailability[];
     }>;
-    amenities: string[];
     host: {
       name: string;
       avatar: string;
@@ -47,6 +59,156 @@ interface CampsiteDetailsProps {
     checkOut?: string;
   };
 }
+
+// Mock availability data generator
+const generateMockAvailability = (totalSlots: number): ZoneAvailability[] => {
+  const availability: ZoneAvailability[] = [];
+  const today = new Date();
+  
+  for (let i = 0; i < 60; i++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + i);
+    
+    // Random available slots (some days fully booked)
+    const booked = Math.floor(Math.random() * (totalSlots + 2));
+    const availableSlots = Math.max(0, totalSlots - booked);
+    
+    availability.push({
+      date,
+      availableSlots,
+      totalSlots
+    });
+  }
+  
+  return availability;
+};
+
+// Zone Availability Calendar Component
+const ZoneAvailabilityCalendar = ({ 
+  zoneName,
+  totalSlots,
+  availability
+}: { 
+  zoneName: string;
+  totalSlots: number;
+  availability?: ZoneAvailability[];
+}) => {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
+  const mockAvailability = availability || generateMockAvailability(totalSlots);
+  
+  const getAvailabilityForDate = (date: Date) => {
+    const found = mockAvailability.find(
+      a => a.date.toDateString() === date.toDateString()
+    );
+    return found || { date, availableSlots: totalSlots, totalSlots };
+  };
+  
+  const selectedAvailability = selectedDate ? getAvailabilityForDate(selectedDate) : null;
+
+  const modifiers = {
+    fullyBooked: (date: Date) => {
+      const avail = getAvailabilityForDate(date);
+      return avail.availableSlots === 0;
+    },
+    limited: (date: Date) => {
+      const avail = getAvailabilityForDate(date);
+      return avail.availableSlots > 0 && avail.availableSlots <= 3;
+    },
+    available: (date: Date) => {
+      const avail = getAvailabilityForDate(date);
+      return avail.availableSlots > 3;
+    }
+  };
+
+  const modifiersStyles = {
+    fullyBooked: { 
+      backgroundColor: '#fecaca', 
+      color: '#991b1b',
+      borderRadius: '4px'
+    },
+    limited: { 
+      backgroundColor: '#fef08a', 
+      color: '#854d0e',
+      borderRadius: '4px'
+    },
+    available: { 
+      backgroundColor: '#bbf7d0', 
+      color: '#166534',
+      borderRadius: '4px'
+    }
+  };
+
+  return (
+    <div className="pt-4 mt-4 border-t">
+      <h4 className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+        <CalendarDays className="h-4 w-4 text-blue-600" />
+        ปฏิทินว่าง - {zoneName}
+      </h4>
+      
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full justify-start text-left font-normal",
+              !selectedDate && "text-muted-foreground"
+            )}
+          >
+            <CalendarDays className="mr-2 h-4 w-4" />
+            {selectedDate ? (
+              <span>
+                {format(selectedDate, "d MMMM yyyy", { locale: th })} - 
+                <span className={cn(
+                  "ml-2 font-medium",
+                  selectedAvailability?.availableSlots === 0 ? "text-red-600" :
+                  selectedAvailability?.availableSlots && selectedAvailability.availableSlots <= 3 ? "text-amber-600" : "text-green-600"
+                )}>
+                  เหลือ {selectedAvailability?.availableSlots || 0} สล็อต
+                </span>
+              </span>
+            ) : (
+              <span>เลือกวันที่เพื่อดูสล็อตว่าง</span>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={selectedDate}
+            onSelect={setSelectedDate}
+            disabled={(date) => date < new Date()}
+            modifiers={modifiers}
+            modifiersStyles={modifiersStyles}
+            className={cn("p-3 pointer-events-auto")}
+            locale={th}
+          />
+          <div className="p-3 border-t space-y-1.5 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded bg-green-200"></div>
+              <span>ว่างมาก (มากกว่า 3 สล็อต)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded bg-yellow-200"></div>
+              <span>ใกล้เต็ม (1-3 สล็อต)</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded bg-red-200"></div>
+              <span>เต็ม</span>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
+      
+      {/* Quick availability summary */}
+      <div className="mt-3 flex items-center gap-4 text-sm">
+        <div className="flex items-center gap-2">
+          <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          <span className="text-gray-600">วันนี้: เหลือ {getAvailabilityForDate(new Date()).availableSlots} สล็อต จาก {totalSlots}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Amenity Gallery Modal Component
 const AmenityGallery = ({ 
@@ -159,8 +321,6 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
     return Check;
   };
 
-  const getSafetyIcon = () => Shield;
-  const getServiceIcon = () => Store;
   const getAtmosphereIcon = (item: string) => {
     const lower = item.toLowerCase();
     if (lower.includes('เงียบ') || lower.includes('สงบ')) return Volume2;
@@ -433,23 +593,16 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
                       </div>
                     </div>
                   )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </section>
 
-      {/* Key Amenities */}
-      <section id="section-facilities" className="bg-white rounded-lg p-6 border scroll-mt-32">
-        <h2 className="text-xl font-semibold mb-4">สิ่งอำนวยความสะดวก</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {campsite.amenities.map((amenity, index) => {
-            const IconComponent = getAmenityIcon(amenity);
-            return (
-              <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                <IconComponent className="h-5 w-5 text-green-600" />
-                <span className="text-gray-700">{amenity}</span>
+                  {/* Zone Availability Calendar */}
+                  {option.slots && (
+                    <ZoneAvailabilityCalendar 
+                      zoneName={option.type}
+                      totalSlots={option.slots}
+                      availability={option.availability}
+                    />
+                  )}
+                </div>
               </div>
             );
           })}
