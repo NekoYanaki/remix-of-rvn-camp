@@ -1,7 +1,7 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Star, ThumbsUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface CampsiteReviewsProps {
   campsite: {
@@ -13,32 +13,32 @@ interface CampsiteReviewsProps {
 const mockReviews = [
   {
     id: 1,
-    author: "Sarah Johnson",
+    author: "สมชาย สุขใจ",
     avatar: "/lovable-uploads/b3b48e94-e287-44ba-807a-e228a1df866a.png",
-    country: "United States",
-    date: "March 2024",
+    country: "ไทย",
+    date: "มีนาคม 2024",
     rating: 5,
-    comment: "Amazing campsite with stunning views! The facilities were clean and the host was very helpful. Perfect for a peaceful getaway.",
+    comment: "ที่พักดีมาก วิวสวย เจ้าของใจดี สิ่งอำนวยความสะดวกครบครัน จะกลับมาอีกแน่นอน!",
     helpful: 12
   },
   {
     id: 2,
-    author: "Marco Silva",
+    author: "วิภา รักธรรมชาติ",
     avatar: "/lovable-uploads/e4ce7067-7522-45d6-82c0-56a7fb4d8543.png",
-    country: "Brazil",
-    date: "February 2024",
+    country: "ไทย",
+    date: "กุมภาพันธ์ 2024",
     rating: 4,
-    comment: "Great location for hiking and stargazing. Quiet and well-maintained. Would definitely come back!",
+    comment: "บรรยากาศดี เงียบสงบ เหมาะกับการพักผ่อน มีพื้นที่กว้างขวางสำหรับรถบ้าน",
     helpful: 8
   },
   {
     id: 3,
-    author: "Emily Chen",
+    author: "ธนา เดินทาง",
     avatar: "/lovable-uploads/b3b48e94-e287-44ba-807a-e228a1df866a.png",
-    country: "Canada",
-    date: "January 2024",
+    country: "ไทย",
+    date: "มกราคม 2024",
     rating: 5,
-    comment: "Perfect for digital nomads. Good WiFi, peaceful environment, and beautiful nature all around.",
+    comment: "สะดวกสบายมาก มีน้ำประปา ไฟฟ้าพร้อม เหมาะสำหรับ Campervan และ Motorhome",
     helpful: 15
   }
 ];
@@ -46,42 +46,14 @@ const mockReviews = [
 export const CampsiteReviews = ({ campsite }: CampsiteReviewsProps) => {
   return (
     <div className="bg-white rounded-lg p-6 border">
-      {/* Review Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Guest reviews</h2>
-          <div className="flex items-center gap-2">
-            <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-            <span className="text-lg font-semibold">{campsite.rating}</span>
-            <span className="text-gray-600">• {campsite.reviewCount} reviews</span>
-          </div>
+      {/* Review Header - Star Rating Only */}
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold mb-2">รีวิวจากผู้เข้าพัก</h2>
+        <div className="flex items-center gap-2">
+          <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+          <span className="text-lg font-semibold">{campsite.rating}</span>
+          <span className="text-gray-600">• {campsite.reviewCount} รีวิว</span>
         </div>
-        <Button variant="outline">Write a review</Button>
-      </div>
-
-      {/* Rating Categories */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-        {[
-          { category: "Cleanliness", score: 4.8 },
-          { category: "Location", score: 4.9 },
-          { category: "Value", score: 4.7 },
-          { category: "Facilities", score: 4.6 },
-          { category: "Communication", score: 4.9 },
-          { category: "Check-in", score: 4.8 }
-        ].map((item, index) => (
-          <div key={index} className="flex justify-between items-center">
-            <span className="text-sm text-gray-600">{item.category}</span>
-            <div className="flex items-center gap-1">
-              <div className="w-24 h-2 bg-gray-200 rounded-full">
-                <div 
-                  className="h-2 bg-blue-600 rounded-full" 
-                  style={{ width: `${(item.score / 5) * 100}%` }}
-                ></div>
-              </div>
-              <span className="text-sm font-medium ml-2">{item.score}</span>
-            </div>
-          </div>
-        ))}
       </div>
 
       {/* Individual Reviews */}
@@ -110,7 +82,7 @@ export const CampsiteReviews = ({ campsite }: CampsiteReviewsProps) => {
                 <p className="text-gray-700 mb-3">{review.comment}</p>
                 <button className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700">
                   <ThumbsUp className="h-4 w-4" />
-                  Helpful ({review.helpful})
+                  เป็นประโยชน์ ({review.helpful})
                 </button>
               </div>
             </div>
@@ -119,7 +91,7 @@ export const CampsiteReviews = ({ campsite }: CampsiteReviewsProps) => {
       </div>
 
       <Button variant="outline" className="w-full mt-6">
-        Show all {campsite.reviewCount} reviews
+        ดูรีวิวทั้งหมด {campsite.reviewCount} รีวิว
       </Button>
     </div>
   );

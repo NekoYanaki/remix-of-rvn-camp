@@ -69,6 +69,25 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
 
   return (
     <div className="space-y-8">
+      {/* Host Information - First */}
+      <section id="section-host" className="bg-white rounded-lg p-6 border scroll-mt-32">
+        <h2 className="text-xl font-semibold mb-4">เจ้าของที่พัก</h2>
+        <div className="flex items-center gap-4">
+          <img
+            src={campsite.host.avatar}
+            alt={campsite.host.name}
+            className="w-16 h-16 rounded-full object-cover"
+          />
+          <div>
+            <h3 className="font-semibold text-lg">{campsite.host.name}</h3>
+            <p className="text-gray-600">เป็นสมาชิกตั้งแต่ปี {campsite.host.joinedDate}</p>
+            {campsite.host.phone && (
+              <p className="text-sm text-gray-500 mt-1">📞 {campsite.host.phone}</p>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* Description */}
       <section id="section-overview" className="bg-white rounded-lg p-6 border scroll-mt-32">
         <h2 className="text-xl font-semibold mb-4">เกี่ยวกับที่พัก</h2>
@@ -131,16 +150,15 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
       {/* Supported Vehicles */}
       <section id="section-vehicles" className="bg-white rounded-lg p-6 border scroll-mt-32">
         <h2 className="text-xl font-semibold mb-4">พาหนะที่รองรับ</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-          {supportedVehicles.map((vehicle, index) => {
-            const IconComponent = getVehicleIcon(vehicle);
-            return (
-              <div key={index} className="flex items-center gap-3 p-3 bg-green-50 rounded-lg border border-green-100">
-                <IconComponent className="h-5 w-5 text-green-600" />
-                <span className="text-gray-700 font-medium">{vehicle}</span>
-              </div>
-            );
-          })}
+        <div className="flex flex-wrap gap-2">
+          {supportedVehicles.map((vehicle, index) => (
+            <span 
+              key={index} 
+              className="px-4 py-2 bg-gray-800 text-white rounded-full text-sm font-medium"
+            >
+              {vehicle}
+            </span>
+          ))}
         </div>
       </section>
 
@@ -170,25 +188,6 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
               <span className="text-gray-700">{activity}</span>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Host Information */}
-      <section id="section-host" className="bg-white rounded-lg p-6 border scroll-mt-32">
-        <h2 className="text-xl font-semibold mb-4">เจ้าของที่พัก</h2>
-        <div className="flex items-center gap-4">
-          <img
-            src={campsite.host.avatar}
-            alt={campsite.host.name}
-            className="w-16 h-16 rounded-full object-cover"
-          />
-          <div>
-            <h3 className="font-semibold text-lg">{campsite.host.name}</h3>
-            <p className="text-gray-600">เป็นสมาชิกตั้งแต่ปี {campsite.host.joinedDate}</p>
-            {campsite.host.phone && (
-              <p className="text-sm text-gray-500 mt-1">📞 {campsite.host.phone}</p>
-            )}
-          </div>
         </div>
       </section>
     </div>
