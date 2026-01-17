@@ -519,14 +519,13 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                                   const amenityData = typeof amenity === 'string' 
                                     ? { name: amenity } 
                                     : amenity;
-                                  const AmenityIcon = getAmenityIcon(amenityData.name);
                                   
                                   return (
                                     <div 
                                       key={aIdx} 
-                                      className="flex items-center gap-2 p-3 bg-purple-50 rounded-lg"
+                                      className="flex items-center gap-2 p-3 bg-green-50 rounded-lg"
                                     >
-                                      <Check className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                                      <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
                                       <span className="text-sm text-gray-700">{amenityData.name}</span>
                                     </div>
                                   );
