@@ -1,5 +1,5 @@
 
-import React, { useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,9 +10,10 @@ import {
 import { CampsiteHeader } from "./CampsiteHeader";
 import { CampsiteGallery } from "./CampsiteGallery";
 import { CampsiteDetails } from "./CampsiteDetails";
-import BookingWidget from "./BookingWidget";
+import BookingCartWidget from "./BookingCartWidget";
 import { CampsiteReviews } from "./CampsiteReviews";
 import { CampsiteLocation } from "./CampsiteLocation";
+import { CartItem } from "./ZoneBookingForm";
 
 interface ZoneDetails {
   safety?: string[];
@@ -75,6 +76,25 @@ interface CampsiteDetailPageProps {
 
 const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
   const navigate = useNavigate();
+  
+  // Cart state
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    const saved = localStorage.getItem('campsite_booking_cart');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('campsite_booking_cart', JSON.stringify(cart));
+  }, [cart]);
+
+  const handleAddToCart = (item: CartItem) => {
+    setCart(prev => [...prev, item]);
+  };
+
+  const handleRemoveFromCart = (itemId: string) => {
+    setCart(prev => prev.filter(item => item.id !== itemId));
+  };
 
   const tabs = [
     { id: "host", label: "เจ้าของที่พัก", sectionId: "section-host" },
@@ -146,8 +166,7 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Main Content */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Overview and Details */}
-            <CampsiteDetails campsite={campsite} />
+            <CampsiteDetails campsite={campsite} onAddToCart={handleAddToCart} />
 
             {/* Location Section */}
             <section id="section-location" className="scroll-mt-32">
@@ -173,10 +192,9 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
             </section>
           </div>
 
-          {/* Right Column - Booking Widget */}
           <div className="lg:col-span-1">
             <div className="sticky top-32">
-              <BookingWidget campsite={campsite} />
+              <BookingCartWidget cart={cart} onRemoveItem={handleRemoveFromCart} />
             </div>
           </div>
         </div>
