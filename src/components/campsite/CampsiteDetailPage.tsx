@@ -14,6 +14,23 @@ import BookingWidget from "./BookingWidget";
 import { CampsiteReviews } from "./CampsiteReviews";
 import { CampsiteLocation } from "./CampsiteLocation";
 
+interface ZoneDetails {
+  safety?: string[];
+  additionalServices?: string[];
+  atmosphere?: string[];
+  rules?: {
+    petsAllowed?: boolean;
+    petRules?: string;
+    noisePolicy?: string;
+    cancellationPolicy?: string;
+  };
+}
+
+interface AmenityItem {
+  name: string;
+  images?: string[];
+}
+
 interface CampsiteDetailPageProps {
   campsite: {
     id: string;
@@ -30,7 +47,6 @@ interface CampsiteDetailPageProps {
       coordinates: { lat: number; lng: number };
     };
     amenities: string[];
-    activities: string[];
     rules: string[];
     stayOptions: Array<{
       type: string;
@@ -42,7 +58,8 @@ interface CampsiteDetailPageProps {
       unit?: string;
       images?: string[];
       supportedVehicles?: string[];
-      amenities?: Array<string | { name: string; image?: string }>;
+      amenities?: Array<string | AmenityItem>;
+      zoneDetails?: ZoneDetails;
     }>;
     host: {
       name: string;

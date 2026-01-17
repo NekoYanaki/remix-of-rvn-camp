@@ -41,12 +41,6 @@ const getCampsiteData = (id: string) => {
       "แสงสว่างในพื้นที่",
       "ร้านค้าหรือร้านอาหารใกล้เคียง"
     ],
-    activities: [
-      "กิจกรรมท้องถิ่น",
-      "การท่องเที่ยวใกล้เคียง",
-      "พักผ่อนท่ามกลางธรรมชาติ",
-      "ถ่ายภาพวิวทิวทัศน์"
-    ],
     rules: [
       "อนุญาตให้นำสัตว์เลี้ยงเข้าพัก (กรุณาตรวจสอบกฎเกี่ยวกับสัตว์เลี้ยง)",
       "เช็คอิน: 14:00 น.",
@@ -71,12 +65,51 @@ const getCampsiteData = (id: string) => {
         ],
         supportedVehicles: ["Caravan", "Motorhome A Class", "Motorhome B Class", "Motorhome C Class", "Campervan"],
         amenities: [
-          "ไฟฟ้าให้เชื่อมต่อ",
-          "จุดทิ้งน้ำเสีย",
-          "ระบบน้ำประปา",
-          "Wi-Fi ฟรี",
-          "ห้องน้ำและห้องอาบน้ำ"
-        ]
+          { 
+            name: "ห้องน้ำและห้องอาบน้ำ", 
+            images: [
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/1.jpg",
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg"
+            ]
+          },
+          { name: "จุดทำอาหาร (ครัวกลาง/เตาปิ้งย่าง)" },
+          { 
+            name: "พื้นที่จอดรถยนต์เสริม",
+            images: [
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg"
+            ]
+          },
+          { name: "ห้องสุขา/สุขภัณฑ์สำหรับคนพิการ" },
+          { 
+            name: "บริเวณพักผ่อน/ลานกางเต็นท์",
+            images: [
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/4.jpg"
+            ]
+          },
+          { name: "จุดทิ้งขยะและระบบจัดการขยะ" }
+        ],
+        zoneDetails: {
+          safety: [
+            "ระบบรักษาความปลอดภัย (กล้อง CCTV, รปภ.)",
+            "แสงสว่างในพื้นที่จอดรถและทางเดิน"
+          ],
+          additionalServices: [
+            "ร้านค้าหรือร้านอาหารใกล้เคียง",
+            "จุดชาร์จไฟฟ้าสำหรับรถยนต์ไฟฟ้า",
+            "บริการซักรีด",
+            "จุดเชื่อมต่อกับกิจกรรมท้องถิ่นหรือการท่องเที่ยว"
+          ],
+          atmosphere: [
+            "ความเงียบสงบและความเป็นส่วนตัว",
+            "มีพื้นที่สีเขียวหรือสวน"
+          ],
+          rules: {
+            petsAllowed: true,
+            petRules: "ต้องใส่สายจูงเมื่ออยู่นอกรถบ้าน",
+            noisePolicy: "งดส่งเสียงหลัง 22.00",
+            cancellationPolicy: "ยกเลิกฟรี 3 วันก่อนเช็คอิน"
+          }
+        }
       },
       {
         type: "ลานจอดรถ โซน B",
@@ -94,10 +127,31 @@ const getCampsiteData = (id: string) => {
         ],
         supportedVehicles: ["Caravan", "Campervan"],
         amenities: [
-          "ระบบน้ำประปา",
-          "ห้องน้ำและห้องอาบน้ำ",
-          "พื้นที่จอดรถยนต์เสริม"
-        ]
+          { name: "ระบบน้ำประปา" },
+          { 
+            name: "ห้องน้ำและห้องอาบน้ำ",
+            images: [
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg"
+            ]
+          },
+          { name: "พื้นที่จอดรถยนต์เสริม" }
+        ],
+        zoneDetails: {
+          safety: [
+            "แสงสว่างในพื้นที่จอดรถและทางเดิน"
+          ],
+          additionalServices: [
+            "ร้านค้าหรือร้านอาหารใกล้เคียง"
+          ],
+          atmosphere: [
+            "ความเงียบสงบและความเป็นส่วนตัว",
+            "มีพื้นที่สีเขียวหรือสวน"
+          ],
+          rules: {
+            petsAllowed: true,
+            noisePolicy: "งดส่งเสียงหลัง 22.00"
+          }
+        }
       },
       {
         type: "พื้นที่กางเต็นท์",
@@ -114,10 +168,33 @@ const getCampsiteData = (id: string) => {
           "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg"
         ],
         amenities: [
-          "ห้องน้ำและห้องอาบน้ำ",
-          "จุดทำอาหาร (ครัวกลาง/เตาปิ้งย่าง)",
-          "บริเวณพักผ่อน/ลานกางเต็นท์"
-        ]
+          { 
+            name: "ห้องน้ำและห้องอาบน้ำ",
+            images: [
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg"
+            ]
+          },
+          { name: "จุดทำอาหาร (ครัวกลาง/เตาปิ้งย่าง)" },
+          { 
+            name: "บริเวณพักผ่อน/ลานกางเต็นท์",
+            images: [
+              "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/4.jpg"
+            ]
+          }
+        ],
+        zoneDetails: {
+          safety: [
+            "แสงสว่างในพื้นที่"
+          ],
+          atmosphere: [
+            "ความเงียบสงบและความเป็นส่วนตัว",
+            "มีพื้นที่สีเขียวหรือสวน"
+          ],
+          rules: {
+            petsAllowed: false,
+            noisePolicy: "งดส่งเสียงหลัง 22.00"
+          }
+        }
       }
     ],
     host: {
