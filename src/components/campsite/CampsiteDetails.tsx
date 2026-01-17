@@ -462,50 +462,80 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                   {option.amenities && option.amenities.length > 0 && (
                     <div className="pt-4 border-t">
                       <h4 className="text-sm font-medium text-gray-700 mb-3">สิ่งอำนวยความสะดวกในโซนนี้</h4>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {option.amenities.map((amenity, aIdx) => {
-                          const amenityData = typeof amenity === 'string' 
-                            ? { name: amenity } 
-                            : amenity;
-                          const AmenityIcon = getAmenityIcon(amenityData.name);
-                          const hasImages = amenityData.images && amenityData.images.length > 0;
-                          
-                          return (
-                            <div 
-                              key={aIdx} 
-                              className={`relative rounded-lg overflow-hidden border ${hasImages ? 'cursor-pointer hover:border-green-400' : ''}`}
-                              onClick={() => hasImages && setSelectedAmenity(amenityData)}
-                            >
-                              {hasImages ? (
-                                <>
-                                  <div className="h-20 relative">
-                                    <img 
-                                      src={amenityData.images![0]} 
-                                      alt={amenityData.name}
-                                      className="w-full h-full object-cover"
-                                    />
-                                    {amenityData.images!.length > 1 && (
-                                      <div className="absolute bottom-1 right-1 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded flex items-center gap-1">
-                                        <Image className="h-3 w-3" />
-                                        {amenityData.images!.length}
+                      
+                      {/* Amenities with Images */}
+                      {(() => {
+                        const withImages = option.amenities.filter(a => {
+                          const data = typeof a === 'string' ? { name: a } : a;
+                          return data.images && data.images.length > 0;
+                        });
+                        const withoutImages = option.amenities.filter(a => {
+                          const data = typeof a === 'string' ? { name: a } : a;
+                          return !data.images || data.images.length === 0;
+                        });
+                        
+                        return (
+                          <>
+                            {withImages.length > 0 && (
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+                                {withImages.map((amenity, aIdx) => {
+                                  const amenityData = typeof amenity === 'string' 
+                                    ? { name: amenity } 
+                                    : amenity;
+                                  const AmenityIcon = getAmenityIcon(amenityData.name);
+                                  
+                                  return (
+                                    <div 
+                                      key={aIdx} 
+                                      className="relative rounded-xl overflow-hidden border cursor-pointer hover:border-green-400 hover:shadow-md transition-all"
+                                      onClick={() => setSelectedAmenity(amenityData)}
+                                    >
+                                      <div className="h-24 relative">
+                                        <img 
+                                          src={amenityData.images![0]} 
+                                          alt={amenityData.name}
+                                          className="w-full h-full object-cover"
+                                        />
+                                        {amenityData.images!.length > 1 && (
+                                          <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded-lg flex items-center gap-1">
+                                            <Image className="h-3 w-3" />
+                                            {amenityData.images!.length}
+                                          </div>
+                                        )}
                                       </div>
-                                    )}
-                                  </div>
-                                  <div className="p-2 bg-gray-50 flex items-center gap-2">
-                                    <AmenityIcon className="h-4 w-4 text-green-600 flex-shrink-0" />
-                                    <span className="text-sm text-gray-700 truncate">{amenityData.name}</span>
-                                  </div>
-                                </>
-                              ) : (
-                                <div className="p-3 bg-gray-50 flex items-center gap-2">
-                                  <AmenityIcon className="h-4 w-4 text-green-600 flex-shrink-0" />
-                                  <span className="text-sm text-gray-700 truncate">{amenityData.name}</span>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </div>
+                                      <div className="p-2.5 bg-white flex items-center gap-2">
+                                        <AmenityIcon className="h-4 w-4 text-green-600 flex-shrink-0" />
+                                        <span className="text-sm text-gray-700 font-medium truncate">{amenityData.name}</span>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                            
+                            {withoutImages.length > 0 && (
+                              <div className="grid grid-cols-2 gap-2">
+                                {withoutImages.map((amenity, aIdx) => {
+                                  const amenityData = typeof amenity === 'string' 
+                                    ? { name: amenity } 
+                                    : amenity;
+                                  const AmenityIcon = getAmenityIcon(amenityData.name);
+                                  
+                                  return (
+                                    <div 
+                                      key={aIdx} 
+                                      className="flex items-center gap-2 p-3 bg-purple-50 rounded-lg"
+                                    >
+                                      <Check className="h-4 w-4 text-purple-600 flex-shrink-0" />
+                                      <span className="text-sm text-gray-700">{amenityData.name}</span>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
                     </div>
                   )}
 
