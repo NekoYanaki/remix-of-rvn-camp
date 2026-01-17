@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Users, Car, Truck, Tent, Home, Zap, Wifi, Droplet, Shield, Flame, ParkingCircle, Trash2, Lightbulb, Store, Check, ChevronRight, ChevronLeft, X, Image, TreePine, Volume2, Dog, FileText, Battery, CalendarDays } from "lucide-react";
+import { useState, useRef } from "react";
+import { Users, Car, Truck, Tent, Home, Zap, Wifi, Droplet, Shield, Flame, ParkingCircle, Trash2, Lightbulb, Store, Check, ChevronRight, ChevronLeft, ChevronDown, ChevronUp, X, Image, TreePine, Volume2, Dog, FileText, Battery, CalendarDays } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -306,6 +306,21 @@ const AmenityGallery = ({
 export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps) => {
   const [selectedAmenity, setSelectedAmenity] = useState<AmenityItem | null>(null);
   const [viewingImages, setViewingImages] = useState<{ images: string[]; currentIndex: number; title: string } | null>(null);
+  const [expandedZones, setExpandedZones] = useState<Record<number, boolean>>({});
+  const zoneBookingRefs = useRef<Record<number, HTMLDivElement | null>>({});
+
+  const toggleZoneExpanded = (index: number) => {
+    setExpandedZones(prev => ({ ...prev, [index]: !prev[index] }));
+  };
+
+  const scrollToBooking = (index: number) => {
+    // First expand the zone if not already expanded
+    setExpandedZones(prev => ({ ...prev, [index]: true }));
+    // Then scroll to booking form after a short delay for expansion animation
+    setTimeout(() => {
+      zoneBookingRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
 
   const getStayIcon = (type: string) => {
     const lowerType = type.toLowerCase();
@@ -387,6 +402,7 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
         <div className="space-y-8">
           {campsite.stayOptions.map((option, index) => {
             const IconComponent = getStayIcon(option.type);
+            const isExpanded = expandedZones[index] || false;
             return (
               <div key={index} className="border rounded-xl overflow-hidden hover:border-green-300 transition-colors">
                 {/* Zone Images */}
@@ -417,9 +433,9 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                   </div>
                 )}
                 
-                {/* Zone Info */}
+                {/* Zone Basic Info - Always visible */}
                 <div className="p-5">
-                  <div className="flex items-start gap-4 mb-4">
+                  <div className="flex items-start gap-4">
                     <div className="bg-green-100 p-3 rounded-lg">
                       <IconComponent className="h-6 w-6 text-green-600" />
                     </div>
@@ -443,19 +459,26 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                         )}
                       </div>
                     </div>
-                    <div className="text-right">
+                    <div className="text-right flex flex-col items-end">
                       <div className="text-2xl font-bold text-green-600">
                         ฿{option.price.toLocaleString()}
                       </div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-gray-500 mb-2">
                         {option.priceType === 'per_person' ? 'ต่อคน/คืน' : 'ต่อคืน'}
                       </div>
+                      <Button
+                        onClick={() => scrollToBooking(index)}
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                        size="sm"
+                      >
+                        จองเลย
+                      </Button>
                     </div>
                   </div>
                   
-                  {/* Zone Supported Vehicles */}
+                  {/* Zone Supported Vehicles - Always visible */}
                   {option.supportedVehicles && option.supportedVehicles.length > 0 && (
-                    <div className="mb-4">
+                    <div className="mt-4">
                       <h4 className="text-sm font-medium text-gray-700 mb-2">รถที่รองรับในโซนนี้</h4>
                       <div className="flex flex-wrap gap-2">
                         {option.supportedVehicles.map((vehicle, vIdx) => (
@@ -469,6 +492,27 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                       </div>
                     </div>
                   )}
+
+                  {/* Expand/Collapse Button */}
+                  <button
+                    onClick={() => toggleZoneExpanded(index)}
+                    className="flex items-center gap-2 mt-4 text-green-600 hover:text-green-700 font-medium text-sm transition-colors"
+                  >
+                    {isExpanded ? (
+                      <>
+                        <ChevronUp className="h-4 w-4" />
+                        ซ่อนรายละเอียด
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="h-4 w-4" />
+                        ดูรายละเอียดเพิ่มเติม
+                      </>
+                    )}
+                  </button>
+
+                  {/* Collapsible Details Section */}
+                  <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? 'max-h-[5000px] opacity-100 mt-4' : 'max-h-0 opacity-0'}`}>
 
                   {/* Zone Amenities with Images */}
                   {option.amenities && option.amenities.length > 0 && (
@@ -658,18 +702,21 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                   )}
 
                   {/* Zone Booking Form */}
-                  <ZoneBookingForm
-                    zoneType={option.type}
-                    zoneName={option.type}
-                    maxGuests={option.maxGuests}
-                    price={option.price}
-                    priceType={option.priceType}
-                    slots={option.slots}
-                    campsiteId={campsite.id}
-                    campsiteName={campsite.name}
-                    campsiteLocation={`${campsite.location.city}, ${campsite.location.country}`}
-                    onAddToCart={onAddToCart}
-                  />
+                  <div ref={el => zoneBookingRefs.current[index] = el}>
+                    <ZoneBookingForm
+                      zoneType={option.type}
+                      zoneName={option.type}
+                      maxGuests={option.maxGuests}
+                      price={option.price}
+                      priceType={option.priceType}
+                      slots={option.slots}
+                      campsiteId={campsite.id}
+                      campsiteName={campsite.name}
+                      campsiteLocation={`${campsite.location.city}, ${campsite.location.country}`}
+                      onAddToCart={onAddToCart}
+                    />
+                  </div>
+                  </div> {/* End of Collapsible Details Section */}
                 </div>
               </div>
             );
