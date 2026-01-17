@@ -97,7 +97,7 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
   };
 
   const tabs = [
-    { id: "host", label: "เกี่ยวกับที่พัก", sectionId: "section-host" },
+    { id: "host", label: "ภาพรวม", sectionId: "section-host" },
     { id: "zones", label: "ข้อมูลโซน", sectionId: "section-zones" },
     { id: "location", label: "ตำแหน่ง", sectionId: "section-location" },
     { id: "reviews", label: "รีวิว", sectionId: "section-reviews" },

@@ -305,6 +305,7 @@ const AmenityGallery = ({
 
 export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps) => {
   const [selectedAmenity, setSelectedAmenity] = useState<AmenityItem | null>(null);
+  const [viewingImages, setViewingImages] = useState<{ images: string[]; currentIndex: number; title: string } | null>(null);
 
   const getStayIcon = (type: string) => {
     const lowerType = type.toLowerCase();
@@ -392,12 +393,25 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                 {option.images && option.images.length > 0 && (
                   <div className="grid grid-cols-4 gap-1 h-40">
                     {option.images.slice(0, 4).map((img, imgIdx) => (
-                      <div key={imgIdx} className="relative overflow-hidden">
+                      <div 
+                        key={imgIdx} 
+                        className="relative overflow-hidden cursor-pointer"
+                        onClick={() => setViewingImages({ 
+                          images: option.images!, 
+                          currentIndex: imgIdx, 
+                          title: option.type 
+                        })}
+                      >
                         <img 
                           src={img} 
                           alt={`${option.type} - รูปที่ ${imgIdx + 1}`}
                           className="w-full h-full object-cover hover:scale-105 transition-transform"
                         />
+                        {imgIdx === 3 && option.images!.length > 4 && (
+                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center text-white font-semibold">
+                            +{option.images!.length - 4}
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -486,7 +500,11 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                                     <div 
                                       key={aIdx} 
                                       className="relative rounded-xl overflow-hidden border cursor-pointer hover:border-green-400 hover:shadow-md transition-all"
-                                      onClick={() => setSelectedAmenity(amenityData)}
+                                      onClick={() => setViewingImages({
+                                        images: amenityData.images!,
+                                        currentIndex: 0,
+                                        title: amenityData.name
+                                      })}
                                     >
                                       <div className="h-24 relative">
                                         <img 
@@ -666,6 +684,77 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
           isOpen={!!selectedAmenity}
           onClose={() => setSelectedAmenity(null)}
         />
+      )}
+
+      {/* Image Viewer Modal */}
+      {viewingImages && (
+        <Dialog open={!!viewingImages} onOpenChange={() => setViewingImages(null)}>
+          <DialogContent className="max-w-4xl p-0 overflow-hidden bg-black">
+            <div className="relative">
+              <button 
+                onClick={() => setViewingImages(null)}
+                className="absolute top-3 right-3 z-10 p-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+              
+              <div className="relative aspect-video bg-black flex items-center justify-center">
+                <img 
+                  src={viewingImages.images[viewingImages.currentIndex]} 
+                  alt={`${viewingImages.title} - รูปที่ ${viewingImages.currentIndex + 1}`}
+                  className="max-w-full max-h-[70vh] object-contain"
+                />
+                
+                {viewingImages.images.length > 1 && (
+                  <>
+                    <button 
+                      onClick={() => setViewingImages({
+                        ...viewingImages,
+                        currentIndex: (viewingImages.currentIndex - 1 + viewingImages.images.length) % viewingImages.images.length
+                      })}
+                      className="absolute left-3 top-1/2 -translate-y-1/2 p-3 bg-white/80 rounded-full hover:bg-white transition-colors shadow-lg"
+                    >
+                      <ChevronLeft className="h-6 w-6" />
+                    </button>
+                    <button 
+                      onClick={() => setViewingImages({
+                        ...viewingImages,
+                        currentIndex: (viewingImages.currentIndex + 1) % viewingImages.images.length
+                      })}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-3 bg-white/80 rounded-full hover:bg-white transition-colors shadow-lg"
+                    >
+                      <ChevronRight className="h-6 w-6" />
+                    </button>
+                  </>
+                )}
+              </div>
+              
+              <div className="p-4 bg-white">
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold text-lg">{viewingImages.title}</h3>
+                  <span className="text-sm text-gray-500">
+                    {viewingImages.currentIndex + 1} / {viewingImages.images.length}
+                  </span>
+                </div>
+                {viewingImages.images.length > 1 && (
+                  <div className="flex gap-2 overflow-x-auto pb-2">
+                    {viewingImages.images.map((img, idx) => (
+                      <button 
+                        key={idx}
+                        onClick={() => setViewingImages({ ...viewingImages, currentIndex: idx })}
+                        className={`w-16 h-12 rounded-lg overflow-hidden border-2 transition-all flex-shrink-0 ${
+                          idx === viewingImages.currentIndex ? 'border-green-500' : 'border-transparent opacity-60 hover:opacity-100'
+                        }`}
+                      >
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       )}
     </div>
   );
