@@ -1,5 +1,4 @@
 
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, Globe } from "lucide-react";
 import { Button } from "./ui/button";
@@ -16,14 +15,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Header = () => {
-  const [language, setLanguage] = useState<"en" | "th">("en");
+  const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
-
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === "en" ? "th" : "en");
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -42,25 +38,25 @@ const Header = () => {
             to="/"
             className="text-sm font-medium transition-colors hover:text-primary"
           >
-            Home
+            {t("nav.home")}
           </Link>
           <Link
             to="/manage-trip"
             className="text-sm font-medium transition-colors hover:text-primary"
           >
-            Manage Your Trip
+            {language === "th" ? "จัดการทริป" : "Manage Your Trip"}
           </Link>
           <Link
             to="/contact"
             className="text-sm font-medium transition-colors hover:text-primary"
           >
-            Contact Us
+            {t("nav.contact")}
           </Link>
           <Link
             to="/travel-guide"
             className="text-sm font-medium transition-colors hover:text-primary"
           >
-            Travel Guide
+            {t("nav.guide")}
           </Link>
 
           <div className="flex items-center space-x-4">
@@ -71,7 +67,7 @@ const Header = () => {
                   {language === "en" ? "ENG" : "ไทย"}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent className="bg-white z-50">
                 <DropdownMenuItem onClick={() => setLanguage("en")}>
                   <Globe className="h-4 w-4 mr-2" />
                   English
@@ -85,7 +81,7 @@ const Header = () => {
             
             <Link to="/login">
               <Button variant="default" size="sm">
-                Login
+                {t("nav.login")}
               </Button>
             </Link>
           </div>
@@ -115,25 +111,25 @@ const Header = () => {
                   to="/"
                   className="text-lg font-medium transition-colors hover:text-primary"
                 >
-                  Home
+                  {t("nav.home")}
                 </Link>
                 <Link
                   to="/manage-trip"
                   className="text-lg font-medium transition-colors hover:text-primary"
                 >
-                  Manage Your Trip
+                  {language === "th" ? "จัดการทริป" : "Manage Your Trip"}
                 </Link>
                 <Link
                   to="/contact"
                   className="text-lg font-medium transition-colors hover:text-primary"
                 >
-                  Contact Us
+                  {t("nav.contact")}
                 </Link>
                 <Link
                   to="/travel-guide"
                   className="text-lg font-medium transition-colors hover:text-primary"
                 >
-                  Travel Guide
+                  {t("nav.guide")}
                 </Link>
                 <div className="flex flex-col space-y-4 pt-4 border-t">
                   <DropdownMenu>
@@ -143,7 +139,7 @@ const Header = () => {
                         {language === "en" ? "ENG" : "ไทย"}
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                    <DropdownMenuContent className="bg-white z-50">
                       <DropdownMenuItem onClick={() => setLanguage("en")}>
                         <Globe className="h-4 w-4 mr-2" />
                         English
@@ -156,7 +152,7 @@ const Header = () => {
                   </DropdownMenu>
                   <Link to="/login">
                     <Button variant="default" size="sm" className="w-full">
-                      Login
+                      {t("nav.login")}
                     </Button>
                   </Link>
                 </div>

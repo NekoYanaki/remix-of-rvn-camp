@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import Index from "./pages/Index";
 import SearchResults from "./pages/SearchResults";
 import Booking from "./pages/Booking";
@@ -38,43 +39,45 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/search" element={<SearchResults />} />
-          <Route path="/booking" element={<Booking />} />
-          <Route path="/booking-summary" element={<BookingSummary />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/manage-trip" element={<ManageTrip />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
-          <Route path="/partner/login" element={<PartnerLogin />} />
-          <Route path="/partner/register" element={<PartnerRegistration />} />
-          <Route path="/travel-guide" element={<TravelGuide />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/book-campsite" element={<BookCampsite />} />
-          <Route path="/campsite/:id" element={<CampsiteDetails />} />
-          <Route path="/customer-details" element={<CustomerDetails />} />
-          <Route path="/payment-summary" element={<PaymentSummary />} />
-          <Route path="/book-motorhome" element={<BookMotorhome />} />
-          <Route path="/search-campsite" element={<SearchHotels />} />
-          <Route path="/hotels-calculator" element={<HotelsCalculator />} />
-          <Route path="/motorhome-results" element={<MotorhomeResults />} />
-          <Route path="/motorhome-calculator" element={<MotorhomeCalculator />} />
-          <Route path="/motorhome-detail" element={<MotorhomeDetail />} />
-          <Route path="/download" element={<Download />} />
-          <Route path="/rent-campervan" element={<RentCampervan />} />
-          <Route path="/campervan-detail" element={<CampervanDetail />} />
-          <Route path="/motorhome-summary" element={<MotorhomeSummary />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <LanguageProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/search" element={<SearchResults />} />
+            <Route path="/booking" element={<Booking />} />
+            <Route path="/booking-summary" element={<BookingSummary />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/manage-trip" element={<ManageTrip />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/partner/login" element={<PartnerLogin />} />
+            <Route path="/partner/register" element={<PartnerRegistration />} />
+            <Route path="/travel-guide" element={<TravelGuide />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/book-campsite" element={<BookCampsite />} />
+            <Route path="/campsite/:id" element={<CampsiteDetails />} />
+            <Route path="/customer-details" element={<CustomerDetails />} />
+            <Route path="/payment-summary" element={<PaymentSummary />} />
+            <Route path="/book-motorhome" element={<BookMotorhome />} />
+            <Route path="/search-campsite" element={<SearchHotels />} />
+            <Route path="/hotels-calculator" element={<HotelsCalculator />} />
+            <Route path="/motorhome-results" element={<MotorhomeResults />} />
+            <Route path="/motorhome-calculator" element={<MotorhomeCalculator />} />
+            <Route path="/motorhome-detail" element={<MotorhomeDetail />} />
+            <Route path="/download" element={<Download />} />
+            <Route path="/rent-campervan" element={<RentCampervan />} />
+            <Route path="/campervan-detail" element={<CampervanDetail />} />
+            <Route path="/motorhome-summary" element={<MotorhomeSummary />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </LanguageProvider>
   </QueryClientProvider>
 );
 
