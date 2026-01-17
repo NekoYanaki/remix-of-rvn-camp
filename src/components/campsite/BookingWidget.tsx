@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { CalendarIcon, Users, MapPin, Calendar as CalendarDays } from "lucide-react";
+import { CalendarIcon, Users, ShoppingCart, Plus, Minus, Check, Truck, Car, Tent, Home } from "lucide-react";
 import { format, differenceInDays } from "date-fns";
+import { th } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { DateRange } from "react-day-picker";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 
 interface StayOption {
   type: string;
@@ -18,6 +19,20 @@ interface StayOption {
   maxGuests: number;
   price: number;
   image?: string;
+}
+
+interface CartItem {
+  campsite: {
+    id: string;
+    name: string;
+    location: string;
+  };
+  stayOption: StayOption;
+  checkIn: string;
+  checkOut: string;
+  nights: number;
+  guests: number;
+  totalPrice: number;
 }
 
 interface BookingWidgetProps {
@@ -30,13 +45,14 @@ interface BookingWidgetProps {
       city: string;
       country: string;
     };
+    supportedVehicles?: string[];
   };
 }
 
 const BookingWidget = ({ campsite }: BookingWidgetProps) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const [selectedOption, setSelectedOption] = useState<StayOption | null>(null);
+  const [selectedOptions, setSelectedOptions] = useState<{[key: string]: number}>({});
   const [guests, setGuests] = useState(2);
   
   // Get dates from search params if available
@@ -53,18 +69,18 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
     return undefined;
   });
 
-  // Add images for each stay option type
-  const getStayOptionImage = (type: string) => {
-    switch (type.toLowerCase()) {
-      case 'tent pitch':
-        return 'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop';
-      case 'rv spot':
-        return 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=400&h=300&fit=crop';
-      case 'glamping cabin':
-        return 'https://images.unsplash.com/photo-1721322800607-8c38375eef04?w=400&h=300&fit=crop';
-      default:
-        return 'https://images.unsplash.com/photo-1472396961693-142e6e269027?w=400&h=300&fit=crop';
-    }
+  // Get cart from localStorage
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    const saved = localStorage.getItem('booking_cart');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const getStayIcon = (type: string) => {
+    const lower = type.toLowerCase();
+    if (lower.includes('รถบ้าน') || lower.includes('motorhome') || lower.includes('caravan')) return Truck;
+    if (lower.includes('campervan') || lower.includes('camper')) return Car;
+    if (lower.includes('เต็นท์') || lower.includes('tent')) return Tent;
+    return Home;
   };
 
   const calculateNights = () => {
@@ -72,122 +88,154 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
     return differenceInDays(date.to, date.from);
   };
 
-  const calculateTotalPrice = () => {
-    if (!selectedOption || !date?.from || !date?.to) return 0;
-    const nights = calculateNights();
-    return selectedOption.price * nights;
+  const nights = calculateNights();
+
+  const updateQuantity = (optionType: string, delta: number) => {
+    setSelectedOptions(prev => {
+      const current = prev[optionType] || 0;
+      const newValue = Math.max(0, current + delta);
+      if (newValue === 0) {
+        const { [optionType]: _, ...rest } = prev;
+        return rest;
+      }
+      return { ...prev, [optionType]: newValue };
+    });
   };
 
-  const handleBooking = () => {
-    if (!selectedOption || !date?.from || !date?.to) {
-      alert('กรุณาเลือกประเภทที่พักและวันที่');
+  const getTotalItems = () => {
+    return Object.values(selectedOptions).reduce((sum, qty) => sum + qty, 0);
+  };
+
+  const getTotalPrice = () => {
+    let total = 0;
+    Object.entries(selectedOptions).forEach(([type, qty]) => {
+      const option = campsite.stayOptions.find(o => o.type === type);
+      if (option) {
+        total += option.price * qty * nights;
+      }
+    });
+    return total;
+  };
+
+  const handleAddToCart = () => {
+    if (!date?.from || !date?.to) {
+      toast.error('กรุณาเลือกวันที่เช็คอิน-เช็คเอาท์');
       return;
     }
 
-    const bookingData = {
-      campsite: {
-        id: campsite.id,
-        name: campsite.name,
-        image: "/lovable-uploads/491cfd8c-5bc4-4d54-afb5-cc0adc56e139.png",
-        location: `${campsite.location.city}, ${campsite.location.country}`
-      },
-      stayOption: selectedOption,
-      checkIn: format(date.from, 'yyyy-MM-dd'),
-      checkOut: format(date.to, 'yyyy-MM-dd'),
-      nights: calculateNights(),
-      guests: guests,
-      totalPrice: calculateTotalPrice()
-    };
+    if (getTotalItems() === 0) {
+      toast.error('กรุณาเลือกที่พักอย่างน้อย 1 รายการ');
+      return;
+    }
 
-    navigate('/booking-summary', { state: bookingData });
+    const newItems: CartItem[] = [];
+    Object.entries(selectedOptions).forEach(([type, qty]) => {
+      const option = campsite.stayOptions.find(o => o.type === type);
+      if (option && qty > 0) {
+        for (let i = 0; i < qty; i++) {
+          newItems.push({
+            campsite: {
+              id: campsite.id,
+              name: campsite.name,
+              location: `${campsite.location.city}, ${campsite.location.country}`
+            },
+            stayOption: option,
+            checkIn: format(date.from!, 'yyyy-MM-dd'),
+            checkOut: format(date.to!, 'yyyy-MM-dd'),
+            nights: nights,
+            guests: guests,
+            totalPrice: option.price * nights
+          });
+        }
+      }
+    });
+
+    const updatedCart = [...cart, ...newItems];
+    setCart(updatedCart);
+    localStorage.setItem('booking_cart', JSON.stringify(updatedCart));
+    
+    toast.success(
+      <div className="flex items-center gap-2">
+        <Check className="h-4 w-4" />
+        <span>เพิ่ม {newItems.length} รายการลงตะกร้าแล้ว</span>
+      </div>
+    );
+    
+    // Reset selections after adding to cart
+    setSelectedOptions({});
   };
 
+  const handleViewCart = () => {
+    navigate('/booking-summary', { 
+      state: { 
+        cart: cart,
+        fromCart: true 
+      } 
+    });
+  };
+
+  const cartTotal = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>จองที่พัก</span>
-            <Badge variant="secondary" className="bg-red-100 text-red-700">
-              ราคาเริ่มต้น ฿{campsite.price}/คืน
-            </Badge>
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {/* Stay Options Dropdown */}
-          <div>
-            <h4 className="font-medium mb-3">เลือกประเภทที่พัก</h4>
-            <Select 
-              value={selectedOption?.type || ""} 
-              onValueChange={(value) => {
-                const option = campsite.stayOptions.find(opt => opt.type === value);
-                setSelectedOption(option || null);
-              }}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="เลือกประเภทที่พัก" />
-              </SelectTrigger>
-              <SelectContent className="bg-white">
-                {campsite.stayOptions.map((option, index) => (
-                  <SelectItem key={index} value={option.type}>
-                    <div className="flex items-center gap-3 w-full">
-                      <img 
-                        src={getStayOptionImage(option.type)}
-                        alt={option.type}
-                        className="w-12 h-8 object-cover rounded"
-                      />
-                      <div className="flex-1">
-                        <div className="font-medium">{option.type}</div>
-                        <div className="text-sm text-gray-600">฿{option.price.toLocaleString()}/คืน</div>
-                      </div>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Selected Stay Option Details */}
-          {selectedOption && (
-            <div className="p-4 bg-red-50 rounded-lg border border-red-200">
-              <div className="flex items-start gap-4">
-                <img 
-                  src={getStayOptionImage(selectedOption.type)}
-                  alt={selectedOption.type}
-                  className="w-20 h-16 object-cover rounded-lg"
-                />
-                <div className="flex-1">
-                  <h5 className="font-medium text-red-800">{selectedOption.type}</h5>
-                  <p className="text-sm text-gray-600 mt-1">{selectedOption.description}</p>
-                  <div className="flex items-center gap-1 mt-2 text-sm text-gray-500">
-                    <Users className="h-3 w-3" />
-                    <span>สูงสุด {selectedOption.maxGuests} คน</span>
-                  </div>
-                  <div className="text-right mt-2">
-                    <p className="font-semibold text-red-600">฿{selectedOption.price.toLocaleString()}</p>
-                    <p className="text-xs text-gray-500">ต่อคืน</p>
-                  </div>
-                </div>
+    <div className="space-y-4">
+      {/* Cart Summary - Always visible if cart has items */}
+      {cart.length > 0 && (
+        <Card className="border-2 border-green-500 bg-green-50">
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <ShoppingCart className="h-5 w-5 text-green-600" />
+                <span className="font-semibold text-green-800">
+                  ตะกร้าของคุณ ({cart.length} รายการ)
+                </span>
               </div>
+              <Badge className="bg-green-600">
+                ฿{cartTotal.toLocaleString()}
+              </Badge>
             </div>
-          )}
+            <Button 
+              onClick={handleViewCart}
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+            >
+              ดูตะกร้าและชำระเงิน
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
+      {/* Main Booking Card */}
+      <Card>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg">เลือกที่พักสำหรับทริปของคุณ</CardTitle>
+          <p className="text-sm text-gray-500">เลือกวันที่และประเภทที่พัก แล้วเพิ่มลงตะกร้า</p>
+        </CardHeader>
+        <CardContent className="space-y-5">
           {/* Date Selection */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-2">
+            <label className="text-sm font-medium">วันที่เข้าพัก</label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline" 
                   className={cn(
-                    "justify-start text-left font-normal",
+                    "w-full justify-start text-left font-normal",
                     !date && "text-muted-foreground"
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {date?.from ? (
-                    format(date.from, "dd/MM")
+                    date.to ? (
+                      <>
+                        {format(date.from, "d MMM", { locale: th })} - {format(date.to, "d MMM yyyy", { locale: th })}
+                        <Badge variant="secondary" className="ml-auto">
+                          {nights} คืน
+                        </Badge>
+                      </>
+                    ) : (
+                      format(date.from, "d MMM yyyy", { locale: th })
+                    )
                   ) : (
-                    "เช็คอิน"
+                    "เลือกวันเช็คอิน - เช็คเอาท์"
                   )}
                 </Button>
               </PopoverTrigger>
@@ -200,27 +248,15 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
                   onSelect={setDate}
                   numberOfMonths={2}
                   className="bg-white"
+                  disabled={(date) => date < new Date()}
                 />
               </PopoverContent>
             </Popover>
-
-            <Button
-              variant="outline"
-              className="justify-start text-left font-normal"
-              disabled
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {date?.to ? (
-                format(date.to, "dd/MM")
-              ) : (
-                "เช็คเอาท์"
-              )}
-            </Button>
           </div>
 
           {/* Guests */}
-          <div>
-            <label className="block text-sm font-medium mb-2">จำนวนผู้เข้าพัก</label>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">จำนวนผู้เข้าพัก</label>
             <div className="flex items-center gap-3">
               <Button
                 variant="outline"
@@ -228,112 +264,149 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
                 onClick={() => setGuests(Math.max(1, guests - 1))}
                 className="h-8 w-8 rounded-full p-0"
               >
-                -
+                <Minus className="h-3 w-3" />
               </Button>
-              <span className="w-8 text-center">{guests}</span>
+              <span className="w-8 text-center font-medium">{guests}</span>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setGuests(guests + 1)}
                 className="h-8 w-8 rounded-full p-0"
               >
-                +
+                <Plus className="h-3 w-3" />
               </Button>
-              <span className="text-sm text-gray-500 ml-2">คน</span>
+              <span className="text-sm text-gray-500">คน</span>
             </div>
           </div>
 
-          {/* Booking Summary */}
-          {selectedOption && date?.from && date?.to && (
-            <div className="border-t pt-4 space-y-3">
-              <h4 className="font-medium">สรุปการจอง</h4>
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span>ประเภทที่พัก:</span>
-                  <span>{selectedOption.type}</span>
+          {/* Stay Options - Select quantity for each */}
+          <div className="space-y-3">
+            <label className="text-sm font-medium">เลือกประเภทที่พัก</label>
+            {campsite.stayOptions.map((option) => {
+              const IconComponent = getStayIcon(option.type);
+              const quantity = selectedOptions[option.type] || 0;
+              
+              return (
+                <div 
+                  key={option.type} 
+                  className={cn(
+                    "border rounded-lg p-4 transition-all",
+                    quantity > 0 ? "border-green-500 bg-green-50" : "border-gray-200"
+                  )}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className={cn(
+                      "p-2 rounded-lg",
+                      quantity > 0 ? "bg-green-200" : "bg-gray-100"
+                    )}>
+                      <IconComponent className={cn(
+                        "h-5 w-5",
+                        quantity > 0 ? "text-green-700" : "text-gray-600"
+                      )} />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-sm">{option.type}</h4>
+                      <p className="text-xs text-gray-500 line-clamp-1">{option.description}</p>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Users className="h-3 w-3 text-gray-400" />
+                        <span className="text-xs text-gray-500">สูงสุด {option.maxGuests} คน</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-green-600">
+                        ฿{option.price.toLocaleString()}
+                      </div>
+                      <div className="text-xs text-gray-500">/คืน</div>
+                    </div>
+                  </div>
+                  
+                  {/* Quantity Selector */}
+                  <div className="flex items-center justify-between mt-3 pt-3 border-t">
+                    <span className="text-sm text-gray-600">
+                      {nights > 0 && quantity > 0 && (
+                        <span className="font-medium text-green-600">
+                          ฿{(option.price * nights * quantity).toLocaleString()} ({quantity} x {nights} คืน)
+                        </span>
+                      )}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateQuantity(option.type, -1)}
+                        disabled={quantity === 0}
+                        className="h-7 w-7 rounded-full p-0"
+                      >
+                        <Minus className="h-3 w-3" />
+                      </Button>
+                      <span className="w-6 text-center font-medium">{quantity}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => updateQuantity(option.type, 1)}
+                        className="h-7 w-7 rounded-full p-0"
+                      >
+                        <Plus className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span>วันที่เข้าพัก:</span>
-                  <span>{format(date.from, 'dd/MM/yyyy')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>วันที่ออก:</span>
-                  <span>{format(date.to, 'dd/MM/yyyy')}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>จำนวนคืน:</span>
-                  <span>{calculateNights()} คืน</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>ผู้เข้าพัก:</span>
-                  <span>{guests} คน</span>
-                </div>
-                <div className="flex justify-between font-medium text-lg border-t pt-2">
-                  <span>ราคารวม:</span>
-                  <span className="text-red-600">฿{calculateTotalPrice().toLocaleString()}</span>
-                </div>
+              );
+            })}
+          </div>
+
+          {/* Summary */}
+          {getTotalItems() > 0 && nights > 0 && (
+            <div className="bg-gray-50 rounded-lg p-4 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>จำนวนที่พัก</span>
+                <span>{getTotalItems()} รายการ</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span>จำนวนคืน</span>
+                <span>{nights} คืน</span>
+              </div>
+              <div className="flex justify-between font-semibold text-lg border-t pt-2">
+                <span>ราคารวม</span>
+                <span className="text-green-600">฿{getTotalPrice().toLocaleString()}</span>
               </div>
             </div>
           )}
 
-          {/* Booking Button */}
+          {/* Add to Cart Button */}
           <Button 
-            onClick={handleBooking}
-            className="w-full bg-red-600 hover:bg-red-700 text-white py-3"
+            onClick={handleAddToCart}
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
             size="lg"
-            disabled={!selectedOption || !date?.from || !date?.to}
+            disabled={!date?.from || !date?.to || getTotalItems() === 0}
           >
-            <CalendarDays className="mr-2 h-4 w-4" />
-            จองเลย
+            <ShoppingCart className="mr-2 h-4 w-4" />
+            เพิ่มลงตะกร้า
           </Button>
 
-          <div className="text-xs text-gray-500 text-center">
-            คุณจะไม่ถูกเรียกเก็บเงินในขั้นตอนนี้
-          </div>
+          <p className="text-xs text-gray-500 text-center">
+            คุณสามารถเพิ่มที่พักหลายแห่งในทริปเดียวกันได้
+          </p>
         </CardContent>
       </Card>
 
-      {/* Vehicle Details Card - Always visible, not collapsible */}
-      <Card className="border rounded-lg bg-white">
-        <CardHeader className="pb-3">
-          <CardTitle className="text-lg">รายละเอียดพาหนะที่รองรับ</CardTitle>
-        </CardHeader>
-        <CardContent className="pt-0 space-y-3 text-sm">
-          <div>
-            <h5 className="font-medium text-green-700 mb-2">🚐 รองรับ:</h5>
-            <ul className="space-y-1 text-gray-600 ml-4">
-              <li>• Campervans</li>
-              <li>• Ute with Slide-on</li>
-              <li>• Tents</li>
-            </ul>
-          </div>
-          
-          <div>
-            <h5 className="font-medium text-red-700 mb-2">❌ ไม่รองรับ:</h5>
-            <ul className="space-y-1 text-gray-600 ml-4">
-              <li>• Caravans</li>
-              <li>• Fifth Wheels</li>
-              <li>• Motorhomes</li>
-            </ul>
-          </div>
-
-          <div className="border-t pt-3 space-y-2">
-            <p><span className="font-medium">📏 ความยาวรถ:</span> ไม่เกิน 18 เมตร</p>
-            <p><span className="font-medium">🅿️ พื้นที่จอด:</span> Back-in site, Concrete pad, Flat surface</p>
-            <p><span className="font-medium">↔️ Drive-through:</span> จำกัด (First-come, first-serve)</p>
-            <p><span className="font-medium">🧯 Slide-out:</span> รองรับ</p>
-          </div>
-
-          <div className="border-t pt-3 space-y-2">
-            <h5 className="font-medium mb-2">สิ่งอำนวยความสะดวก:</h5>
-            <p><span className="font-medium">🔌 ไฟฟ้า:</span> มี (ต่ำกว่า 30 Amps)</p>
-            <p><span className="font-medium">💧 น้ำประปา:</span> มี</p>
-            <p><span className="font-medium">🚿 ท่อน้ำเสีย:</span> มี (gray water dump)</p>
-            <p><span className="font-medium">📺 TV hookup:</span> ไม่มี</p>
-            <p><span className="font-medium">🔇 เครื่องปั่นไฟ:</span> ห้ามใช้</p>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Vehicle Support Info */}
+      {campsite.supportedVehicles && campsite.supportedVehicles.length > 0 && (
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-gray-600">พาหนะที่รองรับ</CardTitle>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="flex flex-wrap gap-2">
+              {campsite.supportedVehicles.map((vehicle, index) => (
+                <Badge key={index} variant="secondary" className="text-xs">
+                  {vehicle}
+                </Badge>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
