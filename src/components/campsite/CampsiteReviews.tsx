@@ -1,6 +1,6 @@
 
-import React from "react";
-import { Star, ThumbsUp } from "lucide-react";
+import React, { useState } from "react";
+import { Star, ThumbsUp, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface CampsiteReviewsProps {
@@ -10,7 +10,7 @@ interface CampsiteReviewsProps {
   };
 }
 
-const mockReviews = [
+const allMockReviews = [
   {
     id: 1,
     author: "สมชาย สุขใจ",
@@ -40,10 +40,57 @@ const mockReviews = [
     rating: 5,
     comment: "สะดวกสบายมาก มีน้ำประปา ไฟฟ้าพร้อม เหมาะสำหรับ Campervan และ Motorhome",
     helpful: 15
+  },
+  {
+    id: 4,
+    author: "มานี มีสุข",
+    avatar: "/lovable-uploads/e4ce7067-7522-45d6-82c0-56a7fb4d8543.png",
+    country: "ไทย",
+    date: "ธันวาคม 2023",
+    rating: 5,
+    comment: "พาครอบครัวมาพักผ่อน ลูกๆ ชอบมาก มีพื้นที่ให้เด็กๆ วิ่งเล่น อากาศดี วิวสวยมาก",
+    helpful: 20
+  },
+  {
+    id: 5,
+    author: "ประยุทธ์ รักการเดินทาง",
+    avatar: "/lovable-uploads/b3b48e94-e287-44ba-807a-e228a1df866a.png",
+    country: "ไทย",
+    date: "พฤศจิกายน 2023",
+    rating: 4,
+    comment: "สถานที่ดี แต่ถนนเข้ามาค่อนข้างแคบ ต้องระวังหน่อย โดยรวมประทับใจมาก",
+    helpful: 5
+  },
+  {
+    id: 6,
+    author: "สุดา ท่องเที่ยว",
+    avatar: "/lovable-uploads/e4ce7067-7522-45d6-82c0-56a7fb4d8543.png",
+    country: "ไทย",
+    date: "ตุลาคม 2023",
+    rating: 5,
+    comment: "เจ้าของใจดีมาก ดูแลดี มีอาหารเช้าให้ด้วย จะกลับมาอีกแน่นอน",
+    helpful: 18
   }
 ];
 
+const REVIEWS_PER_PAGE = 3;
+
 export const CampsiteReviews = ({ campsite }: CampsiteReviewsProps) => {
+  const [displayedCount, setDisplayedCount] = useState(REVIEWS_PER_PAGE);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const displayedReviews = allMockReviews.slice(0, displayedCount);
+  const hasMore = displayedCount < allMockReviews.length;
+
+  const handleLoadMore = () => {
+    setIsLoading(true);
+    // Simulate loading delay
+    setTimeout(() => {
+      setDisplayedCount(prev => Math.min(prev + REVIEWS_PER_PAGE, allMockReviews.length));
+      setIsLoading(false);
+    }, 500);
+  };
+
   return (
     <div className="bg-white rounded-lg p-6 border">
       {/* Review Header - Star Rating Only */}
@@ -58,7 +105,7 @@ export const CampsiteReviews = ({ campsite }: CampsiteReviewsProps) => {
 
       {/* Individual Reviews */}
       <div className="space-y-6">
-        {mockReviews.map((review) => (
+        {displayedReviews.map((review) => (
           <div key={review.id} className="border-b border-gray-100 last:border-0 pb-6 last:pb-0">
             <div className="flex items-start gap-4">
               <img
@@ -90,9 +137,32 @@ export const CampsiteReviews = ({ campsite }: CampsiteReviewsProps) => {
         ))}
       </div>
 
-      <Button variant="outline" className="w-full mt-6">
-        ดูรีวิวทั้งหมด {campsite.reviewCount} รีวิว
-      </Button>
+      {hasMore && (
+        <Button 
+          variant="outline" 
+          className="w-full mt-6"
+          onClick={handleLoadMore}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <span className="flex items-center gap-2">
+              <span className="animate-spin">⏳</span>
+              กำลังโหลด...
+            </span>
+          ) : (
+            <span className="flex items-center gap-2">
+              <ChevronDown className="h-4 w-4" />
+              ดูรีวิวเพิ่มเติม ({allMockReviews.length - displayedCount} รีวิว)
+            </span>
+          )}
+        </Button>
+      )}
+
+      {!hasMore && displayedCount > REVIEWS_PER_PAGE && (
+        <p className="text-center text-sm text-gray-500 mt-4">
+          แสดงรีวิวทั้งหมดแล้ว
+        </p>
+      )}
     </div>
   );
 };
