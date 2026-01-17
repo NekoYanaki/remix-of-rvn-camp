@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { th } from "date-fns/locale";
 import { cn } from "@/lib/utils";
+import ZoneBookingForm, { CartItem } from "./ZoneBookingForm";
 
 interface AmenityItem {
   name: string;
@@ -33,7 +34,14 @@ interface ZoneDetails {
 
 interface CampsiteDetailsProps {
   campsite: {
+    id: string;
+    name: string;
     description: string;
+    location: {
+      address: string;
+      city: string;
+      country: string;
+    };
     stayOptions: Array<{
       type: string;
       description: string;
@@ -58,6 +66,7 @@ interface CampsiteDetailsProps {
     checkIn?: string;
     checkOut?: string;
   };
+  onAddToCart: (item: CartItem) => void;
 }
 
 // Mock availability data generator
@@ -294,7 +303,7 @@ const AmenityGallery = ({
   );
 };
 
-export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
+export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps) => {
   const [selectedAmenity, setSelectedAmenity] = useState<AmenityItem | null>(null);
 
   const getStayIcon = (type: string) => {
@@ -602,6 +611,20 @@ export const CampsiteDetails = ({ campsite }: CampsiteDetailsProps) => {
                       availability={option.availability}
                     />
                   )}
+
+                  {/* Zone Booking Form */}
+                  <ZoneBookingForm
+                    zoneType={option.type}
+                    zoneName={option.type}
+                    maxGuests={option.maxGuests}
+                    price={option.price}
+                    priceType={option.priceType}
+                    slots={option.slots}
+                    campsiteId={campsite.id}
+                    campsiteName={campsite.name}
+                    campsiteLocation={`${campsite.location.city}, ${campsite.location.country}`}
+                    onAddToCart={onAddToCart}
+                  />
                 </div>
               </div>
             );
