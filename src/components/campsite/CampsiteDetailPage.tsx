@@ -101,7 +101,6 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
     { id: "overview", label: "ภาพรวม", sectionId: "section-overview" },
     { id: "zones", label: "ข้อมูลโซน", sectionId: "section-zones" },
     { id: "location", label: "ตำแหน่ง", sectionId: "section-location" },
-    { id: "rules", label: "กฎระเบียบ", sectionId: "section-rules" },
     { id: "reviews", label: "รีวิว", sectionId: "section-reviews" },
   ];
 
@@ -173,18 +172,6 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
               <CampsiteLocation campsite={campsite} />
             </section>
 
-            {/* Rules Section */}
-            <section id="section-rules" className="bg-white rounded-lg p-6 border scroll-mt-32">
-              <h2 className="text-xl font-semibold mb-4">กฎและข้อบังคับ</h2>
-              <div className="space-y-3">
-                {campsite.rules.map((rule, index) => (
-                  <div key={index} className="flex items-start gap-3">
-                    <div className="w-2 h-2 bg-amber-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span className="text-gray-700">{rule}</span>
-                  </div>
-                ))}
-              </div>
-            </section>
             
             {/* Reviews Section - At Bottom */}
             <section id="section-reviews" className="scroll-mt-32">
