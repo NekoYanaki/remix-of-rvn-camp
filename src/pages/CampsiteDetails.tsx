@@ -56,22 +56,68 @@ const getCampsiteData = (id: string) => {
     ],
     stayOptions: [
       {
-        type: "ลานจอดรถบ้าน (ไฟฟ้า+น้ำ)",
-        description: "พื้นที่สำหรับจอดรถบ้าน Caravan, Motorhome ทุกประเภท พร้อมไฟฟ้าและน้ำประปา",
+        type: "ลานจอดรถ โซน A",
+        description: "พื้นที่สำหรับจอดรถบ้าน Caravan, Motorhome ทุกประเภท พร้อมไฟฟ้าและน้ำประปา ใกล้ริมน้ำ ทำให้อากาศเย็น ร่มรื่น",
         maxGuests: 6,
-        price: 500
+        price: 250,
+        priceType: "per_person" as const,
+        slots: 10,
+        unit: "คน",
+        images: [
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/1.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/4.jpg"
+        ],
+        supportedVehicles: ["Caravan", "Motorhome A Class", "Motorhome B Class", "Motorhome C Class", "Campervan"],
+        amenities: [
+          "ไฟฟ้าให้เชื่อมต่อ",
+          "จุดทิ้งน้ำเสีย",
+          "ระบบน้ำประปา",
+          "Wi-Fi ฟรี",
+          "ห้องน้ำและห้องอาบน้ำ"
+        ]
       },
       {
-        type: "ลานจอดรถบ้าน (ไม่มีไฟฟ้า)",
-        description: "พื้นที่สำหรับจอดรถบ้านแบบไม่ใช้ไฟฟ้า เหมาะสำหรับผู้ที่มี Solar Panel",
+        type: "ลานจอดรถ โซน B",
+        description: "พื้นที่สำหรับจอดรถบ้านแบบไม่ใช้ไฟฟ้า เหมาะสำหรับผู้ที่มี Solar Panel บรรยากาศร่มรื่นใกล้ชิดธรรมชาติ",
         maxGuests: 6,
-        price: 300
+        price: 200,
+        priceType: "per_person" as const,
+        slots: 8,
+        unit: "คน",
+        images: [
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/4.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/1.jpg"
+        ],
+        supportedVehicles: ["Caravan", "Campervan"],
+        amenities: [
+          "ระบบน้ำประปา",
+          "ห้องน้ำและห้องอาบน้ำ",
+          "พื้นที่จอดรถยนต์เสริม"
+        ]
       },
       {
         type: "พื้นที่กางเต็นท์",
-        description: "พื้นที่สำหรับกางเต็นท์ บรรยากาศร่มรื่น ใกล้ชิดธรรมชาติ",
+        description: "พื้นที่สำหรับกางเต็นท์ บรรยากาศร่มรื่น ใกล้ชิดธรรมชาติ เหมาะสำหรับครอบครัวหรือกลุ่มเพื่อน",
         maxGuests: 4,
-        price: 200
+        price: 150,
+        priceType: "per_person" as const,
+        slots: 15,
+        unit: "คน",
+        images: [
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/3.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/4.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/1.jpg",
+          "https://api.rvncamp.com/api/file/getfile?pathname=camp/25ea0fa2-7f03-47d9-9f67-413995c1d395/image_list/2.jpg"
+        ],
+        amenities: [
+          "ห้องน้ำและห้องอาบน้ำ",
+          "จุดทำอาหาร (ครัวกลาง/เตาปิ้งย่าง)",
+          "บริเวณพักผ่อน/ลานกางเต็นท์"
+        ]
       }
     ],
     host: {
