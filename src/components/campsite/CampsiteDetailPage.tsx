@@ -124,16 +124,6 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
               <ArrowLeft className="h-4 w-4" />
               กลับ
             </Button>
-            <div className="flex items-center gap-4">
-              <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                <Share2 className="h-4 w-4" />
-                แชร์
-              </Button>
-              <Button variant="ghost" size="sm" className="flex items-center gap-2">
-                <Heart className="h-4 w-4" />
-                บันทึก
-              </Button>
-            </div>
           </div>
         </div>
       </div>
