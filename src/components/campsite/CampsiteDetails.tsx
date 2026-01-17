@@ -519,7 +519,7 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                     <div className="pt-4 border-t">
                       <h4 className="text-sm font-medium text-gray-700 mb-3">สิ่งอำนวยความสะดวกในโซนนี้</h4>
                       
-                      {/* Amenities with Images */}
+                      {/* Amenities Layout */}
                       {(() => {
                         const withImages = option.amenities.filter(a => {
                           const data = typeof a === 'string' ? { name: a } : a;
@@ -532,6 +532,7 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                         
                         return (
                           <>
+                            {/* Image Cards - Overview Section */}
                             {withImages.length > 0 && (
                               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
                                 {withImages.map((amenity, aIdx) => {
@@ -550,7 +551,7 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                                         title: amenityData.name
                                       })}
                                     >
-                                      <div className="h-24 relative">
+                                      <div className="h-28 relative">
                                         <img 
                                           src={amenityData.images![0]} 
                                           alt={amenityData.name}
@@ -563,7 +564,7 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                                           </div>
                                         )}
                                       </div>
-                                      <div className="p-2.5 bg-white flex items-center gap-2">
+                                      <div className="p-2.5 bg-white flex items-center gap-2 border-t">
                                         <AmenityIcon className="h-4 w-4 text-green-600 flex-shrink-0" />
                                         <span className="text-sm text-gray-700 font-medium truncate">{amenityData.name}</span>
                                       </div>
@@ -573,8 +574,9 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                               </div>
                             )}
                             
+                            {/* Text Labels - Facility Chips */}
                             {withoutImages.length > 0 && (
-                              <div className="grid grid-cols-2 gap-2">
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 {withoutImages.map((amenity, aIdx) => {
                                   const amenityData = typeof amenity === 'string' 
                                     ? { name: amenity } 
@@ -583,10 +585,10 @@ export const CampsiteDetails = ({ campsite, onAddToCart }: CampsiteDetailsProps)
                                   return (
                                     <div 
                                       key={aIdx} 
-                                      className="flex items-center gap-2 p-3 bg-green-50 rounded-lg"
+                                      className="flex items-center gap-2 px-4 py-2.5 bg-green-50 rounded-lg border border-green-100"
                                     >
                                       <Check className="h-4 w-4 text-green-600 flex-shrink-0" />
-                                      <span className="text-sm text-gray-700">{amenityData.name}</span>
+                                      <span className="text-sm text-gray-700 font-medium">{amenityData.name}</span>
                                     </div>
                                   );
                                 })}
