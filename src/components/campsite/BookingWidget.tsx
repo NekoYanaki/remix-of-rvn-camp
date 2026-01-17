@@ -157,7 +157,7 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
     toast.success(
       <div className="flex items-center gap-2">
         <Check className="h-4 w-4" />
-        <span>เพิ่ม {newItems.length} รายการลงตะกร้าแล้ว</span>
+        <span>เพิ่ม {newItems.length} รายการเข้าสู่การจองแล้ว</span>
       </div>
     );
     
@@ -186,7 +186,7 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
               <div className="flex items-center gap-2">
                 <ShoppingCart className="h-5 w-5 text-green-600" />
                 <span className="font-semibold text-green-800">
-                  ตะกร้าของคุณ ({cart.length} รายการ)
+                  รายการจองของคุณ ({cart.length} รายการ)
                 </span>
               </div>
               <Badge className="bg-green-600">
@@ -197,7 +197,7 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
               onClick={handleViewCart}
               className="w-full bg-green-600 hover:bg-green-700 text-white"
             >
-              ดูตะกร้าและชำระเงิน
+              ดูรายการจองและชำระเงิน
             </Button>
           </CardContent>
         </Card>
@@ -373,7 +373,7 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
             </div>
           )}
 
-          {/* Add to Cart Button */}
+          {/* Add to Booking Button */}
           <Button 
             onClick={handleAddToCart}
             className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
@@ -381,7 +381,7 @@ const BookingWidget = ({ campsite }: BookingWidgetProps) => {
             disabled={!date?.from || !date?.to || getTotalItems() === 0}
           >
             <ShoppingCart className="mr-2 h-4 w-4" />
-            เพิ่มลงตะกร้า
+            เพิ่มรายการจอง
           </Button>
 
           <p className="text-xs text-gray-500 text-center">

@@ -55,13 +55,14 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
   const navigate = useNavigate();
 
   const tabs = [
+    { id: "host", label: "เจ้าของที่พัก", sectionId: "section-host" },
     { id: "overview", label: "ภาพรวม", sectionId: "section-overview" },
     { id: "stayoptions", label: "ที่พัก/ราคา", sectionId: "section-stayoptions" },
     { id: "vehicles", label: "พาหนะที่รองรับ", sectionId: "section-vehicles" },
     { id: "facilities", label: "สิ่งอำนวยความสะดวก", sectionId: "section-facilities" },
-    { id: "reviews", label: "รีวิว", sectionId: "section-reviews" },
     { id: "location", label: "ตำแหน่ง", sectionId: "section-location" },
     { id: "rules", label: "กฎระเบียบ", sectionId: "section-rules" },
+    { id: "reviews", label: "รีวิว", sectionId: "section-reviews" },
   ];
 
   const scrollToSection = (sectionId: string) => {
@@ -127,11 +128,6 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
           <div className="lg:col-span-2 space-y-8">
             {/* Overview and Details */}
             <CampsiteDetails campsite={campsite} />
-            
-            {/* Reviews Section */}
-            <section id="section-reviews" className="scroll-mt-32">
-              <CampsiteReviews campsite={campsite} />
-            </section>
 
             {/* Location Section */}
             <section id="section-location" className="scroll-mt-32">
@@ -149,6 +145,11 @@ const CampsiteDetailPage = ({ campsite }: CampsiteDetailPageProps) => {
                   </div>
                 ))}
               </div>
+            </section>
+            
+            {/* Reviews Section - At Bottom */}
+            <section id="section-reviews" className="scroll-mt-32">
+              <CampsiteReviews campsite={campsite} />
             </section>
           </div>
 
