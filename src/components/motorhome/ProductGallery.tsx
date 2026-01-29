@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { X, ChevronLeft, ChevronRight, Sun, Moon, RotateCcw, Play, Image } from "lucide-react";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Sun,
+  Moon,
+  RotateCcw,
+  Play,
+  Image as ImageIcon,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
@@ -25,29 +34,66 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
 
   // Build gallery array with all images
   const getAllImages = () => {
-    const allImages: { src: string; label: string; type: "image" | "360" | "floorplan" }[] = [
-      { src: images.main, label: "รูปหลัก", type: "image" },
-    ];
-    
+    const allImages: {
+      src: string;
+      label: string;
+      type: "image" | "360" | "floorplan" | "video";
+    }[] = [{ src: images.main, label: "รูปหลัก", type: "image" }];
+
     if (images.view360) {
       allImages.push({ src: images.view360, label: "360° View", type: "360" });
     }
-    
-    images.productImages.slice(0, 2).forEach((img, idx) => {
+
+    images.productImages.slice(0, 3).forEach((img, idx) => {
       allImages.push({ src: img, label: `รูปที่ ${idx + 2}`, type: "image" });
     });
-    
-    // Add floor plan based on current mode
-    allImages.push({ 
-      src: floorPlanMode === "day" ? images.floorPlan.day : images.floorPlan.night, 
-      label: `Floor Plan`, 
-      type: "floorplan"
+
+    allImages.push({
+      src:
+        floorPlanMode === "day" ? images.floorPlan.day : images.floorPlan.night,
+      label: `Floor Plan`,
+      type: "floorplan",
     });
-    
+
     return allImages;
   };
 
   const allImages = getAllImages();
+
+  // Get thumbnails (max 4: 360, 2 product, floor plan or video)
+  const getThumbnails = () => {
+    const thumbs: {
+      src: string;
+      label: string;
+      type: "image" | "360" | "floorplan" | "video";
+      index: number;
+    }[] = [];
+
+    let idx = 1;
+
+    if (images.view360) {
+      thumbs.push({ src: images.view360, label: "360°", type: "360", index: idx });
+      idx++;
+    }
+
+    images.productImages.slice(0, 2).forEach((img, i) => {
+      thumbs.push({ src: img, label: `รูป ${i + 1}`, type: "image", index: idx });
+      idx++;
+    });
+
+    // Floor plan
+    thumbs.push({
+      src:
+        floorPlanMode === "day" ? images.floorPlan.day : images.floorPlan.night,
+      label: "Floor Plan",
+      type: "floorplan",
+      index: allImages.length - 1,
+    });
+
+    return thumbs.slice(0, 4);
+  };
+
+  const thumbnails = getThumbnails();
 
   const openModal = (index: number) => {
     setSelectedImageIndex(index);
@@ -62,19 +108,20 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
     setSelectedImageIndex((prev) => (prev - 1 + allImages.length) % allImages.length);
   };
 
-  // Get video ID from YouTube URL
   const getYouTubeId = (url: string) => {
-    const match = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})/);
+    const match = url.match(
+      /(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/watch\?.+&v=))([\w-]{11})/
+    );
     return match ? match[1] : null;
   };
 
   return (
-    <div className="space-y-3">
-      {/* Main Grid Layout - Compact */}
-      <div className="grid grid-cols-12 gap-2">
-        {/* Main Image - Large */}
-        <div 
-          className="col-span-7 aspect-[4/3] rounded-xl overflow-hidden cursor-pointer relative group"
+    <div className="space-y-2">
+      {/* Main Grid Layout */}
+      <div className="grid grid-cols-12 gap-2 md:gap-3">
+        {/* Main Image */}
+        <div
+          className="col-span-12 md:col-span-7 aspect-[4/3] rounded-xl overflow-hidden cursor-pointer relative group"
           onClick={() => openModal(0)}
         >
           <img
@@ -85,88 +132,101 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
 
-        {/* Right Column - Thumbnails (max 4) */}
-        <div className="col-span-5 grid grid-cols-2 gap-2">
-          {/* 360 View */}
-          {images.view360 && (
-            <div 
+        {/* Thumbnails Grid */}
+        <div className="col-span-12 md:col-span-5 grid grid-cols-4 md:grid-cols-2 gap-2">
+          {thumbnails.map((thumb, i) => (
+            <div
+              key={i}
               className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer relative group"
-              onClick={() => openModal(1)}
+              onClick={() =>
+                thumb.type === "floorplan"
+                  ? openModal(thumb.index)
+                  : openModal(thumb.index)
+              }
             >
               <img
-                src={images.view360}
-                alt={`${name} - 360° View`}
+                src={thumb.src}
+                alt={thumb.label}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                <div className="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium">
-                  <RotateCcw className="h-3 w-3" />
-                  360°
+
+              {/* Overlay badges */}
+              {thumb.type === "360" && (
+                <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                  <div className="bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm">
+                    <RotateCcw className="h-3 w-3" />
+                    360°
+                  </div>
+                </div>
+              )}
+
+              {thumb.type === "floorplan" && (
+                <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center gap-1">
+                  <div className="bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm">
+                    <ImageIcon className="h-3 w-3" />
+                    Floor Plan
+                  </div>
+                  {/* Day/Night Toggle */}
+                  <div className="flex bg-white/95 backdrop-blur-sm rounded-full p-0.5 shadow-sm">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFloorPlanMode("day");
+                      }}
+                      className={`p-1.5 rounded-full transition-colors ${
+                        floorPlanMode === "day"
+                          ? "bg-amber-400 text-white"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Sun className="h-3 w-3" />
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFloorPlanMode("night");
+                      }}
+                      className={`p-1.5 rounded-full transition-colors ${
+                        floorPlanMode === "night"
+                          ? "bg-indigo-600 text-white"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Moon className="h-3 w-3" />
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+
+          {/* Video Tile (if available) */}
+          {images.video && thumbnails.length < 4 && (
+            <div
+              className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer relative group bg-muted"
+              onClick={() => setShowVideoModal(true)}
+            >
+              {images.view360 ? (
+                <img
+                  src={images.view360}
+                  alt="Video thumbnail"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5" />
+              )}
+              <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
+                <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Play className="h-5 w-5 text-primary ml-0.5" fill="currentColor" />
                 </div>
               </div>
             </div>
           )}
-
-          {/* Product Images (max 2) */}
-          {images.productImages.slice(0, 2).map((img, idx) => (
-            <div 
-              key={idx}
-              className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer relative group"
-              onClick={() => openModal(images.view360 ? idx + 2 : idx + 1)}
-            >
-              <img
-                src={img}
-                alt={`${name} - View ${idx + 1}`}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          ))}
-
-          {/* Floor Plan with Day/Night Toggle */}
-          <div className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer relative group">
-            <img
-              src={floorPlanMode === "day" ? images.floorPlan.day : images.floorPlan.night}
-              alt={`${name} - Floor Plan`}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              onClick={() => openModal(allImages.length - 1)}
-            />
-            <div className="absolute inset-0 bg-black/20 flex flex-col items-center justify-center gap-1">
-              <div className="bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium">
-                <Image className="h-3 w-3" />
-                Floor Plan
-              </div>
-              {/* Day/Night Toggle */}
-              <div className="flex bg-white/90 backdrop-blur-sm rounded-full p-0.5">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFloorPlanMode("day");
-                  }}
-                  className={`p-1 rounded-full transition-colors ${
-                    floorPlanMode === "day" ? "bg-amber-400 text-white" : "text-gray-600"
-                  }`}
-                >
-                  <Sun className="h-3 w-3" />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setFloorPlanMode("night");
-                  }}
-                  className={`p-1 rounded-full transition-colors ${
-                    floorPlanMode === "night" ? "bg-indigo-600 text-white" : "text-gray-600"
-                  }`}
-                >
-                  <Moon className="h-3 w-3" />
-                </button>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
-      {/* Video Button (if available) */}
-      {images.video && (
+      {/* Video Button (if no space in grid) */}
+      {images.video && thumbnails.length >= 4 && (
         <Button
           variant="outline"
           size="sm"
@@ -213,7 +273,8 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
             />
 
             <div className="absolute bottom-20 left-1/2 transform -translate-x-1/2 text-white bg-black/60 px-4 py-2 rounded-full text-sm">
-              {allImages[selectedImageIndex].label} • {selectedImageIndex + 1}/{allImages.length}
+              {allImages[selectedImageIndex].label} • {selectedImageIndex + 1}/
+              {allImages.length}
             </div>
 
             {/* Thumbnails */}
@@ -223,7 +284,9 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
                   key={index}
                   onClick={() => setSelectedImageIndex(index)}
                   className={`flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${
-                    selectedImageIndex === index ? "border-white scale-110" : "border-transparent opacity-70 hover:opacity-100"
+                    selectedImageIndex === index
+                      ? "border-white scale-110"
+                      : "border-transparent opacity-70 hover:opacity-100"
                   }`}
                 >
                   <img
@@ -240,14 +303,16 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
 
       {/* Video Modal */}
       <Dialog open={showVideoModal} onOpenChange={setShowVideoModal}>
-        <DialogContent className="max-w-4xl p-0 bg-black">
+        <DialogContent className="max-w-4xl p-0 bg-black border-none">
           <DialogTitle className="sr-only">วิดีโอรถบ้าน {name}</DialogTitle>
           {images.video && getYouTubeId(images.video) && (
             <div className="aspect-video">
               <iframe
                 width="100%"
                 height="100%"
-                src={`https://www.youtube.com/embed/${getYouTubeId(images.video)}?rel=0`}
+                src={`https://www.youtube.com/embed/${getYouTubeId(
+                  images.video
+                )}?rel=0`}
                 title="YouTube video player"
                 allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

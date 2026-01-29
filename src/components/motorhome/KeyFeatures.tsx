@@ -50,29 +50,29 @@ const getFeatureIcon = (name: string) => {
   return featureIcons[name] || <Check className="h-4 w-4" />;
 };
 
-const KeyFeatures = ({ features, maxVisible = 8 }: KeyFeaturesProps) => {
+const KeyFeatures = ({ features, maxVisible = 10 }: KeyFeaturesProps) => {
   const [showAll, setShowAll] = useState(false);
-  
+
   const visibleFeatures = showAll ? features : features.slice(0, maxVisible);
   const remainingCount = features.length - maxVisible;
 
   return (
     <div className="py-5 border-t">
-      <h3 className="font-semibold text-base mb-3">สิ่งอำนวยความสะดวก</h3>
-      <div className="flex flex-wrap gap-2">
+      <h3 className="font-semibold text-base mb-3">Key Features</h3>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
         {visibleFeatures.map((feature, index) => (
           <div
             key={index}
-            className="flex items-center gap-2 px-3 py-2 bg-muted/50 rounded-full text-sm"
+            className="flex items-center gap-2 p-2.5 bg-muted/40 rounded-lg text-sm"
           >
-            <span className="text-primary">
+            <span className="text-primary flex-shrink-0">
               {getFeatureIcon(feature)}
             </span>
-            <span className="text-foreground/80">{feature}</span>
+            <span className="text-foreground/80 truncate">{feature}</span>
           </div>
         ))}
       </div>
-      
+
       {remainingCount > 0 && !showAll && (
         <Button
           variant="ghost"
@@ -80,11 +80,10 @@ const KeyFeatures = ({ features, maxVisible = 8 }: KeyFeaturesProps) => {
           onClick={() => setShowAll(true)}
           className="mt-3 text-primary hover:text-primary/80"
         >
-          <ChevronDown className="h-4 w-4 mr-1" />
-          +{remainingCount} เพิ่มเติม
+          <ChevronDown className="h-4 w-4 mr-1" />+{remainingCount} เพิ่มเติม
         </Button>
       )}
-      
+
       {showAll && features.length > maxVisible && (
         <Button
           variant="ghost"

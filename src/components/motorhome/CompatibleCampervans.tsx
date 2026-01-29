@@ -55,51 +55,50 @@ const mockCampervans: Campervan[] = [
 
 const CompatibleCampervans = ({ currentId }: CompatibleCampervansProps) => {
   const navigate = useNavigate();
-  
+
   // Filter out current motorhome
-  const campervans = mockCampervans.filter((c) => c.id !== currentId);
+  const campervans = mockCampervans.filter((c) => c.id !== currentId).slice(0, 3);
 
   return (
-    <div className="py-6 border-t">
-      <h3 className="font-semibold text-lg mb-4">Compatible Campervans</h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="py-5 border-t">
+      <h3 className="font-semibold text-base mb-4">รถแนะนำอื่นๆ</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {campervans.map((campervan) => (
           <Card
             key={campervan.id}
-            className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
+            className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer group"
             onClick={() => navigate(`/motorhome-detail/${campervan.id}`)}
           >
-            <div className="aspect-video relative">
+            <div className="aspect-[16/10] relative overflow-hidden">
               <img
                 src={campervan.image}
                 alt={campervan.name}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
             </div>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-2">
-                <h4 className="font-medium">{campervan.name}</h4>
+            <CardContent className="p-3">
+              <div className="flex items-center justify-between mb-1">
+                <h4 className="font-medium text-sm">{campervan.type}</h4>
                 <div className="flex items-center gap-1">
-                  <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  <span className="text-sm">{campervan.rating}</span>
+                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                  <span className="text-xs font-medium">{campervan.rating}</span>
                 </div>
               </div>
-              <p className="text-sm text-gray-600 mb-3">{campervan.type}</p>
-              <div className="flex items-center gap-4 text-sm text-gray-500 mb-3">
+              <div className="flex items-center gap-3 text-xs text-muted-foreground mb-2">
                 <span className="flex items-center gap-1">
-                  <Users className="h-4 w-4" />
+                  <Users className="h-3.5 w-3.5" />
                   {campervan.passengers}
                 </span>
                 <span className="flex items-center gap-1">
-                  <BedDouble className="h-4 w-4" />
+                  <BedDouble className="h-3.5 w-3.5" />
                   {campervan.beds}
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-lg font-bold text-primary">
+                <span className="text-sm font-bold text-primary">
                   ฿{campervan.price.toLocaleString()}/วัน
                 </span>
-                <Button variant="outline" size="sm">
+                <Button variant="ghost" size="sm" className="h-7 text-xs">
                   ดูรายละเอียด
                 </Button>
               </div>

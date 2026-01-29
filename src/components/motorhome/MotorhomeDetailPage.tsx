@@ -1,15 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Star, Users, BedDouble, Car, Fuel, Settings } from "lucide-react";
-import { BookingSection } from "./BookingSection";
-import { ReviewsSection } from "./ReviewsSection";
+import { ArrowLeft } from "lucide-react";
 import ProductGallery from "./ProductGallery";
+import HeroHeader from "./HeroHeader";
+import QuickSummary from "./QuickSummary";
 import KeyFeatures from "./KeyFeatures";
 import WhatsIncluded from "./WhatsIncluded";
 import SpecificationDropdown from "./SpecificationDropdown";
 import TermsDropdown from "./TermsDropdown";
 import CompatibleCampervans from "./CompatibleCampervans";
+import { ReviewsSection } from "./ReviewsSection";
+import StickyBookingBox from "./StickyBookingBox";
 import MobileBookingCTA from "./MobileBookingCTA";
 
 interface Addon {
@@ -64,6 +66,7 @@ interface MotorhomeDetailPageProps {
     rating: number;
     reviewCount: number;
     description: string;
+    bestFor?: string;
     badges: string[];
     specs: {
       passengers: number;
@@ -98,146 +101,99 @@ interface MotorhomeDetailPageProps {
       cancellation: string;
       payment: string[];
     };
+    highlights?: string[];
   };
 }
 
 const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
   const navigate = useNavigate();
-  
+
   // Get available amenities for Key Features
   const keyFeatures = motorhome.amenities
-    .filter(amenity => amenity.available)
-    .map(amenity => amenity.name);
+    .filter((amenity) => amenity.available)
+    .map((amenity) => amenity.name);
+
+  // Get highlights for quick summary
+  const highlights = motorhome.highlights || ["Solar panel", "AC"];
 
   const handleSelectVehicle = () => {
     navigate("/campervan-summary");
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24 lg:pb-0">
-      {/* Navigation Header - Cleaner */}
-      <div className="bg-background border-b sticky top-0 z-50">
+    <div className="min-h-screen bg-background pb-24 lg:pb-8">
+      {/* Minimal Navigation */}
+      <div className="bg-background/95 backdrop-blur-sm border-b sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate(-1)}
-                className="hover:bg-muted"
-              >
-                <ArrowLeft className="h-5 w-5" />
-              </Button>
-              <div>
-                <h1 className="text-lg md:text-xl font-bold">{motorhome.vehicleType}</h1>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="bg-primary text-primary-foreground px-2 py-0.5 rounded text-xs font-medium">
-                    {motorhome.brand}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{motorhome.model}</span>
-                  <div className="flex items-center gap-1 text-sm">
-                    <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                    <span className="font-medium">{motorhome.rating}</span>
-                    <span className="text-muted-foreground">({motorhome.reviewCount})</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="text-right hidden sm:block">
-              <span className="text-2xl md:text-3xl font-bold text-primary">฿{motorhome.price.toLocaleString()}</span>
-              <span className="text-muted-foreground">/วัน</span>
-            </div>
-          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => navigate(-1)}
+            className="hover:bg-muted -ml-2"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1" />
+            ย้อนกลับ
+          </Button>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-5">
-        {/* Gallery Section */}
-        <ProductGallery images={motorhome.images} name={motorhome.vehicleType} />
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
           {/* Left Column - Main Content */}
-          <div className="lg:col-span-2 space-y-0">
-            {/* Description - Clean, no label */}
-            <p className="text-muted-foreground leading-relaxed py-4 text-sm md:text-base">
+          <div className="lg:col-span-8 space-y-5">
+            {/* Hero Header */}
+            <HeroHeader
+              vehicleType={motorhome.vehicleType}
+              brand={motorhome.brand}
+              model={motorhome.model}
+              rating={motorhome.rating}
+              reviewCount={motorhome.reviewCount}
+              bestFor={motorhome.bestFor || "เหมาะสำหรับครอบครัวและทริปผจญภัย"}
+            />
+
+            {/* Gallery */}
+            <ProductGallery images={motorhome.images} name={motorhome.vehicleType} />
+
+            {/* Description */}
+            <p className="text-muted-foreground leading-relaxed text-sm md:text-base">
               {motorhome.description}
             </p>
 
-            {/* Quick Specs - Icon based */}
-            <div className="flex flex-wrap gap-4 py-4 border-t">
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Users className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">ผู้โดยสาร</p>
-                  <p className="text-sm font-medium">{motorhome.specs.passengers} คน</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                  <BedDouble className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">ที่นอน</p>
-                  <p className="text-sm font-medium">{motorhome.specs.beds} เตียง</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Car className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">ประเภท</p>
-                  <p className="text-sm font-medium">{motorhome.vehicleType}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Settings className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">เกียร์</p>
-                  <p className="text-sm font-medium">{motorhome.specs.transmission}</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center">
-                  <Fuel className="h-4 w-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">เชื้อเพลิง</p>
-                  <p className="text-sm font-medium">{motorhome.specs.fuelType}</p>
-                </div>
-              </div>
-            </div>
+            {/* Quick Summary - Icon Chips */}
+            <QuickSummary specs={motorhome.specs} highlights={highlights} />
 
-            {/* Key Features - with +more */}
-            <KeyFeatures features={keyFeatures} maxVisible={8} />
+            {/* Key Features */}
+            <KeyFeatures features={keyFeatures} maxVisible={10} />
 
-            {/* Accordions - collapsed by default */}
-            <WhatsIncluded includedItems={motorhome.includedItems} />
-            <SpecificationDropdown specs={motorhome.specs} dimensions={motorhome.dimensions} />
-            <TermsDropdown terms={motorhome.terms} />
-
-            {/* Compatible Campervans */}
-            <div className="py-6 border-t">
-              <CompatibleCampervans currentId={motorhome.id} />
+            {/* Collapsible Sections */}
+            <div className="space-y-0">
+              <WhatsIncluded includedItems={motorhome.includedItems} />
+              <SpecificationDropdown
+                specs={motorhome.specs}
+                dimensions={motorhome.dimensions}
+              />
+              <TermsDropdown terms={motorhome.terms} />
             </div>
 
             {/* Reviews */}
-            <div className="py-6 border-t">
+            <div className="py-5 border-t">
               <h3 className="font-semibold text-base mb-4">รีวิวจากผู้เช่า</h3>
               <ReviewsSection motorhome={motorhome} maxReviews={3} />
             </div>
+
+            {/* Compatible Campervans */}
+            <CompatibleCampervans currentId={motorhome.id} />
           </div>
 
-          {/* Right Column - Booking Widget (Desktop) */}
-          <div className="lg:col-span-1 hidden lg:block">
-            <div className="sticky top-24">
-              <BookingSection 
-                motorhome={motorhome} 
+          {/* Right Column - Sticky Booking Box (Desktop) */}
+          <div className="lg:col-span-4 hidden lg:block">
+            <div className="sticky top-20">
+              <StickyBookingBox
+                pricing={motorhome.pricing}
+                rating={motorhome.rating}
+                reviewCount={motorhome.reviewCount}
                 pickupLocations={motorhome.pickupLocations}
+                cancellationPolicy={motorhome.terms.cancellation}
               />
             </div>
           </div>
@@ -245,10 +201,7 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
       </div>
 
       {/* Mobile CTA - Fixed bottom */}
-      <MobileBookingCTA 
-        price={motorhome.price} 
-        onSelect={handleSelectVehicle}
-      />
+      <MobileBookingCTA price={motorhome.price} onSelect={handleSelectVehicle} />
     </div>
   );
 };
