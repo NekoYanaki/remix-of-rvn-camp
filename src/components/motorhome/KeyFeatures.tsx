@@ -1,69 +1,101 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Wifi,
   Snowflake,
   Tv,
-  ShowerHead,
+  ShowerHeadIcon,
   Utensils,
   Flame,
   Battery,
   BedDouble,
-  Refrigerator,
   Wind,
   Thermometer,
   Droplets,
   UsbIcon,
   Car,
-  Check
+  Check,
+  ChevronDown,
+  ChevronUp
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface KeyFeaturesProps {
   features: string[];
+  maxVisible?: number;
 }
 
 // Icon mapping for features
 const featureIcons: Record<string, React.ReactNode> = {
-  "WiFi": <Wifi className="h-5 w-5" />,
-  "Shower": <ShowerHead className="h-5 w-5" />,
-  "Toilet": <Droplets className="h-5 w-5" />,
-  "Freezer": <Snowflake className="h-5 w-5" />,
-  "Kitchen equipment": <Utensils className="h-5 w-5" />,
-  "Fridge": <Refrigerator className="h-5 w-5" />,
-  "Hot water": <Thermometer className="h-5 w-5" />,
-  "GPS": <Car className="h-5 w-5" />,
-  "AC in cab": <Wind className="h-5 w-5" />,
-  "AC in living area": <Snowflake className="h-5 w-5" />,
-  "Bluetooth": <UsbIcon className="h-5 w-5" />,
-  "TV": <Tv className="h-5 w-5" />,
-  "Floor heating": <Flame className="h-5 w-5" />,
-  "Aux-port": <UsbIcon className="h-5 w-5" />,
-  "Solar panel": <Battery className="h-5 w-5" />,
-  "Adapter to electrical connection": <Battery className="h-5 w-5" />,
-  "Mosquito net": <Check className="h-5 w-5" />,
-  "Double bed": <BedDouble className="h-5 w-5" />,
+  "WiFi": <Wifi className="h-4 w-4" />,
+  "Shower": <ShowerHeadIcon className="h-4 w-4" />,
+  "Toilet": <Droplets className="h-4 w-4" />,
+  "Freezer": <Snowflake className="h-4 w-4" />,
+  "Kitchen equipment": <Utensils className="h-4 w-4" />,
+  "Fridge": <Snowflake className="h-4 w-4" />,
+  "Hot water": <Thermometer className="h-4 w-4" />,
+  "GPS": <Car className="h-4 w-4" />,
+  "AC in cab": <Wind className="h-4 w-4" />,
+  "AC in living area": <Snowflake className="h-4 w-4" />,
+  "Bluetooth": <UsbIcon className="h-4 w-4" />,
+  "TV": <Tv className="h-4 w-4" />,
+  "Floor heating": <Flame className="h-4 w-4" />,
+  "Aux-port": <UsbIcon className="h-4 w-4" />,
+  "Solar panel": <Battery className="h-4 w-4" />,
+  "Adapter to electrical connection": <Battery className="h-4 w-4" />,
+  "Mosquito net": <Check className="h-4 w-4" />,
+  "Double bed": <BedDouble className="h-4 w-4" />,
 };
 
 const getFeatureIcon = (name: string) => {
-  return featureIcons[name] || <Check className="h-5 w-5" />;
+  return featureIcons[name] || <Check className="h-4 w-4" />;
 };
 
-const KeyFeatures = ({ features }: KeyFeaturesProps) => {
+const KeyFeatures = ({ features, maxVisible = 8 }: KeyFeaturesProps) => {
+  const [showAll, setShowAll] = useState(false);
+  
+  const visibleFeatures = showAll ? features : features.slice(0, maxVisible);
+  const remainingCount = features.length - maxVisible;
+
   return (
-    <div className="py-6 border-t">
-      <h3 className="font-semibold text-lg mb-4">Key Features</h3>
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-        {features.map((feature, index) => (
+    <div className="py-5 border-t">
+      <h3 className="font-semibold text-base mb-3">สิ่งอำนวยความสะดวก</h3>
+      <div className="flex flex-wrap gap-2">
+        {visibleFeatures.map((feature, index) => (
           <div
             key={index}
-            className="flex flex-col items-center gap-2 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+            className="flex items-center gap-2 px-3 py-2 bg-muted/50 rounded-full text-sm"
           >
-            <div className="w-12 h-12 flex items-center justify-center bg-white rounded-full shadow-sm text-primary">
+            <span className="text-primary">
               {getFeatureIcon(feature)}
-            </div>
-            <span className="text-sm text-center text-gray-700 font-medium">{feature}</span>
+            </span>
+            <span className="text-foreground/80">{feature}</span>
           </div>
         ))}
       </div>
+      
+      {remainingCount > 0 && !showAll && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowAll(true)}
+          className="mt-3 text-primary hover:text-primary/80"
+        >
+          <ChevronDown className="h-4 w-4 mr-1" />
+          +{remainingCount} เพิ่มเติม
+        </Button>
+      )}
+      
+      {showAll && features.length > maxVisible && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setShowAll(false)}
+          className="mt-3 text-muted-foreground"
+        >
+          <ChevronUp className="h-4 w-4 mr-1" />
+          แสดงน้อยลง
+        </Button>
+      )}
     </div>
   );
 };
