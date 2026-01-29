@@ -119,11 +119,11 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
 
   return (
     <div className="space-y-3">
-      {/* Main Grid Layout - Improved for larger images */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
-        {/* Main Image - Takes 2/3 on desktop */}
+      {/* Main Grid Layout - Like reference image */}
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-2">
+        {/* Main Image - Takes ~60% on desktop */}
         <div
-          className="md:col-span-2 aspect-[16/10] md:aspect-[16/9] rounded-xl overflow-hidden cursor-pointer relative group"
+          className="lg:col-span-3 aspect-[4/3] lg:aspect-[16/11] rounded-xl overflow-hidden cursor-pointer relative group"
           onClick={() => openModal(0)}
         >
           <img
@@ -131,20 +131,16 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
             alt={`${name} - รูปหลัก`}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
 
-        {/* Thumbnails Grid - 1/3 on desktop, 2x2 grid */}
-        <div className="grid grid-cols-4 md:grid-cols-2 gap-2">
+        {/* Thumbnails Grid - 2 columns x 2 rows on desktop */}
+        <div className="lg:col-span-2 grid grid-cols-4 lg:grid-cols-2 gap-2">
           {thumbnails.map((thumb, i) => (
             <div
               key={i}
-              className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer relative group"
-              onClick={() =>
-                thumb.type === "floorplan"
-                  ? openModal(thumb.index)
-                  : openModal(thumb.index)
-              }
+              className="aspect-[4/3] lg:aspect-[16/11] rounded-lg overflow-hidden cursor-pointer relative group"
+              onClick={() => openModal(thumb.index)}
             >
               <img
                 src={thumb.src}
@@ -155,17 +151,17 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
               {/* Overlay badges */}
               {thumb.type === "360" && (
                 <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  <div className="bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm">
-                    <RotateCcw className="h-3 w-3" />
+                  <div className="bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 text-xs font-medium shadow-sm">
+                    <RotateCcw className="h-3.5 w-3.5" />
                     360°
                   </div>
                 </div>
               )}
 
               {thumb.type === "floorplan" && (
-                <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center gap-1">
-                  <div className="bg-white/95 backdrop-blur-sm px-2 py-1 rounded-full flex items-center gap-1 text-xs font-medium shadow-sm">
-                    <ImageIcon className="h-3 w-3" />
+                <div className="absolute inset-0 bg-black/30 flex flex-col items-center justify-center gap-1.5">
+                  <div className="bg-white/95 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5 text-xs font-medium shadow-sm">
+                    <ImageIcon className="h-3.5 w-3.5" />
                     Floor Plan
                   </div>
                   {/* Day/Night Toggle */}
@@ -202,10 +198,10 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
             </div>
           ))}
 
-          {/* Video Tile (if available) */}
+          {/* Video Tile (if available and space) */}
           {images.video && thumbnails.length < 4 && (
             <div
-              className="aspect-[4/3] rounded-lg overflow-hidden cursor-pointer relative group bg-muted"
+              className="aspect-[4/3] lg:aspect-[16/11] rounded-lg overflow-hidden cursor-pointer relative group bg-muted"
               onClick={() => setShowVideoModal(true)}
             >
               {images.view360 ? (
@@ -218,8 +214,8 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
                 <div className="w-full h-full bg-gradient-to-br from-primary/20 to-primary/5" />
               )}
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center group-hover:bg-black/50 transition-colors">
-                <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
-                  <Play className="h-5 w-5 text-primary ml-0.5" fill="currentColor" />
+                <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-white/90 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                  <Play className="h-4 w-4 lg:h-5 lg:w-5 text-primary ml-0.5" fill="currentColor" />
                 </div>
               </div>
             </div>
