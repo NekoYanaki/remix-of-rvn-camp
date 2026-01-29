@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import React from "react";
+import { ChevronDown, Check } from "lucide-react";
 import {
   Collapsible,
   CollapsibleContent,
@@ -16,31 +16,25 @@ interface WhatsIncludedProps {
 }
 
 const WhatsIncluded = ({ includedItems }: WhatsIncludedProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <div className="border-t py-4">
+    <div className="border-t">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
-        <CollapsibleTrigger className="flex items-center justify-between w-full py-2 hover:bg-gray-50 rounded-lg px-2 transition-colors">
-          <h3 className="font-semibold text-lg">What's Included</h3>
-          {isOpen ? (
-            <ChevronUp className="h-5 w-5 text-gray-500" />
-          ) : (
-            <ChevronDown className="h-5 w-5 text-gray-500" />
-          )}
+        <CollapsibleTrigger className="flex items-center justify-between w-full py-4 text-left hover:bg-muted/30 transition-colors px-1 -mx-1 rounded">
+          <h3 className="font-semibold text-base">สิ่งที่รวมในแพ็คเกจ</h3>
+          <ChevronDown className={`h-5 w-5 text-muted-foreground transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
         </CollapsibleTrigger>
-        <CollapsibleContent className="pt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <CollapsibleContent className="pb-4">
+          <div className="grid gap-4 md:grid-cols-2 pt-2">
             {includedItems.map((category, idx) => (
               <div key={idx} className="space-y-2">
-                <h4 className="font-medium text-gray-800 border-b pb-2">
-                  {category.category}
-                </h4>
+                <h4 className="font-medium text-sm text-primary">{category.category}</h4>
                 <ul className="space-y-1">
                   {category.items.map((item, itemIdx) => (
-                    <li key={itemIdx} className="text-gray-600 text-sm flex items-start gap-2">
-                      <span className="text-primary mt-0.5">•</span>
-                      {item}
+                    <li key={itemIdx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
                     </li>
                   ))}
                 </ul>

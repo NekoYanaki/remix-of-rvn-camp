@@ -1,12 +1,13 @@
-
 import React from "react";
-import { Star, ThumbsUp } from "lucide-react";
+import { Star, ThumbsUp, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ReviewsSectionProps {
   motorhome: {
     rating: number;
     reviewCount: number;
   };
+  maxReviews?: number;
 }
 
 const mockReviews = [
@@ -39,71 +40,60 @@ const mockReviews = [
   }
 ];
 
-export const ReviewsSection = ({ motorhome }: ReviewsSectionProps) => {
+export const ReviewsSection = ({ motorhome, maxReviews = 3 }: ReviewsSectionProps) => {
+  const displayedReviews = mockReviews.slice(0, maxReviews);
+
   return (
-    <div className="bg-white rounded-lg p-6 border">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="flex items-center gap-2">
-          <Star className="h-6 w-6 fill-yellow-400 text-yellow-400" />
-          <span className="text-2xl font-bold">{motorhome.rating}</span>
-        </div>
-        <div>
-          <p className="font-medium">{motorhome.reviewCount} รีวิว</p>
-          <p className="text-sm text-gray-600">จากผู้เช่าจริง</p>
-        </div>
-      </div>
-
-      {/* Rating Breakdown */}
-      <div className="space-y-2 mb-6">
-        {[5, 4, 3, 2, 1].map((rating) => (
-          <div key={rating} className="flex items-center gap-3">
-            <span className="text-sm w-3">{rating}</span>
-            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-            <div className="flex-1 bg-gray-200 rounded-full h-2">
-              <div 
-                className="bg-yellow-400 h-2 rounded-full" 
-                style={{ width: `${rating === 5 ? 85 : rating === 4 ? 10 : 3}%` }}
-              />
-            </div>
-            <span className="text-sm text-gray-600 w-8">{rating === 5 ? 85 : rating === 4 ? 10 : 3}%</span>
+    <div className="space-y-4">
+      {/* Compact Rating Summary */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 bg-primary/10 px-3 py-1.5 rounded-full">
+            <Star className="h-5 w-5 fill-primary text-primary" />
+            <span className="text-lg font-bold text-primary">{motorhome.rating}</span>
           </div>
-        ))}
+          <div>
+            <p className="text-sm font-medium">{motorhome.reviewCount} รีวิว</p>
+            <p className="text-xs text-muted-foreground">จากผู้เช่าจริง</p>
+          </div>
+        </div>
       </div>
 
-      {/* Individual Reviews */}
-      <div className="space-y-6">
-        {mockReviews.map((review) => (
-          <div key={review.id} className="border-b pb-6 last:border-b-0">
-            <div className="flex items-start gap-4">
-              <img
-                src={review.avatar}
-                alt={review.author}
-                className="w-12 h-12 rounded-full object-cover"
-              />
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <h4 className="font-medium">{review.author}</h4>
-                  <div className="flex items-center gap-1">
-                    {[...Array(review.rating)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <span className="text-sm text-gray-500">{review.date}</span>
+      {/* Reviews List - Compact */}
+      <div className="space-y-4">
+        {displayedReviews.map((review) => (
+          <div key={review.id} className="flex gap-3 pb-4 border-b last:border-b-0 last:pb-0">
+            <img
+              src={review.avatar}
+              alt={review.author}
+              className="w-10 h-10 rounded-full object-cover flex-shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="font-medium text-sm">{review.author}</span>
+                <div className="flex items-center gap-0.5">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
+                  ))}
                 </div>
-                <p className="text-gray-700 mb-3">{review.text}</p>
-                <button className="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800">
-                  <ThumbsUp className="h-4 w-4" />
-                  <span>มีประโยชน์ ({review.helpful})</span>
-                </button>
+                <span className="text-xs text-muted-foreground">{review.date}</span>
               </div>
+              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{review.text}</p>
+              <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-2">
+                <ThumbsUp className="h-3 w-3" />
+                <span>มีประโยชน์ ({review.helpful})</span>
+              </button>
             </div>
           </div>
         ))}
       </div>
 
-      <button className="w-full mt-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-        ดูรีวิวทั้งหมด
-      </button>
+      {mockReviews.length > maxReviews && (
+        <Button variant="outline" size="sm" className="w-full">
+          ดูรีวิวทั้งหมด
+          <ChevronRight className="h-4 w-4 ml-1" />
+        </Button>
+      )}
     </div>
   );
 };
