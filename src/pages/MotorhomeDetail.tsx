@@ -5,19 +5,27 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MotorhomeDetailPage from "@/components/motorhome/MotorhomeDetailPage";
 
-// Mock data for motorhome
+// Mock data for motorhome with new structure
 const getMotorhomeData = (id: string) => {
   const baseData = {
     id: id || "1",
     name: "Carryboy Motorhome",
     model: "Triton",
-    brand: "Mitsubishi", 
-    images: [
-      "/lovable-uploads/motorhome-main.jpg",
-      "/lovable-uploads/motorhome-gallery-1.png",
-      "/lovable-uploads/motorhome-gallery-2.png",
-      "/lovable-uploads/motorhome-gallery-3.png"
-    ],
+    brand: "Mitsubishi",
+    vehicleType: "Motorhome A Class",
+    images: {
+      main: "/lovable-uploads/motorhome-main.jpg",
+      view360: "/lovable-uploads/motorhome-gallery-1.png",
+      productImages: [
+        "/lovable-uploads/motorhome-gallery-2.png",
+        "/lovable-uploads/motorhome-gallery-3.png",
+        "/lovable-uploads/b047e00a-8752-47a7-8444-d4d4063f3d7a.png"
+      ],
+      floorPlan: {
+        day: "/lovable-uploads/motorhome-gallery-2.png",
+        night: "/lovable-uploads/motorhome-gallery-3.png"
+      }
+    },
     price: 5000,
     rating: 4.9,
     reviewCount: 87,
@@ -55,6 +63,36 @@ const getMotorhomeData = (id: string) => {
       { name: "Solar panel", available: true },
       { name: "Adapter to electrical connection", available: true },
       { name: "Mosquito net", available: true }
+    ],
+    includedItems: [
+      {
+        category: "Linen",
+        items: ["Pillows, Quilts / Doonas", "Sheets, Bath Towels, Bath Mat, Tea Towels"]
+      },
+      {
+        category: "Crockery & Glassware",
+        items: ["Tumblers, Mugs, Side Plates, Dinner Plates", "Bowls"]
+      },
+      {
+        category: "Cutlery",
+        items: ["Knives, Forks, Teaspoons & Spoons, Serving Spoon, Spatula, Can Opener, Tongs", "Vegetable Peeler"]
+      },
+      {
+        category: "Kitchen Equipment",
+        items: ["Saucepan, Frypan, Electric Kettle & Toaster", "Cutting Board, Storage Containers", "Dustpan & Brush, Bucket, Broom"]
+      },
+      {
+        category: "Hygiene and Housekeeping",
+        items: ["Dishwashing Detergent & Brush/Sponge", "Fresh & Grey Water Hoses, Charging Cable"]
+      },
+      {
+        category: "Outdoor Living",
+        items: ["Camping Table, Camping Chairs"]
+      },
+      {
+        category: "Safety Equipment",
+        items: ["Fire Extinguisher, Spare Wheel & Jack Supplied"]
+      }
     ],
     addons: [
       { id: "bedding", name: "ชุดเครื่องนอน", price: 500, description: "ผ้าปูที่นอน หมอน ผ้าห่ม" },
