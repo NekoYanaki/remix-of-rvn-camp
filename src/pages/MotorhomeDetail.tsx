@@ -24,12 +24,14 @@ const getMotorhomeData = (id: string) => {
       floorPlan: {
         day: "/lovable-uploads/motorhome-gallery-2.png",
         night: "/lovable-uploads/motorhome-gallery-3.png"
-      }
+      },
+      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     },
     price: 5000,
     rating: 4.9,
     reviewCount: 87,
     description: "รถบ้าน Mitsubishi Triton พร้อม Carryboy Motorhome ปรับปรุงใหม่ พร้อมอุปกรณ์ครบครัน เหมาะสำหรับการเดินทางท่องเที่ยวกับครอบครัวและเพื่อน มาพร้อมครัวในตัว ห้องน้ำ และเตียงนอนที่สะดวกสบาย ขับขี่ง่าย ประหยัดน้ำมัน",
+    bestFor: "เหมาะสำหรับครอบครัว คู่รัก และนักเดินทางที่ชอบอิสระ",
     badges: ["Motorhome A Class"],
     specs: {
       passengers: 4,
@@ -40,6 +42,7 @@ const getMotorhomeData = (id: string) => {
       drive: "4WD",
       engine: "2.8L"
     },
+    highlights: ["Solar panel", "AC"],
     dimensions: {
       length: "5,915 มม.",
       width: "1,815 มม.",
