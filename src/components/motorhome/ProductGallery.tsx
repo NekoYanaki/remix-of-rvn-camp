@@ -60,7 +60,7 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
 
   const allImages = getAllImages();
 
-  // Get thumbnails (max 4: 360, 2 product, floor plan or video)
+  // Get thumbnails (max 4: 360 + floor plan side by side, then product images)
   const getThumbnails = () => {
     const thumbs: {
       src: string;
@@ -71,23 +71,25 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
 
     let idx = 1;
 
+    // 360° view first
     if (images.view360) {
       thumbs.push({ src: images.view360, label: "360°", type: "360", index: idx });
       idx++;
     }
 
-    images.productImages.slice(0, 2).forEach((img, i) => {
-      thumbs.push({ src: img, label: `รูป ${i + 1}`, type: "image", index: idx });
-      idx++;
-    });
-
-    // Floor plan
+    // Floor plan next to 360°
     thumbs.push({
       src:
         floorPlanMode === "day" ? images.floorPlan.day : images.floorPlan.night,
       label: "Floor Plan",
       type: "floorplan",
       index: allImages.length - 1,
+    });
+
+    // Then product images
+    images.productImages.slice(0, 2).forEach((img, i) => {
+      thumbs.push({ src: img, label: `รูป ${i + 1}`, type: "image", index: idx });
+      idx++;
     });
 
     return thumbs.slice(0, 4);
