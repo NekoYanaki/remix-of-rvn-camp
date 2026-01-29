@@ -138,9 +138,7 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-5">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
-          {/* Left Column - Main Content */}
-          <div className="lg:col-span-8 space-y-5">
+        <div className="space-y-5">
             {/* Hero Header */}
             <HeroHeader
               vehicleType={motorhome.vehicleType}
@@ -148,7 +146,6 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
               model={motorhome.model}
               rating={motorhome.rating}
               reviewCount={motorhome.reviewCount}
-              bestFor={motorhome.bestFor || "เหมาะสำหรับครอบครัวและทริปผจญภัย"}
             />
 
             {/* Gallery */}
@@ -183,11 +180,9 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
 
             {/* Compatible Campervans */}
             <CompatibleCampervans currentId={motorhome.id} />
-          </div>
 
-          {/* Right Column - Sticky Booking Box (Desktop) */}
-          <div className="lg:col-span-4 hidden lg:block">
-            <div className="sticky top-20">
+            {/* Booking Box - Desktop */}
+            <div className="hidden lg:block">
               <StickyBookingBox
                 pricing={motorhome.pricing}
                 rating={motorhome.rating}
@@ -196,7 +191,6 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
                 cancellationPolicy={motorhome.terms.cancellation}
               />
             </div>
-          </div>
         </div>
       </div>
 

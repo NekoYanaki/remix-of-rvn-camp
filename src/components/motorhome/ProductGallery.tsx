@@ -118,12 +118,12 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
   };
 
   return (
-    <div className="space-y-2">
-      {/* Main Grid Layout */}
-      <div className="grid grid-cols-12 gap-2 md:gap-3">
-        {/* Main Image */}
+    <div className="space-y-3">
+      {/* Main Grid Layout - Improved for larger images */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3">
+        {/* Main Image - Takes 2/3 on desktop */}
         <div
-          className="col-span-12 md:col-span-7 aspect-[4/3] rounded-xl overflow-hidden cursor-pointer relative group"
+          className="md:col-span-2 aspect-[16/10] md:aspect-[16/9] rounded-xl overflow-hidden cursor-pointer relative group"
           onClick={() => openModal(0)}
         >
           <img
@@ -134,8 +134,8 @@ const ProductGallery = ({ images, name }: ProductGalleryProps) => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
         </div>
 
-        {/* Thumbnails Grid */}
-        <div className="col-span-12 md:col-span-5 grid grid-cols-4 md:grid-cols-2 gap-2">
+        {/* Thumbnails Grid - 1/3 on desktop, 2x2 grid */}
+        <div className="grid grid-cols-4 md:grid-cols-2 gap-2">
           {thumbnails.map((thumb, i) => (
             <div
               key={i}

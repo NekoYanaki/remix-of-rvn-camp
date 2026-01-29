@@ -1,5 +1,5 @@
 import React from "react";
-import { Star, Car, Sparkles } from "lucide-react";
+import { Star, Car } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface HeroHeaderProps {
@@ -8,7 +8,6 @@ interface HeroHeaderProps {
   model: string;
   rating: number;
   reviewCount: number;
-  bestFor?: string;
 }
 
 const HeroHeader = ({
@@ -17,7 +16,6 @@ const HeroHeader = ({
   model,
   rating,
   reviewCount,
-  bestFor = "Perfect for families & road trips",
 }: HeroHeaderProps) => {
   return (
     <div className="space-y-3">
@@ -40,11 +38,6 @@ const HeroHeader = ({
         </Badge>
       </div>
 
-      {/* Best For */}
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
-        <Sparkles className="h-4 w-4 text-primary" />
-        <span>{bestFor}</span>
-      </div>
     </div>
   );
 };
