@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, Car, Images, Sparkles, Star, CarFront } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import HeroGallery from "./HeroGallery";
 import GalleryTabs from "./GalleryTabs";
@@ -158,7 +158,10 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
           <div className="lg:col-span-7 space-y-8">
             {/* รายละเอียดรถ - Description first, then icons */}
             <section className="space-y-3">
-              <h2 className="text-lg font-semibold">รายละเอียดรถ</h2>
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Car className="h-5 w-5 text-primary" />
+                รายละเอียดรถ
+              </h2>
               <p className="text-muted-foreground text-sm leading-relaxed">
                 {motorhome.description}
               </p>
@@ -172,7 +175,10 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
 
             {/* สิ่งอำนวยความสะดวก (Amenities) */}
             <section className="space-y-4">
-              <h2 className="text-lg font-semibold">สิ่งอำนวยความสะดวก</h2>
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                สิ่งอำนวยความสะดวก
+              </h2>
               <PremiumAmenities amenities={motorhome.amenities} maxVisible={8} />
             </section>
 
@@ -283,7 +289,10 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
 
             {/* รีวิว (Reviews) */}
             <section className="space-y-4 pt-4">
-              <h2 className="text-lg font-semibold">รีวิวจากผู้เช่า</h2>
+              <h2 className="text-lg font-semibold flex items-center gap-2">
+                <Star className="h-5 w-5 text-primary" />
+                รีวิวจากผู้เช่า
+              </h2>
               <ReviewsSection motorhome={motorhome} maxReviews={3} />
             </section>
 

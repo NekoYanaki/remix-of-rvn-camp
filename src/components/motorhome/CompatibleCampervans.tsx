@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Star, Users, BedDouble } from "lucide-react";
+import { Star, Users, BedDouble, CarFront } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -61,7 +61,10 @@ const CompatibleCampervans = ({ currentId }: CompatibleCampervansProps) => {
 
   return (
     <div className="py-5 border-t">
-      <h3 className="font-semibold text-base mb-4">รถแนะนำอื่นๆ</h3>
+      <h3 className="font-semibold text-base mb-4 flex items-center gap-2">
+        <CarFront className="h-5 w-5 text-primary" />
+        รถแนะนำอื่นๆ
+      </h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {campervans.map((campervan) => (
           <Card
