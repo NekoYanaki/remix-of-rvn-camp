@@ -328,10 +328,10 @@ const filteredAndSortedMotorhomes = useMemo(() => {
   const handleSelectMotorhome = (motorhome: Motorhome) => {
     toast({
       title: "เลือกรถ Motorhome",
-      description: `คุณได้เลือก ${motorhome.name} กำลังพาคุณไปยังหน้ารายละเอียด...`,
+      description: `คุณได้เลือก ${motorhome.name} กำลังพาคุณไปยังหน้าสรุปการจอง...`,
     });
 
-    navigate("/motorhome-calculator", {
+    navigate("/motorhome-summary", {
       state: {
         pickupLocation,
         departureDate: departureDate?.toISOString(),
