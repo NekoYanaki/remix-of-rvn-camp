@@ -136,8 +136,19 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4">
+        {/* Header - Below back button, above gallery */}
+        <div className="py-4">
+          <HeroHeader
+            vehicleType={motorhome.vehicleType}
+            brand={motorhome.brand}
+            model={motorhome.model}
+            rating={motorhome.rating}
+            reviewCount={motorhome.reviewCount}
+          />
+        </div>
+
         {/* Hero Gallery - Full width for maximum impact */}
-        <div className="py-6">
+        <div className="pb-6">
           <PremiumGallery images={motorhome.images} name={motorhome.vehicleType} />
         </div>
 
@@ -145,17 +156,8 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column - Content */}
           <div className="lg:col-span-7 space-y-8">
-            {/* Header */}
+            {/* Description - Clean, minimal */}
             <div className="space-y-4">
-              <HeroHeader
-                vehicleType={motorhome.vehicleType}
-                brand={motorhome.brand}
-                model={motorhome.model}
-                rating={motorhome.rating}
-                reviewCount={motorhome.reviewCount}
-              />
-              
-              {/* Description - Clean, minimal */}
               <p className="text-muted-foreground leading-relaxed">
                 {motorhome.description}
               </p>
