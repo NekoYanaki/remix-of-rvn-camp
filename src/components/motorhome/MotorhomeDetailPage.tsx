@@ -124,7 +124,12 @@ interface MotorhomeDetailPageProps {
       maxAge?: number;
       license: string[];
       cancellation: string;
-      payment: string[];
+      cancellationFee?: string;
+      paymentOptions?: string[];
+      paymentMethods?: {
+        online: string;
+        atPickup: string;
+      };
       deposit?: string;
       mileage?: string;
       fuelPolicy?: string;
@@ -567,20 +572,38 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
                       <div className="space-y-2 text-sm">
                         {motorhome.terms.deposit && (
                           <div className="flex flex-col">
-                            <span className="text-muted-foreground">เงินมัดจำ</span>
+                            <span className="text-muted-foreground">เงินมัดจำค้ำประกัน</span>
                             <span className="mt-1">{motorhome.terms.deposit}</span>
                           </div>
                         )}
-                        <div>
-                          <span className="text-muted-foreground">วิธีชำระเงิน</span>
-                          <div className="flex flex-wrap gap-2 mt-2">
-                            {motorhome.terms.payment.map((method, idx) => (
-                              <span key={idx} className="px-3 py-1 bg-secondary rounded-full text-xs">
-                                {method}
-                              </span>
-                            ))}
+                        {motorhome.terms.paymentOptions && (
+                          <div>
+                            <span className="text-muted-foreground">ตัวเลือกการชำระ</span>
+                            <ul className="mt-1 space-y-1">
+                              {motorhome.terms.paymentOptions.map((option, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <Check className="h-3.5 w-3.5 text-primary flex-shrink-0 mt-0.5" />
+                                  <span>{option}</span>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
-                        </div>
+                        )}
+                        {motorhome.terms.paymentMethods && (
+                          <div className="space-y-2 mt-3">
+                            <span className="text-muted-foreground">วิธีชำระเงิน</span>
+                            <div className="mt-1 space-y-2">
+                              <div className="flex flex-col p-2 bg-secondary/50 rounded-lg">
+                                <span className="text-xs text-muted-foreground">ชำระออนไลน์</span>
+                                <span className="text-sm">{motorhome.terms.paymentMethods.online}</span>
+                              </div>
+                              <div className="flex flex-col p-2 bg-secondary/50 rounded-lg">
+                                <span className="text-xs text-muted-foreground">ชำระตอนรับรถ (สำหรับยอด 80% ที่เหลือ)</span>
+                                <span className="text-sm">{motorhome.terms.paymentMethods.atPickup}</span>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -590,8 +613,13 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
                       <div className="space-y-2 text-sm">
                         <div className="flex flex-col">
                           <span className="text-muted-foreground">นโยบายยกเลิก</span>
-                          <span className="mt-1">{motorhome.terms.cancellation}</span>
+                          <span className="mt-1 text-green-600">{motorhome.terms.cancellation}</span>
                         </div>
+                        {motorhome.terms.cancellationFee && (
+                          <div className="flex flex-col">
+                            <span className="mt-1 text-destructive">{motorhome.terms.cancellationFee}</span>
+                          </div>
+                        )}
                         {motorhome.terms.damagePolicy && (
                           <div className="flex flex-col">
                             <span className="text-muted-foreground">ความรับผิดชอบความเสียหาย</span>
