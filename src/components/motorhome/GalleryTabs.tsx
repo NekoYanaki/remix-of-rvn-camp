@@ -41,7 +41,6 @@ const GalleryTabs = ({ images, name }: GalleryTabsProps) => {
         <Images className="h-5 w-5 text-primary" />
         แกลเลอรี่
       </h2>
-      <h2 className="text-lg font-semibold">แกลเลอรี่</h2>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div className="flex overflow-x-auto gap-1 py-1 scrollbar-hide">
