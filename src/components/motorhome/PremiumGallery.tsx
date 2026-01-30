@@ -146,14 +146,16 @@ const PremiumGallery = ({ images, name }: PremiumGalleryProps) => {
         {/* 360° View */}
         {images.view360 && (
           <TabsContent value="360" className="mt-4">
-            <div className="aspect-[16/9] rounded-xl overflow-hidden bg-muted">
-              <img
-                src={images.view360}
-                alt={`${name} - 360° View`}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium shadow-lg flex items-center gap-2">
+            <div className="space-y-4">
+              <div className="aspect-[16/9] rounded-xl overflow-hidden bg-muted">
+                <img
+                  src={images.view360}
+                  alt={`${name} - 360° View`}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="flex justify-center">
+                <div className="bg-muted/50 px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2">
                   <RotateCcw className="h-4 w-4 animate-spin" style={{ animationDuration: '3s' }} />
                   ลากเพื่อหมุนชมรอบคัน
                 </div>
