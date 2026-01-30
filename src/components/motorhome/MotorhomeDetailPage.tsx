@@ -2,7 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import PremiumGallery from "./PremiumGallery";
+import HeroGallery from "./HeroGallery";
+import GalleryTabs from "./GalleryTabs";
 import HeroHeader from "./HeroHeader";
 import QuickSummary from "./QuickSummary";
 import PremiumAmenities from "./PremiumAmenities";
@@ -146,6 +147,11 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
           />
         </div>
 
+        {/* Hero Gallery - Full Width at Top */}
+        <div className="pb-6">
+          <HeroGallery images={motorhome.images} name={motorhome.vehicleType} />
+        </div>
+
         {/* Two Column Layout - Content + Booking */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column - Content */}
@@ -159,9 +165,9 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
               <QuickSummary specs={motorhome.specs} highlights={highlights} />
             </section>
 
-            {/* Gallery Section - Below Car Details */}
+            {/* Gallery Tabs - 360°, Floor Plan, Video */}
             <section>
-              <PremiumGallery images={motorhome.images} name={motorhome.vehicleType} />
+              <GalleryTabs images={motorhome.images} name={motorhome.vehicleType} />
             </section>
 
             {/* สิ่งอำนวยความสะดวก (Amenities) */}
