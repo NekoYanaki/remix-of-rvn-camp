@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PremiumGallery from "./PremiumGallery";
 import HeroHeader from "./HeroHeader";
@@ -10,7 +10,6 @@ import PremiumBookingCard from "./PremiumBookingCard";
 import MobileBookingCTA from "./MobileBookingCTA";
 import CompatibleCampervans from "./CompatibleCampervans";
 import { ReviewsSection } from "./ReviewsSection";
-import { ChevronDown, Check } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -136,7 +135,7 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4">
-        {/* Header - Below back button, above gallery */}
+        {/* Header - Vehicle type, brand, model, rating */}
         <div className="py-4">
           <HeroHeader
             vehicleType={motorhome.vehicleType}
@@ -147,149 +146,24 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
           />
         </div>
 
-        {/* Hero Gallery - Full width for maximum impact */}
-        <div className="pb-6">
-          <PremiumGallery images={motorhome.images} name={motorhome.vehicleType} />
-        </div>
+        {/* Two Column Layout - Gallery + Booking on top */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
+          {/* Left Column - Main Content */}
+          <div className="lg:col-span-7 space-y-6">
+            {/* Hero Gallery - 1 Large + 2 Small on right */}
+            <PremiumGallery images={motorhome.images} name={motorhome.vehicleType} />
 
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
-          {/* Left Column - Content */}
-          <div className="lg:col-span-7 space-y-8">
-            {/* Description - Clean, minimal */}
-            <div className="space-y-4">
-              <p className="text-muted-foreground leading-relaxed">
+            {/* Quick Summary - Car Detail Icons (Above the fold) */}
+            <section className="space-y-3">
+              <h2 className="text-lg font-semibold">รายละเอียดรถ</h2>
+              <QuickSummary specs={motorhome.specs} highlights={highlights} />
+              <p className="text-muted-foreground text-sm leading-relaxed">
                 {motorhome.description}
               </p>
-            </div>
-
-            {/* Quick Summary */}
-            <QuickSummary specs={motorhome.specs} highlights={highlights} />
-
-            {/* Amenities - Reduced, with View All */}
-            <section className="space-y-4">
-              <h2 className="text-lg font-semibold">สิ่งอำนวยความสะดวก</h2>
-              <PremiumAmenities amenities={motorhome.amenities} maxVisible={6} />
-            </section>
-
-            {/* Accordion Sections - Clean separation */}
-            <Accordion type="single" collapsible className="space-y-2">
-              {/* What's Included */}
-              <AccordionItem value="included" className="border rounded-xl px-4">
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <span className="font-medium">สิ่งที่รวมในแพ็คเกจ</span>
-                </AccordionTrigger>
-                <AccordionContent className="pb-4">
-                  <div className="grid gap-6 md:grid-cols-2">
-                    {motorhome.includedItems.map((category, idx) => (
-                      <div key={idx} className="space-y-2">
-                        <h4 className="font-medium text-sm text-primary">{category.category}</h4>
-                        <ul className="space-y-1.5">
-                          {category.items.map((item, itemIdx) => (
-                            <li key={itemIdx} className="flex items-start gap-2 text-sm text-muted-foreground">
-                              <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
-                              <span>{item}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ))}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Specifications */}
-              <AccordionItem value="specs" className="border rounded-xl px-4">
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <span className="font-medium">ข้อมูลจำเพาะ</span>
-                </AccordionTrigger>
-                <AccordionContent className="pb-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-3">
-                      <h4 className="font-medium text-sm text-primary">ขนาด</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">ความยาว</span>
-                          <span>{motorhome.dimensions.length}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">ความกว้าง</span>
-                          <span>{motorhome.dimensions.width}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">ความสูง</span>
-                          <span>{motorhome.dimensions.height}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="space-y-3">
-                      <h4 className="font-medium text-sm text-primary">เครื่องยนต์</h4>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">ประเภทเชื้อเพลิง</span>
-                          <span>{motorhome.specs.fuelType}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">ระบบขับเคลื่อน</span>
-                          <span>{motorhome.specs.drive}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">ขนาดเครื่องยนต์</span>
-                          <span>{motorhome.specs.engine}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Terms */}
-              <AccordionItem value="terms" className="border rounded-xl px-4">
-                <AccordionTrigger className="hover:no-underline py-4">
-                  <span className="font-medium">เงื่อนไขการเช่า</span>
-                </AccordionTrigger>
-                <AccordionContent className="pb-4">
-                  <div className="space-y-4 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">อายุขั้นต่ำ</span>
-                      <span>{motorhome.terms.minAge} ปี</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">ใบขับขี่</span>
-                      <span>{motorhome.terms.license.join(", ")}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">นโยบายยกเลิก</span>
-                      <span>{motorhome.terms.cancellation}</span>
-                    </div>
-                    <div>
-                      <span className="text-muted-foreground">วิธีชำระเงิน</span>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {motorhome.terms.payment.map((method, idx) => (
-                          <span key={idx} className="px-3 py-1 bg-secondary rounded-full text-xs">
-                            {method}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-
-            {/* Reviews */}
-            <section className="space-y-4 pt-4">
-              <h2 className="text-lg font-semibold">รีวิวจากผู้เช่า</h2>
-              <ReviewsSection motorhome={motorhome} maxReviews={3} />
-            </section>
-
-            {/* Similar Vehicles */}
-            <section className="pt-4">
-              <CompatibleCampervans currentId={motorhome.id} />
             </section>
           </div>
 
-          {/* Right Column - Booking Card (Desktop) */}
+          {/* Right Column - Booking Card (Desktop) - Visible above fold */}
           <div className="hidden lg:block lg:col-span-5">
             <div className="sticky top-20">
               <PremiumBookingCard
@@ -301,6 +175,131 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
               />
             </div>
           </div>
+        </div>
+
+        {/* Sections Below - Full width on left column */}
+        <div className="lg:max-w-[58.333%] space-y-8 mt-8">
+          {/* 6. สิ่งอำนวยความสะดวก (Amenities) */}
+          <section className="space-y-4">
+            <h2 className="text-lg font-semibold">สิ่งอำนวยความสะดวก</h2>
+            <PremiumAmenities amenities={motorhome.amenities} maxVisible={8} />
+          </section>
+
+          {/* Accordion Sections */}
+          <Accordion type="single" collapsible className="space-y-2">
+            {/* 7. สิ่งที่รวมในแพ็คเกจ (What's Included) */}
+            <AccordionItem value="included" className="border rounded-xl px-4">
+              <AccordionTrigger className="hover:no-underline py-4">
+                <span className="font-medium">สิ่งที่รวมในแพ็คเกจ</span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-4">
+                <div className="grid gap-6 md:grid-cols-2">
+                  {motorhome.includedItems.map((category, idx) => (
+                    <div key={idx} className="space-y-2">
+                      <h4 className="font-medium text-sm text-primary">{category.category}</h4>
+                      <ul className="space-y-1.5">
+                        {category.items.map((item, itemIdx) => (
+                          <li key={itemIdx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                            <Check className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* 8. ข้อมูลจำเพาะ (Specifications) */}
+            <AccordionItem value="specs" className="border rounded-xl px-4">
+              <AccordionTrigger className="hover:no-underline py-4">
+                <span className="font-medium">ข้อมูลจำเพาะ</span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-sm text-primary">ขนาด</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">ความยาว</span>
+                        <span>{motorhome.dimensions.length}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">ความกว้าง</span>
+                        <span>{motorhome.dimensions.width}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">ความสูง</span>
+                        <span>{motorhome.dimensions.height}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <h4 className="font-medium text-sm text-primary">เครื่องยนต์</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">ประเภทเชื้อเพลิง</span>
+                        <span>{motorhome.specs.fuelType}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">ระบบขับเคลื่อน</span>
+                        <span>{motorhome.specs.drive}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">ขนาดเครื่องยนต์</span>
+                        <span>{motorhome.specs.engine}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+
+            {/* 9. เงื่อนไขการเช่า (Terms) */}
+            <AccordionItem value="terms" className="border rounded-xl px-4">
+              <AccordionTrigger className="hover:no-underline py-4">
+                <span className="font-medium">เงื่อนไขการเช่า</span>
+              </AccordionTrigger>
+              <AccordionContent className="pb-4">
+                <div className="space-y-4 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">อายุขั้นต่ำ</span>
+                    <span>{motorhome.terms.minAge} ปี</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">ใบขับขี่</span>
+                    <span>{motorhome.terms.license.join(", ")}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">นโยบายยกเลิก</span>
+                    <span>{motorhome.terms.cancellation}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted-foreground">วิธีชำระเงิน</span>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {motorhome.terms.payment.map((method, idx) => (
+                        <span key={idx} className="px-3 py-1 bg-secondary rounded-full text-xs">
+                          {method}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          {/* 10. รีวิว (Reviews) */}
+          <section className="space-y-4 pt-4">
+            <h2 className="text-lg font-semibold">รีวิวจากผู้เช่า</h2>
+            <ReviewsSection motorhome={motorhome} maxReviews={3} />
+          </section>
+
+          {/* 11. เปรียบเทียบรถคันอื่นๆ (Compare) */}
+          <section className="pt-4 pb-8">
+            <CompatibleCampervans currentId={motorhome.id} />
+          </section>
         </div>
       </div>
 
