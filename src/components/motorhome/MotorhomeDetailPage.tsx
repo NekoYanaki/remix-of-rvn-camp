@@ -146,22 +146,22 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
           />
         </div>
 
-        {/* Hero Gallery - Full Width */}
-        <div className="pb-6">
-          <PremiumGallery images={motorhome.images} name={motorhome.vehicleType} />
-        </div>
-
         {/* Two Column Layout - Content + Booking */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* Left Column - Content */}
           <div className="lg:col-span-7 space-y-8">
-            {/* Quick Summary - Car Detail Icons */}
+            {/* รายละเอียดรถ - Description first, then icons */}
             <section className="space-y-3">
               <h2 className="text-lg font-semibold">รายละเอียดรถ</h2>
-              <QuickSummary specs={motorhome.specs} highlights={highlights} />
               <p className="text-muted-foreground text-sm leading-relaxed">
                 {motorhome.description}
               </p>
+              <QuickSummary specs={motorhome.specs} highlights={highlights} />
+            </section>
+
+            {/* Gallery Section - Below Car Details */}
+            <section>
+              <PremiumGallery images={motorhome.images} name={motorhome.vehicleType} />
             </section>
 
             {/* สิ่งอำนวยความสะดวก (Amenities) */}
