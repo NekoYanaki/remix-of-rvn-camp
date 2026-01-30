@@ -87,39 +87,35 @@ const PremiumGallery = ({ images, name }: PremiumGalleryProps) => {
         </button>
       </div>
 
-      {/* Media Tabs */}
+      {/* Media Tabs - Minimal Underline Style */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="w-full max-w-md mx-auto grid grid-cols-4 bg-muted/50 p-1 h-auto rounded-full">
+        <TabsList className="w-full max-w-lg mx-auto flex justify-center gap-1 bg-transparent p-0 h-auto">
           <TabsTrigger
             value="photos"
-            className="rounded-full py-2.5 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm"
+            className="relative px-4 py-2.5 text-sm font-normal bg-transparent border-0 shadow-none text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:w-0 after:bg-foreground after:transition-all data-[state=active]:after:w-full"
           >
-            <Camera className="h-4 w-4 mr-1.5 md:mr-2" />
-            <span className="hidden sm:inline">รูปภาพ</span>
+            รูปภาพ
           </TabsTrigger>
           {images.view360 && (
             <TabsTrigger
               value="360"
-              className="rounded-full py-2.5 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              className="relative px-4 py-2.5 text-sm font-normal bg-transparent border-0 shadow-none text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:w-0 after:bg-foreground after:transition-all data-[state=active]:after:w-full"
             >
-              <RotateCcw className="h-4 w-4 mr-1.5 md:mr-2" />
-              <span className="hidden sm:inline">360°</span>
+              360°
             </TabsTrigger>
           )}
           <TabsTrigger
             value="floorplan"
-            className="rounded-full py-2.5 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm"
+            className="relative px-4 py-2.5 text-sm font-normal bg-transparent border-0 shadow-none text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:w-0 after:bg-foreground after:transition-all data-[state=active]:after:w-full"
           >
-            <Layout className="h-4 w-4 mr-1.5 md:mr-2" />
-            <span className="hidden sm:inline">Floor Plan</span>
+            Floor Plan
           </TabsTrigger>
           {images.video && (
             <TabsTrigger
               value="video"
-              className="rounded-full py-2.5 text-sm data-[state=active]:bg-background data-[state=active]:shadow-sm"
+              className="relative px-4 py-2.5 text-sm font-normal bg-transparent border-0 shadow-none text-muted-foreground data-[state=active]:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none transition-colors after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:w-0 after:bg-foreground after:transition-all data-[state=active]:after:w-full"
             >
-              <Film className="h-4 w-4 mr-1.5 md:mr-2" />
-              <span className="hidden sm:inline">วิดีโอ</span>
+              วิดีโอ
             </TabsTrigger>
           )}
         </TabsList>
