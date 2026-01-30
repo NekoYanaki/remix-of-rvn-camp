@@ -42,14 +42,34 @@ const getMotorhomeData = (id: string) => {
       fuelType: "ดีเซล",
       year: 2023,
       drive: "4WD",
-      engine: "2.8L"
+      engine: "2.4L MIVEC Turbo Diesel",
+      power: "181 แรงม้า @ 3,500 รอบ/นาที",
+      torque: "430 Nm @ 2,500 รอบ/นาที",
+      fuelTank: "75 ลิตร",
+      fuelConsumption: "10-12 กม./ลิตร",
+      gearbox: "6 สปีด อัตโนมัติ",
+      brakes: "ดิสก์เบรก 4 ล้อ + ABS + EBD",
+      suspension: "อิสระหน้า / แหนบหลัง",
+      tires: "265/60 R18",
+      waterTank: "80 ลิตร",
+      greyWaterTank: "40 ลิตร",
+      gasBottle: "4 กก.",
+      battery: "12V 100Ah AGM + 200W Solar",
+      inverter: "1,500W Pure Sine Wave"
     },
     highlights: ["Solar panel", "AC"],
     dimensions: {
       length: "5,915 มม.",
       width: "1,815 มม.",
       height: "2,950 มม.",
-      wheelbase: "3,000 มม."
+      wheelbase: "3,000 มม.",
+      interiorHeight: "1,900 มม.",
+      groundClearance: "220 มม.",
+      grossWeight: "3,100 กก.",
+      payload: "500 กก.",
+      bedSize: "1,900 x 1,400 มม.",
+      seatingCapacity: "4 ที่นั่ง (2 เบาะหน้า + 2 เบาะท้าย)",
+      diningArea: "โต๊ะพับได้ รองรับ 4 คน"
     },
     amenities: [
       { name: "Shower", available: true },
@@ -126,9 +146,25 @@ const getMotorhomeData = (id: string) => {
     },
     terms: {
       minAge: 25,
-      license: ["ใบขับขี่ประเภท 1", "ใบขับขี่นานาชาติ"],
+      maxAge: 70,
+      license: ["ใบขับขี่ประเภท 1 (อายุไม่น้อยกว่า 2 ปี)", "ใบขับขี่นานาชาติ (สำหรับชาวต่างชาติ)"],
       cancellation: "ยกเลิกได้ฟรีภายใน 48 ชั่วโมงก่อนการเดินทาง",
-      payment: ["โอนธนาคาร", "QR Code", "บัตรเครดิต"]
+      payment: ["โอนธนาคาร", "QR Code PromptPay", "บัตรเครดิต/เดบิต", "ผ่อนชำระ 0% 3-6 เดือน"],
+      deposit: "มัดจำ 10,000 บาท (คืนเต็มจำนวนหลังคืนรถ)",
+      mileage: "ไม่จำกัดระยะทาง",
+      fuelPolicy: "รับรถเต็มถัง - คืนรถเต็มถัง",
+      lateReturn: "ค่าปรับ 500 บาท/ชั่วโมง (หลังผ่อนผัน 1 ชั่วโมง)",
+      earlyReturn: "ไม่สามารถขอคืนเงินสำหรับวันที่ไม่ได้ใช้งาน",
+      smoking: "ห้ามสูบบุหรี่ในรถ (ค่าปรับ 5,000 บาท)",
+      pets: "อนุญาตให้นำสัตว์เลี้ยงได้ (ค่าทำความสะอาดเพิ่ม 1,500 บาท)",
+      internationalTravel: "ไม่อนุญาตให้ข้ามพรมแดน",
+      minimumRental: "ขั้นต่ำ 1 วัน (ช่วงเทศกาล 3 วัน)",
+      pickupTime: "รับรถ 09:00 - 17:00 น.",
+      returnTime: "คืนรถ 09:00 - 17:00 น.",
+      requiredDocuments: ["บัตรประชาชน/พาสปอร์ต", "ใบขับขี่", "บัตรเครดิต (สำหรับค้ำประกัน)"],
+      driverRequirements: "ผู้ขับขี่เพิ่มเติมต้องลงทะเบียนและมีคุณสมบัติเท่ากัน",
+      roadsideAssistance: "บริการช่วยเหลือฉุกเฉิน 24 ชม. โทร 02-XXX-XXXX",
+      damagePolicy: "รับผิดชอบความเสียหายสูงสุด 30,000 บาท (ลดเหลือ 10,000 บาท หากซื้อประกันเพิ่ม)"
     }
   };
 

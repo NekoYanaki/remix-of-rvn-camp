@@ -80,12 +80,32 @@ interface MotorhomeDetailPageProps {
       year: number;
       drive: string;
       engine: string;
+      power?: string;
+      torque?: string;
+      fuelTank?: string;
+      fuelConsumption?: string;
+      gearbox?: string;
+      brakes?: string;
+      suspension?: string;
+      tires?: string;
+      waterTank?: string;
+      greyWaterTank?: string;
+      gasBottle?: string;
+      battery?: string;
+      inverter?: string;
     };
     dimensions: {
       length: string;
       width: string;
       height: string;
       wheelbase: string;
+      interiorHeight?: string;
+      groundClearance?: string;
+      grossWeight?: string;
+      payload?: string;
+      bedSize?: string;
+      seatingCapacity?: string;
+      diningArea?: string;
     };
     amenities: Amenity[];
     includedItems: IncludedCategory[];
@@ -101,9 +121,25 @@ interface MotorhomeDetailPageProps {
     };
     terms: {
       minAge: number;
+      maxAge?: number;
       license: string[];
       cancellation: string;
       payment: string[];
+      deposit?: string;
+      mileage?: string;
+      fuelPolicy?: string;
+      lateReturn?: string;
+      earlyReturn?: string;
+      smoking?: string;
+      pets?: string;
+      internationalTravel?: string;
+      minimumRental?: string;
+      pickupTime?: string;
+      returnTime?: string;
+      requiredDocuments?: string[];
+      driverRequirements?: string;
+      roadsideAssistance?: string;
+      damagePolicy?: string;
     };
     highlights?: string[];
   };
@@ -214,9 +250,10 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
                   <span className="font-medium">ข้อมูลจำเพาะ</span>
                 </AccordionTrigger>
                 <AccordionContent className="pb-4">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* ขนาดภายนอก */}
                     <div className="space-y-3">
-                      <h4 className="font-medium text-sm text-primary">ขนาด</h4>
+                      <h4 className="font-medium text-sm text-primary">ขนาดภายนอก</h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">ความยาว</span>
@@ -230,23 +267,165 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
                           <span className="text-muted-foreground">ความสูง</span>
                           <span>{motorhome.dimensions.height}</span>
                         </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">ระยะฐานล้อ</span>
+                          <span>{motorhome.dimensions.wheelbase}</span>
+                        </div>
+                        {motorhome.dimensions.groundClearance && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ระยะห่างจากพื้น</span>
+                            <span>{motorhome.dimensions.groundClearance}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
+
+                    {/* ขนาดภายใน */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">ขนาดภายใน</h4>
+                      <div className="space-y-2 text-sm">
+                        {motorhome.dimensions.interiorHeight && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ความสูงภายใน</span>
+                            <span>{motorhome.dimensions.interiorHeight}</span>
+                          </div>
+                        )}
+                        {motorhome.dimensions.bedSize && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ขนาดเตียง</span>
+                            <span>{motorhome.dimensions.bedSize}</span>
+                          </div>
+                        )}
+                        {motorhome.dimensions.seatingCapacity && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ที่นั่ง</span>
+                            <span>{motorhome.dimensions.seatingCapacity}</span>
+                          </div>
+                        )}
+                        {motorhome.dimensions.diningArea && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">พื้นที่รับประทานอาหาร</span>
+                            <span>{motorhome.dimensions.diningArea}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* น้ำหนัก */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">น้ำหนัก</h4>
+                      <div className="space-y-2 text-sm">
+                        {motorhome.dimensions.grossWeight && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">น้ำหนักรวม</span>
+                            <span>{motorhome.dimensions.grossWeight}</span>
+                          </div>
+                        )}
+                        {motorhome.dimensions.payload && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">น้ำหนักบรรทุก</span>
+                            <span>{motorhome.dimensions.payload}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* เครื่องยนต์ */}
                     <div className="space-y-3">
                       <h4 className="font-medium text-sm text-primary">เครื่องยนต์</h4>
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
-                          <span className="text-muted-foreground">ประเภทเชื้อเพลิง</span>
+                          <span className="text-muted-foreground">รุ่นเครื่องยนต์</span>
+                          <span>{motorhome.specs.engine}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">เชื้อเพลิง</span>
                           <span>{motorhome.specs.fuelType}</span>
                         </div>
+                        {motorhome.specs.power && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">กำลังสูงสุด</span>
+                            <span>{motorhome.specs.power}</span>
+                          </div>
+                        )}
+                        {motorhome.specs.torque && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">แรงบิดสูงสุด</span>
+                            <span>{motorhome.specs.torque}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* ระบบขับเคลื่อน */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">ระบบขับเคลื่อน</h4>
+                      <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">ระบบขับเคลื่อน</span>
                           <span>{motorhome.specs.drive}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">ขนาดเครื่องยนต์</span>
-                          <span>{motorhome.specs.engine}</span>
-                        </div>
+                        {motorhome.specs.gearbox && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">เกียร์</span>
+                            <span>{motorhome.specs.gearbox}</span>
+                          </div>
+                        )}
+                        {motorhome.specs.brakes && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ระบบเบรก</span>
+                            <span>{motorhome.specs.brakes}</span>
+                          </div>
+                        )}
+                        {motorhome.specs.tires && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ขนาดยาง</span>
+                            <span>{motorhome.specs.tires}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* ความจุและระบบไฟ */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">ความจุและระบบไฟ</h4>
+                      <div className="space-y-2 text-sm">
+                        {motorhome.specs.fuelTank && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ถังน้ำมัน</span>
+                            <span>{motorhome.specs.fuelTank}</span>
+                          </div>
+                        )}
+                        {motorhome.specs.fuelConsumption && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">อัตราสิ้นเปลือง</span>
+                            <span>{motorhome.specs.fuelConsumption}</span>
+                          </div>
+                        )}
+                        {motorhome.specs.waterTank && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ถังน้ำสะอาด</span>
+                            <span>{motorhome.specs.waterTank}</span>
+                          </div>
+                        )}
+                        {motorhome.specs.greyWaterTank && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ถังน้ำเสีย</span>
+                            <span>{motorhome.specs.greyWaterTank}</span>
+                          </div>
+                        )}
+                        {motorhome.specs.battery && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">แบตเตอรี่</span>
+                            <span>{motorhome.specs.battery}</span>
+                          </div>
+                        )}
+                        {motorhome.specs.inverter && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">อินเวอร์เตอร์</span>
+                            <span>{motorhome.specs.inverter}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -259,27 +438,172 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
                   <span className="font-medium">เงื่อนไขการเช่า</span>
                 </AccordionTrigger>
                 <AccordionContent className="pb-4">
-                  <div className="space-y-4 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">อายุขั้นต่ำ</span>
-                      <span>{motorhome.terms.minAge} ปี</span>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* คุณสมบัติผู้เช่า */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">คุณสมบัติผู้เช่า</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-muted-foreground">อายุ</span>
+                          <span>{motorhome.terms.minAge} - {motorhome.terms.maxAge || 70} ปี</span>
+                        </div>
+                        <div>
+                          <span className="text-muted-foreground">ใบขับขี่ที่รับ</span>
+                          <ul className="mt-1 space-y-1">
+                            {motorhome.terms.license.map((lic, idx) => (
+                              <li key={idx} className="flex items-start gap-2">
+                                <Check className="h-3.5 w-3.5 text-primary flex-shrink-0 mt-0.5" />
+                                <span>{lic}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        {motorhome.terms.requiredDocuments && (
+                          <div>
+                            <span className="text-muted-foreground">เอกสารที่ต้องใช้</span>
+                            <ul className="mt-1 space-y-1">
+                              {motorhome.terms.requiredDocuments.map((doc, idx) => (
+                                <li key={idx} className="flex items-start gap-2">
+                                  <Check className="h-3.5 w-3.5 text-primary flex-shrink-0 mt-0.5" />
+                                  <span>{doc}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {motorhome.terms.driverRequirements && (
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">ผู้ขับขี่เพิ่มเติม</span>
+                            <span className="mt-1">{motorhome.terms.driverRequirements}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">ใบขับขี่</span>
-                      <span>{motorhome.terms.license.join(", ")}</span>
+
+                    {/* การรับ-คืนรถ */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">การรับ-คืนรถ</h4>
+                      <div className="space-y-2 text-sm">
+                        {motorhome.terms.minimumRental && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ระยะเวลาเช่าขั้นต่ำ</span>
+                            <span>{motorhome.terms.minimumRental}</span>
+                          </div>
+                        )}
+                        {motorhome.terms.pickupTime && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">เวลารับรถ</span>
+                            <span>{motorhome.terms.pickupTime}</span>
+                          </div>
+                        )}
+                        {motorhome.terms.returnTime && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">เวลาคืนรถ</span>
+                            <span>{motorhome.terms.returnTime}</span>
+                          </div>
+                        )}
+                        {motorhome.terms.lateReturn && (
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">คืนรถล่าช้า</span>
+                            <span className="mt-1 text-destructive">{motorhome.terms.lateReturn}</span>
+                          </div>
+                        )}
+                        {motorhome.terms.earlyReturn && (
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">คืนรถก่อนกำหนด</span>
+                            <span className="mt-1">{motorhome.terms.earlyReturn}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-muted-foreground">นโยบายยกเลิก</span>
-                      <span>{motorhome.terms.cancellation}</span>
+
+                    {/* นโยบายน้ำมันและระยะทาง */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">น้ำมันและระยะทาง</h4>
+                      <div className="space-y-2 text-sm">
+                        {motorhome.terms.fuelPolicy && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">นโยบายน้ำมัน</span>
+                            <span>{motorhome.terms.fuelPolicy}</span>
+                          </div>
+                        )}
+                        {motorhome.terms.mileage && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ระยะทาง</span>
+                            <span>{motorhome.terms.mileage}</span>
+                          </div>
+                        )}
+                        {motorhome.terms.internationalTravel && (
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">ข้ามพรมแดน</span>
+                            <span>{motorhome.terms.internationalTravel}</span>
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div>
-                      <span className="text-muted-foreground">วิธีชำระเงิน</span>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {motorhome.terms.payment.map((method, idx) => (
-                          <span key={idx} className="px-3 py-1 bg-secondary rounded-full text-xs">
-                            {method}
-                          </span>
-                        ))}
+
+                    {/* กฎระเบียบ */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">กฎระเบียบ</h4>
+                      <div className="space-y-2 text-sm">
+                        {motorhome.terms.smoking && (
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">การสูบบุหรี่</span>
+                            <span className="mt-1 text-destructive">{motorhome.terms.smoking}</span>
+                          </div>
+                        )}
+                        {motorhome.terms.pets && (
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">สัตว์เลี้ยง</span>
+                            <span className="mt-1">{motorhome.terms.pets}</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* การชำระเงิน */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">การชำระเงิน</h4>
+                      <div className="space-y-2 text-sm">
+                        {motorhome.terms.deposit && (
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">เงินมัดจำ</span>
+                            <span className="mt-1">{motorhome.terms.deposit}</span>
+                          </div>
+                        )}
+                        <div>
+                          <span className="text-muted-foreground">วิธีชำระเงิน</span>
+                          <div className="flex flex-wrap gap-2 mt-2">
+                            {motorhome.terms.payment.map((method, idx) => (
+                              <span key={idx} className="px-3 py-1 bg-secondary rounded-full text-xs">
+                                {method}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* การยกเลิกและประกัน */}
+                    <div className="space-y-3">
+                      <h4 className="font-medium text-sm text-primary">การยกเลิกและประกัน</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex flex-col">
+                          <span className="text-muted-foreground">นโยบายยกเลิก</span>
+                          <span className="mt-1">{motorhome.terms.cancellation}</span>
+                        </div>
+                        {motorhome.terms.damagePolicy && (
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">ความรับผิดชอบความเสียหาย</span>
+                            <span className="mt-1">{motorhome.terms.damagePolicy}</span>
+                          </div>
+                        )}
+                        {motorhome.terms.roadsideAssistance && (
+                          <div className="flex flex-col">
+                            <span className="text-muted-foreground">บริการช่วยเหลือฉุกเฉิน</span>
+                            <span className="mt-1">{motorhome.terms.roadsideAssistance}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
