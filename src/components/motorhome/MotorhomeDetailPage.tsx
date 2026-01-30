@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Share2, Heart } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PremiumGallery from "./PremiumGallery";
 import HeroHeader from "./HeroHeader";
@@ -131,14 +131,7 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
             <ArrowLeft className="h-4 w-4 mr-1.5" />
             กลับ
           </Button>
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" className="h-9 w-9">
-              <Share2 className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="icon" className="h-9 w-9">
-              <Heart className="h-4 w-4" />
-            </Button>
-          </div>
+          <div className="w-20" />
         </div>
       </div>
 
