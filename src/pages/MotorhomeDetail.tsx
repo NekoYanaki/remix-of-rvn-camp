@@ -4,6 +4,8 @@ import { useParams } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MotorhomeDetailPage from "@/components/motorhome/MotorhomeDetailPage";
+import floorplanDay from "@/assets/floorplan-day.png";
+import floorplanNight from "@/assets/floorplan-night.png";
 
 // Mock data for motorhome with new structure
 const getMotorhomeData = (id: string) => {
@@ -22,8 +24,8 @@ const getMotorhomeData = (id: string) => {
         "/lovable-uploads/b047e00a-8752-47a7-8444-d4d4063f3d7a.png"
       ],
       floorPlan: {
-        day: "/lovable-uploads/motorhome-gallery-2.png",
-        night: "/lovable-uploads/motorhome-gallery-3.png"
+        day: floorplanDay,
+        night: floorplanNight
       },
       video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
     },
