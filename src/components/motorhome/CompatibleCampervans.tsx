@@ -1,9 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Star, Users, BedDouble, CarFront, Plus, Shield, Wrench } from "lucide-react";
+import { Star, Users, BedDouble, CarFront } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 interface Campervan {
   id: string;
@@ -14,9 +13,6 @@ interface Campervan {
   rating: number;
   passengers: number;
   beds: number;
-  hasAddons?: boolean;
-  hasInsurance?: boolean;
-  hasAccessories?: boolean;
 }
 
 interface CompatibleCampervansProps {
@@ -34,9 +30,6 @@ const mockCampervans: Campervan[] = [
     rating: 4.8,
     passengers: 4,
     beds: 2,
-    hasAddons: true,
-    hasInsurance: true,
-    hasAccessories: true,
   },
   {
     id: "3",
@@ -47,9 +40,6 @@ const mockCampervans: Campervan[] = [
     rating: 4.7,
     passengers: 3,
     beds: 1,
-    hasAddons: true,
-    hasInsurance: true,
-    hasAccessories: false,
   },
   {
     id: "4",
@@ -60,9 +50,6 @@ const mockCampervans: Campervan[] = [
     rating: 4.6,
     passengers: 5,
     beds: 2,
-    hasAddons: false,
-    hasInsurance: true,
-    hasAccessories: true,
   },
 ];
 
@@ -91,27 +78,6 @@ const CompatibleCampervans = ({ currentId }: CompatibleCampervansProps) => {
                 alt={campervan.name}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              {/* Availability Badges */}
-              <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
-                {campervan.hasAddons && (
-                  <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-[10px] px-1.5 py-0.5 font-normal pointer-events-none">
-                    <Plus className="h-2.5 w-2.5 mr-0.5" />
-                    Add-on
-                  </Badge>
-                )}
-                {campervan.hasInsurance && (
-                  <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-[10px] px-1.5 py-0.5 font-normal pointer-events-none">
-                    <Shield className="h-2.5 w-2.5 mr-0.5" />
-                    ประกัน
-                  </Badge>
-                )}
-                {campervan.hasAccessories && (
-                  <Badge variant="secondary" className="bg-white/90 backdrop-blur-sm text-[10px] px-1.5 py-0.5 font-normal pointer-events-none">
-                    <Wrench className="h-2.5 w-2.5 mr-0.5" />
-                    อุปกรณ์
-                  </Badge>
-                )}
-              </div>
             </div>
             <CardContent className="p-3">
               <div className="flex items-center justify-between mb-1">
