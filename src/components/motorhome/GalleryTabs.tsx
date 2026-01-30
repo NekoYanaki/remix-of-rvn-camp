@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Sun, Moon, RotateCcw, Play } from "lucide-react";
+import { Sun, Moon, RotateCcw, Play, Images } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
@@ -37,6 +37,10 @@ const GalleryTabs = ({ images, name }: GalleryTabsProps) => {
 
   return (
     <div className="space-y-4">
+      <h2 className="text-lg font-semibold flex items-center gap-2">
+        <Images className="h-5 w-5 text-primary" />
+        แกลเลอรี่
+      </h2>
       <h2 className="text-lg font-semibold">แกลเลอรี่</h2>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
