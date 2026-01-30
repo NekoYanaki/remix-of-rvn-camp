@@ -17,7 +17,7 @@ const getMotorhomeData = (id: string) => {
     vehicleType: "Motorhome A Class",
     images: {
       main: "/lovable-uploads/motorhome-main.jpg",
-      view360: "/lovable-uploads/motorhome-gallery-1.png",
+      view360: "https://youtu.be/LX7z_--rQg0",
       productImages: [
         "/lovable-uploads/motorhome-gallery-2.png",
         "/lovable-uploads/motorhome-gallery-3.png",
@@ -27,7 +27,7 @@ const getMotorhomeData = (id: string) => {
         day: floorplanDay,
         night: floorplanNight
       },
-      video: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+      video: "https://youtu.be/Bki11UnPbGI"
     },
     price: 5000,
     rating: 4.9,
