@@ -1,5 +1,5 @@
 import React from "react";
-import { Star, ThumbsUp, ChevronRight } from "lucide-react";
+import { Star, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ReviewsSectionProps {
@@ -79,10 +79,6 @@ export const ReviewsSection = ({ motorhome, maxReviews = 3 }: ReviewsSectionProp
                 <span className="text-xs text-muted-foreground">{review.date}</span>
               </div>
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{review.text}</p>
-              <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-2">
-                <ThumbsUp className="h-3 w-3" />
-                <span>มีประโยชน์ ({review.helpful})</span>
-              </button>
             </div>
           </div>
         ))}
