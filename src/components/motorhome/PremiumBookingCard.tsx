@@ -44,7 +44,7 @@ const PremiumBookingCard = ({
   const [selectedLocation, setSelectedLocation] = useState(pickupLocations[0]?.id || "");
 
   const handleBookNow = () => {
-    navigate("/campervan-summary");
+    navigate("/motorhome-summary");
   };
 
   const confirmationItems = [

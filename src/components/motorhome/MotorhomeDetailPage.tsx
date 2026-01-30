@@ -155,7 +155,7 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
   const highlights = motorhome.highlights || ["Solar panel", "AC"];
 
   const handleSelectVehicle = () => {
-    navigate("/campervan-summary");
+    navigate("/motorhome-summary");
   };
 
   return (
@@ -166,7 +166,7 @@ const MotorhomeDetailPage = ({ motorhome }: MotorhomeDetailPageProps) => {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/motorhome-results")}
             className="hover:bg-muted -ml-2"
           >
             <ArrowLeft className="h-4 w-4 mr-1.5" />
