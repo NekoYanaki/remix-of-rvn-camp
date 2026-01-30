@@ -8,6 +8,9 @@ import {
   Star,
   Shield,
   Calendar,
+  Plus,
+  Wrench,
+  Check,
 } from "lucide-react";
 
 interface PickupLocation {
@@ -43,6 +46,12 @@ const PremiumBookingCard = ({
   const handleBookNow = () => {
     navigate("/campervan-summary");
   };
+
+  const confirmationItems = [
+    { icon: Plus, label: "Add-on เสริมในขั้นตอนถัดไป" },
+    { icon: Shield, label: "เลือกแพ็คเกจประกันได้" },
+    { icon: Wrench, label: "อุปกรณ์เสริมพร้อมให้เลือก" },
+  ];
 
   return (
     <Card className="border-0 shadow-2xl rounded-2xl overflow-hidden bg-card">
@@ -94,6 +103,19 @@ const PremiumBookingCard = ({
         <div className="flex items-center gap-3 p-3 bg-secondary/50 rounded-xl text-sm text-muted-foreground">
           <Calendar className="h-4 w-4" />
           <span>เลือกวันที่รับ-คืนรถในขั้นตอนถัดไป</span>
+        </div>
+
+        {/* Confirmation Badges */}
+        <div className="space-y-2 p-3 bg-primary/5 rounded-xl border border-primary/10">
+          {confirmationItems.map((item, idx) => (
+            <div key={idx} className="flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="flex items-center justify-center w-4 h-4 rounded-full bg-primary/10">
+                <Check className="h-2.5 w-2.5 text-primary" />
+              </div>
+              <item.icon className="h-3.5 w-3.5 text-primary/70" />
+              <span>{item.label}</span>
+            </div>
+          ))}
         </div>
 
         {/* CTA Button */}
