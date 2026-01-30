@@ -1,6 +1,5 @@
 import React from "react";
-import { Star, Car } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Star } from "lucide-react";
 
 interface HeroHeaderProps {
   vehicleType: string;
@@ -18,26 +17,26 @@ const HeroHeader = ({
   reviewCount,
 }: HeroHeaderProps) => {
   return (
-    <div className="space-y-3">
-      {/* Title */}
-      <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+    <div className="space-y-5">
+      {/* Brand Pill - Soft, minimal */}
+      <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-muted/40 rounded-full text-xs font-medium text-muted-foreground tracking-wide uppercase">
+        {brand} {model}
+      </div>
+
+      {/* Title - Large, confident */}
+      <h1 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-foreground tracking-tight leading-tight">
         {vehicleType}
       </h1>
 
-      {/* Badges Row */}
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="secondary" className="flex items-center gap-1 px-2.5 py-1">
-          <Car className="h-3.5 w-3.5" />
-          {brand} {model}
-        </Badge>
-        
-        <Badge variant="outline" className="flex items-center gap-1 px-2.5 py-1 bg-amber-50 border-amber-200 text-amber-700">
-          <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-          <span className="font-semibold">{rating}</span>
-          <span className="text-muted-foreground">({reviewCount} รีวิว)</span>
-        </Badge>
+      {/* Rating - Subtle, understated */}
+      <div className="flex items-center gap-3 text-sm text-muted-foreground">
+        <div className="flex items-center gap-1.5">
+          <Star className="h-4 w-4 fill-muted-foreground/60 text-muted-foreground/60" />
+          <span className="font-medium text-foreground/70">{rating}</span>
+        </div>
+        <span className="text-muted-foreground/50">•</span>
+        <span>{reviewCount} รีวิว</span>
       </div>
-
     </div>
   );
 };

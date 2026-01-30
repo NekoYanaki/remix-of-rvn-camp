@@ -1,13 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import {
   ChevronDown,
   MapPin,
-  Star,
   Shield,
-  Calendar,
 } from "lucide-react";
 
 interface PickupLocation {
@@ -32,8 +29,6 @@ interface PremiumBookingCardProps {
 
 const PremiumBookingCard = ({
   pricing,
-  rating,
-  reviewCount,
   pickupLocations,
   cancellationPolicy = "ยกเลิกฟรีก่อน 48 ชม.",
 }: PremiumBookingCardProps) => {
@@ -45,73 +40,60 @@ const PremiumBookingCard = ({
   };
 
   return (
-    <Card className="border-0 shadow-2xl rounded-2xl overflow-hidden bg-card">
-      <CardContent className="p-6 space-y-6">
-        {/* Price & Rating */}
-        <div className="space-y-3">
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-bold tracking-tight">
-              ฿{pricing.basePrice.toLocaleString()}
-            </span>
-            <span className="text-muted-foreground">/วัน</span>
-          </div>
-          
-          <div className="flex items-center gap-2 text-sm">
-          <div className="flex items-center gap-1">
-            <Star className="h-4 w-4 fill-primary text-primary" />
-            <span className="font-medium">{rating}</span>
-          </div>
-            <span className="text-muted-foreground">• {reviewCount} รีวิว</span>
-          </div>
+    <div className="bg-card border border-border/50 rounded-3xl p-8 shadow-sm space-y-8">
+      {/* Price Section - Calm, neutral */}
+      <div className="space-y-2">
+        <div className="flex items-baseline gap-1">
+          <span className="text-4xl font-light tracking-tight text-foreground">
+            ฿{pricing.basePrice.toLocaleString()}
+          </span>
+          <span className="text-muted-foreground font-normal">/วัน</span>
         </div>
+        <p className="text-sm text-muted-foreground">
+          อุปกรณ์พื้นฐานรวมอยู่ในราคา
+        </p>
+      </div>
 
-        {/* Divider */}
-        <div className="h-px bg-border" />
+      {/* Divider */}
+      <div className="h-px bg-border/50" />
 
-        {/* Pickup Location */}
-        <div className="space-y-2">
-          <label className="text-sm font-medium text-foreground">
-            สถานที่รับ-คืนรถ
-          </label>
-          <div className="relative">
-            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <select
-              value={selectedLocation}
-              onChange={(e) => setSelectedLocation(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 text-sm border rounded-xl bg-background focus:ring-2 focus:ring-primary/20 focus:border-primary appearance-none cursor-pointer"
-            >
-              {pickupLocations.map((location) => (
-                <option key={location.id} value={location.id}>
-                  {location.name}
-                </option>
-              ))}
-            </select>
-            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-          </div>
+      {/* Pickup Location */}
+      <div className="space-y-3">
+        <label className="text-sm font-medium text-foreground/80">
+          สถานที่รับ-คืนรถ
+        </label>
+        <div className="relative">
+          <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60" />
+          <select
+            value={selectedLocation}
+            onChange={(e) => setSelectedLocation(e.target.value)}
+            className="w-full pl-11 pr-10 py-4 text-sm border border-border/50 rounded-2xl bg-background focus:ring-1 focus:ring-primary/30 focus:border-primary/50 appearance-none cursor-pointer transition-all"
+          >
+            {pickupLocations.map((location) => (
+              <option key={location.id} value={location.id}>
+                {location.name}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60 pointer-events-none" />
         </div>
+      </div>
 
-        {/* Date Hint */}
-        <div className="flex items-center gap-3 p-3 bg-secondary/50 rounded-xl text-sm text-muted-foreground">
-          <Calendar className="h-4 w-4" />
-          <span>เลือกวันที่รับ-คืนรถในขั้นตอนถัดไป</span>
-        </div>
+      {/* CTA Button - Clean, confident */}
+      <Button
+        size="lg"
+        className="w-full h-14 text-base font-medium rounded-2xl"
+        onClick={handleBookNow}
+      >
+        จองรถบ้านคันนี้
+      </Button>
 
-        {/* CTA Button */}
-        <Button
-          size="lg"
-          className="w-full h-12 text-base font-medium rounded-xl shadow-lg"
-          onClick={handleBookNow}
-        >
-          จองรถบ้านคันนี้
-        </Button>
-
-        {/* Trust Badge */}
-        <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-          <Shield className="h-4 w-4 text-primary" />
-          <span>{cancellationPolicy}</span>
-        </div>
-      </CardContent>
-    </Card>
+      {/* Trust Badge - Minimal */}
+      <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground/70">
+        <Shield className="h-4 w-4" />
+        <span>{cancellationPolicy}</span>
+      </div>
+    </div>
   );
 };
 
