@@ -34,6 +34,7 @@ import Download from "./pages/Download";
 import RentCampervan from "./pages/RentCampervan";
 import CampervanDetail from "./pages/CampervanDetail";
 import MotorhomeSummary from "./pages/MotorhomeSummary";
+import CampervanSummary from "./pages/CampervanSummary";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ const App = () => (
             <Route path="/rent-campervan" element={<RentCampervan />} />
             <Route path="/campervan-detail" element={<CampervanDetail />} />
             <Route path="/motorhome-summary" element={<MotorhomeSummary />} />
+            <Route path="/campervan-summary" element={<CampervanSummary />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
